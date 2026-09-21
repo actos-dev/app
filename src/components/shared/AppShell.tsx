@@ -17,6 +17,7 @@ import type { ReactNode } from "react";
 
 import { AccountMenu } from "@/components/shared/AccountMenu";
 import { AnnouncementBell } from "@/components/shared/AnnouncementBell";
+import { CommandPalette } from "@/components/shared/CommandPalette";
 import { CreditDisplay } from "@/components/shared/CreditDisplay";
 import { MobileNav } from "@/components/shared/MobileNav";
 import { Sidebar } from "@/components/shared/Sidebar";
@@ -53,6 +54,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
             {app("name")}
           </span>
           <div className="ml-auto flex items-center gap-3">
+            <CommandPalette theme={theme} />
             <AnnouncementBell initialAnnouncements={announcements ?? undefined} />
             <CreditDisplay initialCredits={credits?.credits} />
             <AccountMenu theme={theme} initialCredits={credits?.credits} />

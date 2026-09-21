@@ -31,6 +31,12 @@ vi.mock("next/headers", () => ({
   headers: () => Promise.resolve(new Headers()),
 }));
 
+// Komut paleti tema/dil server action'larını import eder; testte ağa çıkmasın.
+vi.mock("@/i18n/actions", () => ({
+  setTheme: vi.fn(),
+  setLocale: vi.fn(),
+}));
+
 vi.mock("next-intl/server", async () => {
   const messages = (await import("../../../../messages/tr.json")).default as Record<string, unknown>;
   const resolve = (namespace: string | undefined, key: string): string => {

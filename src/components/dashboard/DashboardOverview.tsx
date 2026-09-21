@@ -11,6 +11,7 @@
  */
 import { DigestPreviewWidget } from "@/components/dashboard/DigestPreviewWidget";
 import { MarketPulseWidget } from "@/components/dashboard/MarketPulseWidget";
+import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist";
 import { PortfolioSummaryWidget } from "@/components/dashboard/PortfolioSummaryWidget";
 import { QuickActionsWidget } from "@/components/dashboard/QuickActionsWidget";
 import { WatchlistWidget } from "@/components/dashboard/WatchlistWidget";
@@ -28,6 +29,12 @@ export function DashboardOverview({ data }: DashboardOverviewProps) {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <OnboardingChecklist
+        profile={data.profile}
+        favoritesCount={data.favorites.length}
+        portfoliosCount={data.summary?.items.length ?? 0}
+        className="sm:col-span-2 lg:col-span-3"
+      />
       <PortfolioSummaryWidget initialData={data.summary} className="sm:col-span-2" />
       <WatchlistWidget
         initialFavorites={data.favorites}

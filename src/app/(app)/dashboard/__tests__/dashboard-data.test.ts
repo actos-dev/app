@@ -5,10 +5,10 @@
  * çağırır; testte ağ mock'lanır ve istek sayısı/paths doğrulanır.
  *
  * Doğrulananlar:
- *   - tam paket: 5 bağımsız + favori varsa 1 toplu = 6 istek,
+ *   - tam paket: 6 bağımsız + favori varsa 1 toplu = 7 istek,
  *   - ekonomi quote'ları FR + metal TEK istekte (`symbols=`, `group` yok),
  *   - güncel digest TEK istekte (tazelik `?at=` sorgusu yok),
- *   - favori boşken `/companies/summary` ÇAĞRILMAZ (5 istek),
+ *   - favori boşken `/companies/summary` ÇAĞRILMAZ (6 istek),
  *   - backend tamamen kapalıyken çökme yok, `null`/boş dönüş.
  */
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -78,6 +78,16 @@ function baseHandlers(favorites: string[]): Handlers {
     "/api/v1/economy/quotes": () =>
       mockResponse({ ts: STATUS.as_of, source: null, quotes: {}, remaining: null }),
     "/api/v1/digest": () => mockResponse(digest()),
+    "/api/v1/profile": () =>
+      mockResponse({
+        username: "ada",
+        email: "ada@example.com",
+        user_type: "user",
+        created_at: null,
+        email_verified: true,
+        avatar_id: null,
+        credits: 10,
+      }),
     "/api/v1/companies/summary": () => mockResponse({ data: [], total: 0 }),
   };
 }
@@ -89,13 +99,14 @@ afterEach(() => {
 });
 
 describe("fetchDashboardData", () => {
-  it("favori varken 6 istek atar; ekonomi ve digest TEK istek (P-05)", async () => {
+  it("favori varken 7 istek atar; ekonomi ve digest TEK istek (P-05)", async () => {
     installFetch(baseHandlers(["THYAO", "ASELS"]));
 
     const data = await fetchDashboardData();
 
     expect(data.favorites).toEqual(["THYAO", "ASELS"]);
-    expect(calls).toHaveLength(6);
+    expect(data.profile?.email_verified).toBe(true);
+    expect(calls).toHaveLength(7);
 
     const economy = callsTo("/api/v1/economy/quotes");
     expect(economy).toHaveLength(1);
@@ -111,7 +122,7 @@ describe("fetchDashboardData", () => {
     expect(summary[0]!.params.get("tickers")).toBe("THYAO,ASELS");
   });
 
-  it("favori boşken companies/summary çağrılmaz (5 istek)", async () => {
+  it("favori boşken companies/summary çağrılmaz (6 istek)", async () => {
     installFetch(baseHandlers([]));
 
     const data = await fetchDashboardData();
@@ -119,7 +130,7 @@ describe("fetchDashboardData", () => {
     expect(data.favorites).toEqual([]);
     expect(data.companies).toBeNull();
     expect(callsTo("/api/v1/companies/summary")).toHaveLength(0);
-    expect(calls).toHaveLength(5);
+    expect(calls).toHaveLength(6);
   });
 
   it("backend tamamen kapalıyken çökmez; boş/hata sonucu döner", async () => {
@@ -139,5 +150,6 @@ describe("fetchDashboardData", () => {
     expect(data.pulse).toBeNull();
     expect(data.status).toBeNull();
     expect(data.digest).toEqual({ digest: null, failed: true });
+    expect(data.profile).toBeNull();
   });
 });

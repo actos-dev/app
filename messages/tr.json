@@ -1119,6 +1119,58 @@
     "logout": "Çıkış yap",
     "logoutError": "Çıkış yapılamadı. Lütfen tekrar dene."
   },
+  "command": {
+    "open": "Komut paletini aç",
+    "title": "Komut paleti",
+    "description": "Sayfalara git, bir işlem çalıştır veya sembol ara.",
+    "label": "Komutlar",
+    "placeholder": "Sayfa, işlem veya sembol ara",
+    "shortcut": "⌘K",
+    "shortcutHint": "Komut paletini açmak için ⌘K",
+    "groups": {
+      "general": "Genel",
+      "actions": "İşlemler",
+      "symbols": "Semboller"
+    },
+    "actions": {
+      "theme": "Tema: {theme}",
+      "locale": "Dil: {locale}",
+      "newReport": "Yeni rapor",
+      "newSimulation": "Yeni simülasyon",
+      "logout": "Çıkış yap"
+    },
+    "searching": "Aranıyor…",
+    "noResults": "Sonuç bulunamadı.",
+    "error": "Arama başarısız oldu.",
+    "hint": "Sembol aramak için en az 2 karakter yaz.",
+    "empty": "Eşleşen komut yok."
+  },
+  "onboarding": {
+    "title": "Başlangıç adımları",
+    "description": "Florence'ı kurmak için birkaç kısa adım.",
+    "progress": "{done}/{total} tamamlandı",
+    "dismiss": "Kapat",
+    "steps": {
+      "verifyEmail": {
+        "title": "E-postanı doğrula",
+        "description": "Doğrulama bağlantısı için gelen kutunu kontrol et.",
+        "cta": "Hesabıma git",
+        "done": "E-posta doğrulandı"
+      },
+      "follow": {
+        "title": "İlk hisseni takibe al",
+        "description": "İlgini çeken bir hisseyi favorilerine ekle.",
+        "cta": "Hisseleri keşfet",
+        "done": "Takip listen hazır"
+      },
+      "portfolio": {
+        "title": "İlk portföyünü oluştur",
+        "description": "Sanal alım satımlarla bir portföy kur.",
+        "cta": "Portföyünü oluştur",
+        "done": "Portföyün hazır"
+      }
+    }
+  },
   "profile": {
     "title": "Profil",
     "description": "Hesabını, görünümünü ve güvenlik ayarlarını yönet.",

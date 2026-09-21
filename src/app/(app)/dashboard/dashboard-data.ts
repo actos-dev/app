@@ -26,6 +26,8 @@ import type { Digest } from "@/lib/digest/types";
 import { WATCHLIST_TICKER_LIMIT } from "@/lib/markets/params";
 import { portfolioSummariesServerPath } from "@/lib/portfolio/api-paths";
 import type { PortfolioSummaryResponse } from "@/lib/portfolio/types";
+import { PROFILE_PATH } from "@/lib/profile/api-paths";
+import type { Profile } from "@/lib/profile/types";
 import type { FavoritesResponse } from "@/types/favorites";
 import type { CompanySummaryResponse, EconomyQuoteBundle, MarketStatus } from "@/types/market";
 
@@ -60,6 +62,8 @@ export type DashboardData = {
   status: MarketStatus | null;
   /** Güncel bülten; yok/hata ayrımı `failed` ile yapılır. */
   digest: DashboardDigest;
+  /** Oturum profili; doğrulama adımı için (5B.4); başarısızsa `null`. */
+  profile: Profile | null;
 };
 
 /** `GET /portfolios/summaries` — değerlemeli portföy listesi (B-10). */
@@ -91,6 +95,11 @@ export function fetchPulseQuotes(): Promise<EconomyQuoteBundle | null> {
   });
 }
 
+/** `GET /profile` — doğrulama adımı için oturum profili (5B.4). */
+export function fetchProfile(): Promise<Profile | null> {
+  return serverAuthApiFetch<Profile>(PROFILE_PATH);
+}
+
 /**
  * `GET /digest` — yalnız güncel bülten (tek istek).
  *
@@ -109,21 +118,23 @@ export async function fetchCurrentDigest(): Promise<DashboardDigest> {
 /**
  * Paketin tamamını yükler.
  *
- * Beş bağımsız kaynak PARALEL çekilir; favori özeti favori listesine bağımlı
+ * Altı bağımsız kaynak PARALEL çekilir; favori özeti favori listesine bağımlı
  * olduğundan yalnız o (ve favori varsa) ikinci turda alınır (N+1 yok, tek toplu
- * istek).
+ * istek). Profil yalnızca onboarding doğrulama adımı için eklenir (5B.4);
+ * doğrulama durumu başka kaynaktan türetilemez.
  */
 export async function fetchDashboardData(): Promise<DashboardData> {
-  const [summary, favoritesResponse, status, pulse, digest] = await Promise.all([
+  const [summary, favoritesResponse, status, pulse, digest, profile] = await Promise.all([
     fetchPortfolioSummaries(),
     fetchFavorites(),
     fetchMarketStatus(),
     fetchPulseQuotes(),
     fetchCurrentDigest(),
+    fetchProfile(),
   ]);
 
   const favorites = favoritesResponse?.favorites ?? [];
   const companies = favorites.length > 0 ? await fetchFavoriteSummaries(favorites) : null;
 
-  return { summary, favorites, companies, pulse, status, digest };
+  return { summary, favorites, companies, pulse, status, digest, profile };
 }

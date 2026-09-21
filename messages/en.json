@@ -1119,6 +1119,58 @@
     "logout": "Sign out",
     "logoutError": "Could not sign out. Please try again."
   },
+  "command": {
+    "open": "Open command palette",
+    "title": "Command palette",
+    "description": "Go to a page, run an action or search for a symbol.",
+    "label": "Commands",
+    "placeholder": "Search pages, actions or symbols",
+    "shortcut": "⌘K",
+    "shortcutHint": "Press ⌘K to open the command palette",
+    "groups": {
+      "general": "General",
+      "actions": "Actions",
+      "symbols": "Symbols"
+    },
+    "actions": {
+      "theme": "Theme: {theme}",
+      "locale": "Language: {locale}",
+      "newReport": "New report",
+      "newSimulation": "New simulation",
+      "logout": "Sign out"
+    },
+    "searching": "Searching…",
+    "noResults": "No results found.",
+    "error": "Search failed.",
+    "hint": "Type at least 2 characters to search symbols.",
+    "empty": "No matching commands."
+  },
+  "onboarding": {
+    "title": "Getting started",
+    "description": "A few quick steps to set up Florence.",
+    "progress": "{done}/{total} completed",
+    "dismiss": "Dismiss",
+    "steps": {
+      "verifyEmail": {
+        "title": "Verify your email",
+        "description": "Check your inbox for the verification link.",
+        "cta": "Go to my account",
+        "done": "Email verified"
+      },
+      "follow": {
+        "title": "Follow your first stock",
+        "description": "Add a stock you care about to your watchlist.",
+        "cta": "Explore stocks",
+        "done": "Watchlist ready"
+      },
+      "portfolio": {
+        "title": "Create your first portfolio",
+        "description": "Build a portfolio with virtual trades.",
+        "cta": "Create your portfolio",
+        "done": "Portfolio ready"
+      }
+    }
+  },
   "profile": {
     "title": "Profile",
     "description": "Manage your account, appearance and security settings.",
