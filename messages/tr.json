@@ -1055,6 +1055,55 @@
       "errorDescription": "Sunucuya ulaşılamadı. Lütfen daha sonra tekrar dene."
     }
   },
+  "dashboard": {
+    "title": "Genel Bakış",
+    "description": "Portföyünün, takip listenin ve piyasanın güncel özeti.",
+    "portfolio": {
+      "title": "Portföy özeti",
+      "totalValue": "Toplam değer",
+      "dailyChange": "Günlük değişim",
+      "count": "{count} portföy",
+      "viewAll": "Tüm portföyler",
+      "emptyTitle": "Henüz portföyün yok",
+      "emptyDescription": "Sanal alım satımlarla bir portföy oluştur; değerini ve getirisini buradan izle.",
+      "emptyCta": "Portföy oluştur",
+      "error": "Portföyler yüklenemedi.",
+      "retry": "Tekrar dene"
+    },
+    "watchlist": {
+      "title": "Takip listesi",
+      "viewAll": "Tümünü gör",
+      "emptyTitle": "Takip listeniz boş",
+      "emptyDescription": "Beğendiğin hisseleri favorilere ekle; güncel fiyatları burada gör.",
+      "emptyCta": "Piyasalara git",
+      "error": "Takip listesi yüklenemedi.",
+      "retry": "Tekrar dene"
+    },
+    "pulse": {
+      "title": "Piyasa nabzı",
+      "usd": "Dolar",
+      "eur": "Euro",
+      "gold": "Gram Altın",
+      "empty": "Fiyat verisi yok.",
+      "error": "Piyasa verisi yüklenemedi.",
+      "retry": "Tekrar dene"
+    },
+    "digest": {
+      "title": "Piyasa bülteni",
+      "untitled": "Başlıksız bülten",
+      "viewArchive": "Arşive git",
+      "emptyTitle": "Henüz bülten yok",
+      "emptyDescription": "Yayınlanmış bir piyasa bülteni bulunmuyor.",
+      "errorTitle": "Bülten yüklenemedi",
+      "errorDescription": "Sunucuya ulaşılamadı. Lütfen daha sonra tekrar dene."
+    },
+    "quickActions": {
+      "title": "Hızlı işlemler",
+      "reports": "Rapor üret",
+      "simulation": "Simülasyon",
+      "markets": "Piyasalar"
+    }
+  },
   "credits": {
     "label": "Kredi",
     "tooltip": "Kredi, AI raporu ve Monte-Carlo simülasyonu üretiminde harcanır.",

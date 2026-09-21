@@ -1055,6 +1055,55 @@
       "errorDescription": "The server is unreachable. Please try again later."
     }
   },
+  "dashboard": {
+    "title": "Overview",
+    "description": "The current summary of your portfolios, watchlist and the market.",
+    "portfolio": {
+      "title": "Portfolio summary",
+      "totalValue": "Total value",
+      "dailyChange": "Daily change",
+      "count": "{count} portfolios",
+      "viewAll": "All portfolios",
+      "emptyTitle": "No portfolios yet",
+      "emptyDescription": "Create a portfolio with paper trades and track its value and return here.",
+      "emptyCta": "Create portfolio",
+      "error": "Could not load portfolios.",
+      "retry": "Try again"
+    },
+    "watchlist": {
+      "title": "Watchlist",
+      "viewAll": "View all",
+      "emptyTitle": "Your watchlist is empty",
+      "emptyDescription": "Add tickers to your favorites and see their latest prices here.",
+      "emptyCta": "Go to markets",
+      "error": "Could not load the watchlist.",
+      "retry": "Try again"
+    },
+    "pulse": {
+      "title": "Market pulse",
+      "usd": "US Dollar",
+      "eur": "Euro",
+      "gold": "Gram Gold",
+      "empty": "No price data.",
+      "error": "Could not load market data.",
+      "retry": "Try again"
+    },
+    "digest": {
+      "title": "Market digest",
+      "untitled": "Untitled digest",
+      "viewArchive": "Go to archive",
+      "emptyTitle": "No digest yet",
+      "emptyDescription": "No market digest has been published.",
+      "errorTitle": "Could not load the digest",
+      "errorDescription": "The server is unreachable. Please try again later."
+    },
+    "quickActions": {
+      "title": "Quick actions",
+      "reports": "Generate report",
+      "simulation": "Simulation",
+      "markets": "Markets"
+    }
+  },
   "credits": {
     "label": "Credits",
     "tooltip": "Credits are spent when generating AI reports and Monte-Carlo simulations.",

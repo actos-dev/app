@@ -1,15 +1,21 @@
 /**
- * `/dashboard` iskeleti (Faz 1 / Birim 1.4).
+ * `/dashboard` — genel bakış (Faz 5B / Birim 5B.1, P-05, U-07, U-13).
  *
- * Auth koruması henüz yok; Faz 2'de middleware ile korunacak. Gerçek içerik
- * (portföy özeti, piyasa nabzı, digest, favoriler) Faz 5B'de gelecek.
+ * Sunucu bileşeni: tüm veri TEK pakette (`fetchDashboardData`) paralel yüklenir
+ * ve istemci widget'larına `initialData` geçirilir; böylece ilk boyamada ek
+ * istek olmaz. Kredi AppShell'de çekildiği için burada tekrar istenmez.
+ *
+ * Backend kapalı/hata durumunda yükleyiciler `null` döner; sayfa çökmez,
+ * widget'lar zarif boş/hata durumu gösterir.
  */
-import { Construction } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "@/components/shared/EmptyState";
+import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
+import { MarketStatusPill } from "@/components/market/MarketStatusPill";
 import { PageHeader } from "@/components/shared/PageHeader";
+
+import { fetchDashboardData } from "./dashboard-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -17,16 +23,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DashboardPage() {
-  const t = await getTranslations();
+  const [data, t] = await Promise.all([fetchDashboardData(), getTranslations("dashboard")]);
 
   return (
-    <>
-      <PageHeader title={t("nav.dashboard")} />
-      <EmptyState
-        icon={<Construction aria-hidden="true" className="size-5" />}
-        title={t("common.comingSoonTitle")}
-        description={t("common.comingSoonDescription")}
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title={t("title")}
+        description={t("description")}
+        actions={<MarketStatusPill initialData={data.status ?? undefined} />}
       />
-    </>
+      <DashboardOverview data={data} />
+    </div>
   );
 }
