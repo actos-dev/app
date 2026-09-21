@@ -15,8 +15,11 @@
     background-color: var(--background);
   }
 
-  /* font-sans rolü `--font-geist-sans`'a bağlıdır (tokens.css @theme inline). */
+  /* font-sans rolü `--font-geist-sans`'a bağlıdır (tokens.css @theme inline).
+     `position: relative`, Base UI'ın iOS 26 notu gereği backdrop'ların tüm
+     görsel alanı kaplaması içindir. */
   body {
+    position: relative;
     background-color: var(--background);
     color: var(--foreground);
     @apply font-sans antialiased;

@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 
+import { Toaster } from "@/components/ui/toaster";
 import { resolveTheme, THEME_COOKIE, themeColors } from "@/i18n/config";
 
 import "./globals.css";
@@ -42,6 +43,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <Toaster theme={theme} />
       </body>
     </html>
   );
