@@ -149,6 +149,44 @@ export const qk = {
   tradePrice: (symbol: string) =>
     [...qk.all, "trade-price", symbol.trim().toUpperCase()] as const,
 
+  /**
+   * Rapor anahtarları (Faz 5 / Birim 5A.1, P-03, U-03, K-09).
+   *
+   * `info` statiktir (maliyet şeması) ve ayrı durur; geçmiş + arama
+   * `qk.reports.list()` altındadır. Başarılı üretimden sonra
+   * `invalidateQueries({ queryKey: qk.reports.list() })` yalnız liste
+   * sorgularını tazeler, info gereksiz yere yeniden çekilmez.
+   */
+  reports: {
+    all: () => [...qk.all, "reports"] as const,
+    info: () => [...qk.reports.all(), "info"] as const,
+    list: () => [...qk.reports.all(), "list"] as const,
+    history: (params: ReportHistoryParams = {}) =>
+      [
+        ...qk.reports.list(),
+        "history",
+        {
+          sort: params.sort ?? "created_at",
+          order: params.order ?? "desc",
+        },
+      ] as const,
+    search: (query: string, params: ReportSearchParams = {}) =>
+      [
+        ...qk.reports.list(),
+        "search",
+        {
+          q: query.trim(),
+          sort: params.sort ?? "created_at",
+          order: params.order ?? "desc",
+          limit: params.limit ?? 20,
+          offset: params.offset ?? 0,
+        },
+      ] as const,
+  },
+
+  /** `GET /credits` — toplam kredi bakiyesi (U-03). */
+  credits: () => [...qk.all, "credits"] as const,
+
   /** Simülasyon anahtarları ileride genişler (Faz 5). */
   simulations: {
     all: () => [...qk.all, "simulations"] as const,
@@ -156,3 +194,15 @@ export const qk = {
     detail: (id: string) => [...qk.simulations.all(), "detail", id] as const,
   },
 } as const;
+
+/** Rapor geçmişi sıralama parametreleri (backend allowlist'i). */
+export type ReportHistoryParams = {
+  sort?: "created_at" | "ticker";
+  order?: "asc" | "desc";
+};
+
+/** Rapor arama parametreleri; sayfalama sunucu tarafındadır (`offset`). */
+export type ReportSearchParams = ReportHistoryParams & {
+  limit?: number;
+  offset?: number;
+};

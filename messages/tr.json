@@ -718,6 +718,110 @@
       "note": "Al/sat işlemleri portföy sayfasında yapılır; bu ekran yalnızca piyasa verisini gösterir."
     }
   },
+  "reports": {
+    "title": "Raporlar",
+    "description": "Hisse bazlı AI raporları üret ve geçmişini incele.",
+    "tabs": {
+      "generate": "Yeni Rapor",
+      "history": "Geçmiş"
+    },
+    "type": {
+      "quick_report": "Hızlı Rapor",
+      "deep_report": "Derin Rapor"
+    },
+    "credits": {
+      "label": "Kredi bakiyesi",
+      "value": "{credits} kredi",
+      "loading": "Bakiye yükleniyor…",
+      "insufficient": "Yetersiz kredi: bu rapor {cost} kredi gerektiriyor, bakiyen {balance} kredi.",
+      "insufficientHint": "Kredi her gün tavana kadar otomatik olarak dolar."
+    },
+    "wizard": {
+      "title": "Yeni rapor üret",
+      "description": "Rapor tipini ve sembolü seç; istersen amacını yazarak sorunun yanıtını yönlendir.",
+      "typeLabel": "Rapor tipi",
+      "typePlaceholder": "Rapor tipi seç",
+      "symbolLabel": "Sembol",
+      "symbolHint": "BIST hisseleri arasında ara.",
+      "symbolRequired": "Lütfen bir sembol seç.",
+      "purposeLabel": "Amaç / soru (opsiyonel)",
+      "purposePlaceholder": "Örn. Temettü verimliliği ve borçluluk oranı nasıl?",
+      "purposeHint": "En fazla {max} karakter.",
+      "purposeTooLong": "Amaç en fazla {max} karakter olabilir.",
+      "costLabel": "Tahmini maliyet",
+      "costPending": "—",
+      "submit": "Raporu üret",
+      "errors": {
+        "typeRequired": "Lütfen bir rapor tipi seç."
+      },
+      "generating": {
+        "title": "Rapor üretiliyor…",
+        "stage": "Haberler taranıyor ve finansal veriler analiz ediliyor.",
+        "elapsed": "Geçen süre: {seconds} sn",
+        "warning": "Bu işlem genellikle 30-60 saniye sürer. Tamamlanana kadar sayfayı kapatmayın.",
+        "noCancel": "Bu sürümde üretim iptal edilemez."
+      },
+      "success": {
+        "title": "Rapor hazır.",
+        "view": "Raporu aç",
+        "cost": "Harcanan kredi: {cost}",
+        "remaining": "Kalan kredi: {credits}"
+      }
+    },
+    "history": {
+      "title": "Rapor geçmişi",
+      "searchLabel": "Ara",
+      "searchPlaceholder": "Başlık veya içerikte ara",
+      "columns": {
+        "title": "Başlık",
+        "ticker": "Sembol",
+        "type": "Tip",
+        "date": "Tarih",
+        "cost": "Maliyet"
+      },
+      "costValue": "{cost} kredi",
+      "unknownTitle": "Başlıksız rapor",
+      "total": "{count} rapor",
+      "emptyTitle": "Henüz rapor yok",
+      "emptyDescription": "İlk raporunu üretmek için Yeni Rapor sekmesini kullan.",
+      "emptySearchTitle": "Sonuç bulunamadı",
+      "emptySearchDescription": "Farklı bir terimle aramayı dene.",
+      "errorTitle": "Rapor geçmişi yüklenemedi",
+      "errorDescription": "Bağlantını kontrol edip tekrar dene.",
+      "retry": "Tekrar dene"
+    },
+    "detail": {
+      "back": "Raporlar",
+      "titleFallback": "Rapor",
+      "meta": {
+        "type": "Tip",
+        "tokens": "Token",
+        "cost": "Maliyet",
+        "date": "Tarih",
+        "purpose": "Amaç"
+      },
+      "tokensValue": "{count} token",
+      "costValue": "{cost} kredi",
+      "sentiments": {
+        "title": "Kaynaklar ve duyarlılık",
+        "empty": "Bu raporda kaynak kaydı yok.",
+        "source": "Kaynağı aç",
+        "positive": "Olumlu",
+        "neutral": "Nötr",
+        "negative": "Olumsuz"
+      },
+      "actions": {
+        "copy": "Kopyala",
+        "copyFailed": "Rapor kopyalanamadı.",
+        "copied": "Rapor kopyalandı.",
+        "download": "Markdown indir",
+        "downloadFailed": "Rapor indirilemedi."
+      },
+      "errorTitle": "Rapor yüklenemedi",
+      "errorDescription": "Rapor getirilemedi. Lütfen tekrar dene.",
+      "retry": "Tekrar dene"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",
@@ -746,6 +850,9 @@
     "favoriteFailed": "Favorilere eklenemedi.",
     "insufficientCredit": "Yeterli kredin yok.",
     "reportNotFound": "Rapor bulunamadı.",
+    "reportFailed": "Rapor üretilemedi. Lütfen tekrar dene.",
+    "invalidReportType": "Geçersiz rapor tipi.",
+    "invalidFileType": "Desteklenmeyen dosya türü.",
     "simulationNotFound": "Simülasyon bulunamadı.",
     "invalidTargetPrice": "Hedef fiyat geçersiz.",
     "invalidSimulationParameters": "Simülasyon parametreleri geçersiz.",

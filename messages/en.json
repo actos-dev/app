@@ -561,10 +561,10 @@
       "cashHint": "Available cash: {amount}",
       "subtotal": "Trade amount",
       "commission": "Commission ({rate}%)",
-    "totalBuy": "Total to pay",
-    "totalSell": "Net proceeds",
-    "submitBuy": "Submit buy order",
-    "submitSell": "Submit sell order",
+      "totalBuy": "Total to pay",
+      "totalSell": "Net proceeds",
+      "submitBuy": "Submit buy order",
+      "submitSell": "Submit sell order",
       "marketClosed": "The market is closed; trades are only allowed during session hours.",
       "marketOpensAt": "The market is closed. Next open: {time}.",
       "marketHoliday": "The market is closed (public holiday: {name}).",
@@ -718,6 +718,110 @@
       "note": "Buy/sell trades are placed on the portfolio page; this screen only shows market data."
     }
   },
+  "reports": {
+    "title": "Reports",
+    "description": "Generate AI stock reports and browse their history.",
+    "tabs": {
+      "generate": "New Report",
+      "history": "History"
+    },
+    "type": {
+      "quick_report": "Quick Report",
+      "deep_report": "Deep Report"
+    },
+    "credits": {
+      "label": "Credit balance",
+      "value": "{credits} credits",
+      "loading": "Loading balance…",
+      "insufficient": "Not enough credits: this report costs {cost} credits and your balance is {balance} credits.",
+      "insufficientHint": "Credits refill automatically up to the cap each day."
+    },
+    "wizard": {
+      "title": "Generate a new report",
+      "description": "Choose a report type and symbol; optionally add your goal to steer the answer.",
+      "typeLabel": "Report type",
+      "typePlaceholder": "Select a report type",
+      "symbolLabel": "Symbol",
+      "symbolHint": "Search among BIST stocks.",
+      "symbolRequired": "Please select a symbol.",
+      "purposeLabel": "Goal / question (optional)",
+      "purposePlaceholder": "e.g. How do dividend yield and leverage look?",
+      "purposeHint": "Up to {max} characters.",
+      "purposeTooLong": "The goal can be at most {max} characters.",
+      "costLabel": "Estimated cost",
+      "costPending": "—",
+      "submit": "Generate report",
+      "errors": {
+        "typeRequired": "Please select a report type."
+      },
+      "generating": {
+        "title": "Generating report…",
+        "stage": "Scanning news and analyzing financial data.",
+        "elapsed": "Elapsed: {seconds}s",
+        "warning": "This usually takes 30-60 seconds. Do not close the page until it finishes.",
+        "noCancel": "Generation cannot be cancelled in this version."
+      },
+      "success": {
+        "title": "Report is ready.",
+        "view": "Open report",
+        "cost": "Credits spent: {cost}",
+        "remaining": "Remaining credits: {credits}"
+      }
+    },
+    "history": {
+      "title": "Report history",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search title or content",
+      "columns": {
+        "title": "Title",
+        "ticker": "Symbol",
+        "type": "Type",
+        "date": "Date",
+        "cost": "Cost"
+      },
+      "costValue": "{cost} credits",
+      "unknownTitle": "Untitled report",
+      "total": "{count} reports",
+      "emptyTitle": "No reports yet",
+      "emptyDescription": "Use the New Report tab to generate your first report.",
+      "emptySearchTitle": "No results",
+      "emptySearchDescription": "Try searching with a different term.",
+      "errorTitle": "Could not load report history",
+      "errorDescription": "Check your connection and try again.",
+      "retry": "Try again"
+    },
+    "detail": {
+      "back": "Reports",
+      "titleFallback": "Report",
+      "meta": {
+        "type": "Type",
+        "tokens": "Tokens",
+        "cost": "Cost",
+        "date": "Date",
+        "purpose": "Goal"
+      },
+      "tokensValue": "{count} tokens",
+      "costValue": "{cost} credits",
+      "sentiments": {
+        "title": "Sources and sentiment",
+        "empty": "No sources recorded in this report.",
+        "source": "Open source",
+        "positive": "Positive",
+        "neutral": "Neutral",
+        "negative": "Negative"
+      },
+      "actions": {
+        "copy": "Copy",
+        "copyFailed": "Could not copy the report.",
+        "copied": "Report copied.",
+        "download": "Download Markdown",
+        "downloadFailed": "Could not download the report."
+      },
+      "errorTitle": "Could not load the report",
+      "errorDescription": "The report could not be fetched. Please try again.",
+      "retry": "Try again"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",
@@ -746,6 +850,9 @@
     "favoriteFailed": "Could not add to favorites.",
     "insufficientCredit": "You don't have enough credits.",
     "reportNotFound": "Report not found.",
+    "reportFailed": "The report could not be generated. Please try again.",
+    "invalidReportType": "Invalid report type.",
+    "invalidFileType": "Unsupported file type.",
     "simulationNotFound": "Simulation not found.",
     "invalidTargetPrice": "Invalid target price.",
     "invalidSimulationParameters": "Invalid simulation parameters.",

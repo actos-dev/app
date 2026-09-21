@@ -1,15 +1,24 @@
 /**
- * `/research/reports` iskeleti (Faz 1 / Birim 1.4).
+ * `/research/reports` — rapor üretimi + geçmiş (Faz 5 / Birim 5A.1).
  *
- * Auth koruması henüz yok; Faz 2'de middleware ile korunacak. AI raporları ve
- * üretim sihirbazı Faz 5A'da gelecek.
+ * Sunucu bileşeni: rapor tipleri/maliyet (`/reports/info`), geçmiş ve kredi
+ * bakiyesi PARALEL çekilir (çerez forward edilerek) ve istemci adasına
+ * `initialData` olarak geçirilir; böylece ilk boyamada çift istek olmaz.
+ *
+ * Üretim SENKRONdur (B-09 job altyapısı yok); iptal/gerçek ilerleme sunulmaz,
+ * bu karar `ReportWizard` başında belgelenmiştir.
  */
-import { Construction } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "@/components/shared/EmptyState";
-import { PageHeader } from "@/components/shared/PageHeader";
+import { ReportsWorkspace } from "@/components/reports/ReportsWorkspace";
+import { serverAuthApiFetch } from "@/lib/api/server-auth";
+import {
+  creditsServerPath,
+  reportsHistoryServerPath,
+  reportsInfoServerPath,
+} from "@/lib/reports/api-paths";
+import type { CreditsResponse, ReportHistoryItem, ReportInfo } from "@/lib/reports/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -17,16 +26,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ReportsPage() {
-  const t = await getTranslations();
+  const [info, history, credits] = await Promise.all([
+    serverAuthApiFetch<ReportInfo>(reportsInfoServerPath()),
+    serverAuthApiFetch<ReportHistoryItem[]>(reportsHistoryServerPath()),
+    serverAuthApiFetch<CreditsResponse>(creditsServerPath()),
+  ]);
 
   return (
-    <>
-      <PageHeader title={t("nav.reports")} />
-      <EmptyState
-        icon={<Construction aria-hidden="true" className="size-5" />}
-        title={t("common.comingSoonTitle")}
-        description={t("common.comingSoonDescription")}
-      />
-    </>
+    <ReportsWorkspace
+      {...(info ? { initialInfo: info } : {})}
+      {...(Array.isArray(history) ? { initialHistory: history } : {})}
+      {...(credits ? { initialCredits: credits } : {})}
+    />
   );
 }

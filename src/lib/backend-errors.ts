@@ -51,7 +51,17 @@ const BACKEND_ERROR_KEYS: Readonly<Record<string, string>> = {
   "No vector data available for given tickers": "apiErrors.noVectorData",
   "Could not add to favorites": "apiErrors.favoriteFailed",
 
-  // Rapor / simülasyon / kredi.
+  // Rapor — kodlaştırılmış sabit `detail` değerleri (B-07).
+  error_insufficient_credit: "apiErrors.insufficientCredit",
+  error_report_failed: "apiErrors.reportFailed",
+  error_report_not_found: "apiErrors.reportNotFound",
+  error_invalid_report_type: "apiErrors.invalidReportType",
+  error_invalid_file_type: "apiErrors.invalidFileType",
+  error_invalid_sort: "apiErrors.generic",
+  error_invalid_order: "apiErrors.generic",
+  error_database: "apiErrors.database",
+
+  // Rapor / simülasyon / kredi — düz İngilizce metinler (backend geçiş dönemi).
   "insufficient credit": "apiErrors.insufficientCredit",
   "Report not found or you do not have permission to view it.": "apiErrors.reportNotFound",
   "Report not found.": "apiErrors.reportNotFound",

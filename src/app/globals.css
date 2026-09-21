@@ -48,3 +48,123 @@
     }
   }
 }
+
+/**
+ * AI raporu Markdown tipografisi (Faz 5 / Birim 5A.1, K-09).
+ *
+ * Tailwind tipografi eklentisi bilinçli olarak yok; rapor içeriği yalnız bu
+ * kapsamda biçimlenir ve tüm renkler token'dan gelir (keyfi değer yok).
+ * Yapı `ReportMarkdown` bileşeninde üretilir; burada yalnız görünüm tanımlanır.
+ */
+@layer components {
+  .report-markdown {
+    color: var(--foreground);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+
+  .report-markdown > * + * {
+    margin-top: 0.875rem;
+  }
+
+  .report-markdown h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .report-markdown h2 {
+    margin-top: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  .report-markdown h3 {
+    margin-top: 1.25rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+
+  .report-markdown ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+
+  .report-markdown ol {
+    list-style: decimal;
+    padding-left: 1.25rem;
+  }
+
+  .report-markdown li + li {
+    margin-top: 0.25rem;
+  }
+
+  .report-markdown a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .report-markdown a:hover {
+    color: var(--primary-hover);
+  }
+
+  .report-markdown strong {
+    font-weight: 600;
+  }
+
+  .report-markdown blockquote {
+    border-left: 2px solid var(--border-strong);
+    padding-left: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
+  .report-markdown code {
+    background-color: var(--surface-raised);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.3rem;
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+  }
+
+  .report-markdown pre {
+    background-color: var(--surface-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    overflow-x: auto;
+  }
+
+  .report-markdown pre code {
+    background-color: transparent;
+    padding: 0;
+  }
+
+  .report-markdown table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .report-markdown th,
+  .report-markdown td {
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.6rem;
+    text-align: left;
+  }
+
+  .report-markdown th {
+    background-color: var(--surface-raised);
+    font-weight: 600;
+  }
+
+  .report-markdown hr {
+    border-color: var(--border);
+  }
+
+  .report-markdown img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+  }
+}

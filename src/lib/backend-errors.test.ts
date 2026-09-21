@@ -38,6 +38,15 @@ describe("translateBackendError", () => {
     expect(translateBackendError("Report not found.")).toBe("apiErrors.reportNotFound");
   });
 
+  it("rapor sabit kodlarını eşler (B-07)", () => {
+    expect(translateBackendError("error_insufficient_credit")).toBe("apiErrors.insufficientCredit");
+    expect(translateBackendError("error_report_failed")).toBe("apiErrors.reportFailed");
+    expect(translateBackendError("error_report_not_found")).toBe("apiErrors.reportNotFound");
+    expect(translateBackendError("error_invalid_report_type")).toBe("apiErrors.invalidReportType");
+    expect(translateBackendError("error_invalid_file_type")).toBe("apiErrors.invalidFileType");
+    expect(translateBackendError("error_database")).toBe("apiErrors.database");
+  });
+
   it("BFF ve doğrulama değerlerini eşler", () => {
     expect(translateBackendError("error_backend_unreachable")).toBe("apiErrors.backendUnreachable");
     expect(translateBackendError("error_csrf_origin_mismatch")).toBe("apiErrors.csrfRejected");
