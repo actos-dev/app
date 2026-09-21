@@ -266,6 +266,63 @@
       }
     }
   },
+  "markets": {
+    "title": "Piyasalar",
+    "description": "BIST hisseleri, döviz kurları, kıymetli madenler ve halka arzlar tek ekranda.",
+    "tabs": {
+      "label": "Varlık türü",
+      "stocks": "Hisseler",
+      "fx": "Döviz",
+      "metals": "Kıymetli Madenler",
+      "ipos": "Halka Arz"
+    },
+    "sort": {
+      "label": "Sıralama",
+      "popular": "Popüler",
+      "alphabetical": "Alfabetik",
+      "gainers": "Yükselenler",
+      "losers": "Düşenler",
+      "price_high": "Fiyat (yüksek)",
+      "price_low": "Fiyat (düşük)",
+      "volume": "Hacim",
+      "market_cap": "Piyasa değeri"
+    },
+    "columns": {
+      "symbol": "Sembol",
+      "name": "Ad",
+      "price": "Fiyat",
+      "change": "Değişim",
+      "volume": "Hacim",
+      "marketCap": "Piyasa değeri",
+      "buying": "Alış",
+      "selling": "Satış",
+      "title": "Halka arz",
+      "date": "Tarih",
+      "status": "Durum"
+    },
+    "total": "{count} sonuç",
+    "empty": "Gösterilecek kayıt yok.",
+    "error": "Veriler yüklenemedi.",
+    "errorDescription": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene.",
+    "retry": "Tekrar dene",
+    "stale": "Gecikmeli",
+    "source": "Kaynak: {source}",
+    "updatedAt": "Güncelleme: {time}",
+    "search": {
+      "label": "Hisse ara",
+      "placeholder": "Hisse kodu veya şirket adı",
+      "clear": "Aramayı temizle",
+      "hint": "Aramak için en az 2 karakter yaz.",
+      "searching": "Aranıyor…",
+      "noResults": "Sonuç bulunamadı.",
+      "error": "Arama başarısız oldu. Lütfen tekrar dene."
+    },
+    "ipos": {
+      "statusActive": "Aktif",
+      "statusUpcoming": "Yaklaşan",
+      "statusDraft": "Taslak"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",

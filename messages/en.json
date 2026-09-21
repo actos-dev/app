@@ -266,6 +266,63 @@
       }
     }
   },
+  "markets": {
+    "title": "Markets",
+    "description": "BIST stocks, currencies, precious metals and IPOs on a single screen.",
+    "tabs": {
+      "label": "Asset type",
+      "stocks": "Stocks",
+      "fx": "Currencies",
+      "metals": "Precious Metals",
+      "ipos": "IPOs"
+    },
+    "sort": {
+      "label": "Sort",
+      "popular": "Popular",
+      "alphabetical": "Alphabetical",
+      "gainers": "Gainers",
+      "losers": "Losers",
+      "price_high": "Price (high)",
+      "price_low": "Price (low)",
+      "volume": "Volume",
+      "market_cap": "Market cap"
+    },
+    "columns": {
+      "symbol": "Symbol",
+      "name": "Name",
+      "price": "Price",
+      "change": "Change",
+      "volume": "Volume",
+      "marketCap": "Market cap",
+      "buying": "Buy",
+      "selling": "Sell",
+      "title": "IPO",
+      "date": "Date",
+      "status": "Status"
+    },
+    "total": "{count} results",
+    "empty": "Nothing to show.",
+    "error": "Data could not be loaded.",
+    "errorDescription": "The data provider may be unreachable. Please try again.",
+    "retry": "Try again",
+    "stale": "Delayed",
+    "source": "Source: {source}",
+    "updatedAt": "Updated: {time}",
+    "search": {
+      "label": "Search stocks",
+      "placeholder": "Ticker or company name",
+      "clear": "Clear search",
+      "hint": "Type at least 2 characters to search.",
+      "searching": "Searching…",
+      "noResults": "No results found.",
+      "error": "Search failed. Please try again."
+    },
+    "ipos": {
+      "statusActive": "Active",
+      "statusUpcoming": "Upcoming",
+      "statusDraft": "Draft"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",

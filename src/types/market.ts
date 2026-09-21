@@ -233,3 +233,46 @@ export type NewsArticle = {
   lang: string | null;
   date: string | null;
 };
+
+/** `GET /api/v1/companies/search` tek sonuç (`services/search.py`). */
+export type CompanySearchResult = {
+  ticker: string;
+  name: string;
+  score: number;
+};
+
+/**
+ * `/api/v1/ipos/*` liste öğesi (`clients/ipo.py::list_ipos`).
+ *
+ * Backend `json.loads(...)` ile WordPress listesini aynen döndürür; alan
+ * adları tel formatıdır ve `response_model` yoktur.
+ */
+export type IpoListItem = {
+  id: number;
+  slug: string;
+  title: string;
+  link: string;
+  date: string;
+  modified: string | null;
+};
+
+/** Halka arzın listedeki kategorisi; tek tabloda durum sütunu için. */
+export type IpoStatus = "active" | "upcoming" | "draft";
+
+/** Durum etiketiyle birleştirilmiş halka arz satırı. */
+export type IpoRow = IpoListItem & { status: IpoStatus };
+
+/** `GET /api/v1/ipos/{slug}` detayı (`clients/ipo.py::get_ipo_detail`). */
+export type IpoDetail = {
+  slug: string;
+  ticker: string | null;
+  company_name: string | null;
+  info: Record<string, string>;
+  sections: Record<string, string>;
+  company: {
+    city?: string;
+    founded?: string;
+    description?: string;
+  };
+  updated_at: string | null;
+};
