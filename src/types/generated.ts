@@ -1256,6 +1256,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/portfolios/summaries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Portfolio Summaries */
+        get: operations["list_portfolio_summaries_api_v1_portfolios_summaries_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/portfolios/{portfolio_id}": {
         parameters: {
             query?: never;
@@ -1836,6 +1853,43 @@ export interface components {
              * @default 5
              */
             limit: number;
+        };
+        /** PortfolioSummariesResponse */
+        PortfolioSummariesResponse: {
+            /** Items */
+            items: components["schemas"]["PortfolioSummary"][];
+        };
+        /**
+         * PortfolioSummary
+         * @description Liste karti icin tek portfoy ozeti (B-10).
+         */
+        PortfolioSummary: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Currency */
+            currency: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Current Value */
+            current_value: number;
+            /** Cost Basis */
+            cost_basis: number;
+            /** Daily Change Pct */
+            daily_change_pct?: number | null;
+            /** Total Return Pct */
+            total_return_pct?: number | null;
+            /** Position Count */
+            position_count: number;
+            /**
+             * As Of
+             * Format: date-time
+             */
+            as_of: string;
         };
         /** PreferencesUpdate */
         PreferencesUpdate: {
@@ -4346,6 +4400,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_portfolio_summaries_api_v1_portfolios_summaries_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PortfolioSummariesResponse"];
                 };
             };
             /** @description Validation Error */
