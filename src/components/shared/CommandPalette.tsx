@@ -93,9 +93,15 @@ function optionId(index: number): string {
 type CommandPaletteProps = {
   /** SSR'da çerezden çözülen aktif tema; işlem etiketlerinde kullanılır. */
   theme: ThemeName;
+  /**
+   * Oturum durumu (5C / X-03). Anonimde çıkış/rapor/simülasyon gibi kişisel
+   * işlemler listeden çıkarılır; sembol arama (public) ve tema/dil kalır.
+   * Varsayılan `true` eski kullanımı (testler) korur.
+   */
+  authenticated?: boolean;
 };
 
-export function CommandPalette({ theme }: CommandPaletteProps) {
+export function CommandPalette({ theme, authenticated = true }: CommandPaletteProps) {
   const t = useTranslations("command");
   const tNav = useTranslations("nav");
   const themeNames = useTranslations("theme");
@@ -242,38 +248,40 @@ export function CommandPalette({ theme }: CommandPaletteProps) {
         },
       });
     }
-    result.push({
-      id: "action:new-report",
-      group: "actions",
-      label: t("actions.newReport"),
-      icon: FileText,
-      run: () => {
-        setOpen(false);
-        router.push("/research/reports");
-      },
-    });
-    result.push({
-      id: "action:new-simulation",
-      group: "actions",
-      label: t("actions.newSimulation"),
-      icon: BarChart3,
-      run: () => {
-        setOpen(false);
-        router.push("/research/simulation");
-      },
-    });
-    result.push({
-      id: "action:logout",
-      group: "actions",
-      label: t("actions.logout"),
-      icon: LogOut,
-      run: () => {
-        setOpen(false);
-        void logout();
-      },
-    });
+    if (authenticated) {
+      result.push({
+        id: "action:new-report",
+        group: "actions",
+        label: t("actions.newReport"),
+        icon: FileText,
+        run: () => {
+          setOpen(false);
+          router.push("/research/reports");
+        },
+      });
+      result.push({
+        id: "action:new-simulation",
+        group: "actions",
+        label: t("actions.newSimulation"),
+        icon: BarChart3,
+        run: () => {
+          setOpen(false);
+          router.push("/research/simulation");
+        },
+      });
+      result.push({
+        id: "action:logout",
+        group: "actions",
+        label: t("actions.logout"),
+        icon: LogOut,
+        run: () => {
+          setOpen(false);
+          void logout();
+        },
+      });
+    }
     return result;
-  }, [t, themeNames, localeNames, theme, locale, router, logout]);
+  }, [t, themeNames, localeNames, theme, locale, router, logout, authenticated]);
 
   const symbolCommands = useMemo<CommandItem[]>(() => {
     return (searchQuery.data ?? []).map((result) => ({

@@ -15,6 +15,7 @@ import { Shield, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { useRequireAuth } from "@/components/auth/SessionProvider";
 import { AdvisorPortfolioResults } from "@/components/advisor/AdvisorPortfolioResults";
 import { SymbolSearch } from "@/components/market/SymbolSearch";
 import { Panel } from "@/components/shared/Panel";
@@ -49,6 +50,7 @@ export function AdvisorPortfolioForm({ maintenanceBlocked }: AdvisorPortfolioFor
   const [submitted, setSubmitted] = useState(false);
 
   const query = useAdvisorPortfolioProfile(tickers, limit, submitted && !maintenanceBlocked);
+  const requireAuth = useRequireAuth();
 
   const limitOptions: SelectOption<string>[] = PORTFOLIO_LIMIT_OPTIONS.map((value) => ({
     value: String(value),
@@ -88,14 +90,17 @@ export function AdvisorPortfolioForm({ maintenanceBlocked }: AdvisorPortfolioFor
           className="flex flex-col gap-4"
           onSubmit={(event) => {
             event.preventDefault();
-            if (maintenanceBlocked || tickers.length === 0) {
-              return;
-            }
-            if (submitted) {
-              void query.refetch();
-            } else {
-              setSubmitted(true);
-            }
+            // 5C / X-04: anonimde analiz başlatılmaz; login'e yönlendirilir.
+            requireAuth(() => {
+              if (maintenanceBlocked || tickers.length === 0) {
+                return;
+              }
+              if (submitted) {
+                void query.refetch();
+              } else {
+                setSubmitted(true);
+              }
+            });
           }}
         >
           <p className="text-sm text-muted-foreground">{t("portfolio.description")}</p>

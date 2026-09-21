@@ -20,6 +20,7 @@ import { FlaskConical, Info, LoaderCircle, TriangleAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { useRequireAuth } from "@/components/auth/SessionProvider";
 import { SymbolSearch } from "@/components/market/SymbolSearch";
 import { MaintenanceNotice } from "@/components/shared/MaintenanceNotice";
 import { Panel } from "@/components/shared/Panel";
@@ -68,6 +69,7 @@ export function SimulationForm({ initialPerDayCost, initialCredits }: Simulation
   const creditsQuery = useSimulationCredits(initialCredits);
   const maintenance = useMaintenance();
   const run = useRunSimulation();
+  const requireAuth = useRequireAuth();
 
   const [ticker, setTicker] = useState("");
   const [daysInput, setDaysInput] = useState(String(SIMULATION_DEFAULT_DAYS));
@@ -142,16 +144,19 @@ export function SimulationForm({ initialPerDayCost, initialCredits }: Simulation
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setShowValidation(true);
-    if (!canSubmit) {
-      return;
-    }
-    setElapsed(0);
-    run.mutate({
-      ticker: normalizedTicker,
-      days,
-      bounds,
-      ...(normalizedTarget ? { target: normalizedTarget } : {}),
+    // 5C / X-04: anonimde koşu başlatılmaz; login'e yönlendirilir.
+    requireAuth(() => {
+      setShowValidation(true);
+      if (!canSubmit) {
+        return;
+      }
+      setElapsed(0);
+      run.mutate({
+        ticker: normalizedTicker,
+        days,
+        bounds,
+        ...(normalizedTarget ? { target: normalizedTarget } : {}),
+      });
     });
   };
 

@@ -15,7 +15,8 @@
     "comingSoonTitle": "Yakında",
     "comingSoonDescription": "Bu bölüm henüz hazır değil; içerik sonraki sürümlerde eklenecek.",
     "featureTitle": "Özellik bakımda",
-    "featureDescription": "Bu özellik geçici olarak devre dışı. Lütfen daha sonra tekrar dene."
+    "featureDescription": "Bu özellik geçici olarak devre dışı. Lütfen daha sonra tekrar dene.",
+    "loginRequired": "Bu bölüm için giriş yapmalısın"
   },
   "nav": {
     "groups": {
@@ -711,6 +712,7 @@
     "favorite": {
       "add": "Favorilere ekle",
       "remove": "Favorilerden çıkar",
+      "loginToAdd": "Takibe almak için giriş yap",
       "added": "Favorilere eklendi.",
       "removed": "Favorilerden çıkarıldı.",
       "error": "Favori güncellenemedi."
@@ -1102,6 +1104,13 @@
       "reports": "Rapor üret",
       "simulation": "Simülasyon",
       "markets": "Piyasalar"
+    },
+    "guest": {
+      "noticeTitle": "Kişisel panel girişten sonra açılır",
+      "noticeDescription": "Portföyün, takip listen ve kredi bakiyen yalnızca oturum açtığında gösterilir. Piyasa verilerini giriş yapmadan inceleyebilirsin.",
+      "login": "Giriş yap",
+      "register": "Kayıt ol",
+      "markets": "Piyasalara göz at"
     }
   },
   "credits": {

@@ -16,7 +16,7 @@ import { PortfolioSummaryWidget } from "@/components/dashboard/PortfolioSummaryW
 import { QuickActionsWidget } from "@/components/dashboard/QuickActionsWidget";
 import { WatchlistWidget } from "@/components/dashboard/WatchlistWidget";
 import { useMarketStatus } from "@/lib/query/polling";
-import type { DashboardData } from "@/app/(app)/dashboard/dashboard-data";
+import type { DashboardData } from "@/app/(app)/(public-market)/dashboard/dashboard-data";
 
 type DashboardOverviewProps = {
   data: DashboardData;

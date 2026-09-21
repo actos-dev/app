@@ -27,16 +27,18 @@ import { isAccessTokenExpired } from "@/lib/auth/jwt";
 import { buildLoginRedirect } from "@/lib/auth/next-path";
 import { refreshSession, type NormalizedCookie } from "@/lib/auth/refresh";
 
-/** Korumalı rotalar; `/api/v1` (BFF) bilinçli olarak hariç. */
+/**
+ * Korumalı YALNIZ kişisel rotalar; `/api/v1` (BFF) bilinçli olarak hariç.
+ *
+ * Faz 5C / X-02: piyasa okuma rotaları (`/markets`, `/symbol`, `/digest`) ve
+ * guest dashboard'a hazırlık için `/dashboard` listeden ÇIKARILDI; bunlar
+ * anonime açıktır ve `serverApiFetch` (çerezsiz) ile veri çeker.
+ */
 export const config = {
   matcher: [
-    "/dashboard/:path*",
-    "/markets/:path*",
-    "/symbol/:path*",
     "/watchlist/:path*",
     "/portfolio/:path*",
     "/research/:path*",
-    "/digest/:path*",
     "/data/:path*",
     "/profile/:path*",
     "/kitchen-sink/:path*",

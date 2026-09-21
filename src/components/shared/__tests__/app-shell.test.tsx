@@ -19,6 +19,10 @@ const mocks = vi.hoisted(() => ({
   replace: vi.fn(),
   refresh: vi.fn(),
   push: vi.fn(),
+  // Faz 5C: AppShell oturumu `getSession()` ile çözer. Testler varsayılan
+  // olarak oturumlu kullanıcıyı taklit eder; anonim senaryo `session.value =
+  // null` ile kurulur.
+  session: { value: { id: 1 } as unknown },
 }));
 
 vi.mock("next/navigation", () => ({
@@ -29,6 +33,10 @@ vi.mock("next/navigation", () => ({
 vi.mock("next/headers", () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
   headers: () => Promise.resolve(new Headers()),
+}));
+
+vi.mock("@/lib/auth/session", () => ({
+  getSession: () => Promise.resolve(mocks.session.value),
 }));
 
 // Komut paleti tema/dil server action'larını import eder; testte ağa çıkmasın.
@@ -73,6 +81,7 @@ afterEach(() => {
 
 describe("AppShell", () => {
   beforeEach(() => {
+    mocks.session.value = { id: 1 };
     // RSC kredi tohumu ve istemci tazelemesi ağa çıkmasın.
     vi.stubGlobal("fetch", vi.fn(async () => mockResponse({ credits: 10 })));
   });
@@ -152,5 +161,45 @@ describe("AppShell", () => {
     await waitFor(() => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
+  });
+});
+
+describe("AppShell — anonim (5C / X-03)", () => {
+  beforeEach(() => {
+    mocks.session.value = null;
+  });
+
+  it("çerez yoksa kişisel uçlara AĞ ÇAĞRISI yapmaz", async () => {
+    const fetchMock = vi.fn(async () => mockResponse({ credits: 10 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await renderShell();
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("Giriş/Kayıt gösterir; kredi, hesap menüsü ve duyuru zili gizlenir", async () => {
+    await renderShell();
+
+    expect(screen.getByRole("link", { name: "Giriş" })).toHaveAttribute("href", "/login");
+    expect(screen.getByRole("link", { name: "Kayıt" })).toHaveAttribute("href", "/register");
+    expect(screen.queryByRole("button", { name: "Hesap menüsü" })).not.toBeInTheDocument();
+    expect(screen.queryByText("Kredi")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Duyurular" })).not.toBeInTheDocument();
+  });
+
+  it("kişisel nav kilitli ve /login?next= hedefine gider; piyasa açık kalır", async () => {
+    await renderShell();
+
+    const watchlist = screen.getByRole("link", { name: "Takip Listesi" });
+    expect(watchlist).toHaveAttribute("href", "/login?next=%2Fwatchlist");
+    expect(watchlist).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByRole("link", { name: "Portföyler" })).toHaveAttribute(
+      "href",
+      "/login?next=%2Fportfolio",
+    );
+    expect(screen.getByRole("link", { name: "Piyasalar" })).toHaveAttribute("href", "/markets");
+    expect(screen.getByRole("link", { name: "Genel Bakış" })).toHaveAttribute("href", "/dashboard");
+    expect(screen.getByRole("link", { name: "Piyasa Bülteni" })).toHaveAttribute("href", "/digest");
   });
 });

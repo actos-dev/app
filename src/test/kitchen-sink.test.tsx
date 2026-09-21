@@ -11,7 +11,7 @@ import userEvent from "@testing-library/user-event";
 import { toast } from "sonner";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import KitchenSinkPage from "@/app/(app)/kitchen-sink/page";
+import KitchenSinkPage from "@/app/(app)/(private)/kitchen-sink/page";
 
 const navigation = vi.hoisted(() => ({ notFound: vi.fn() }));
 

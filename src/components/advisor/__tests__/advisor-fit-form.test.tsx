@@ -20,6 +20,12 @@ vi.mock("sonner", () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
+// Aksiyon kapısı (`useRequireAuth`) `useRouter` çağırır; provider'sız testte
+// oturum kapısı uygulanmaz ama router hook'u yine de gerekir.
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+}));
+
 const fitPayload = {
   query: { horizon_target: 0.7, profitability_target: 0.7, risk_tolerance: 0.5 },
   results: [

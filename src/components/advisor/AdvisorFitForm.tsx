@@ -15,6 +15,7 @@ import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
+import { useRequireAuth } from "@/components/auth/SessionProvider";
 import { AdvisorFitResults } from "@/components/advisor/AdvisorFitResults";
 import { Panel } from "@/components/shared/Panel";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,7 @@ export function AdvisorFitForm({ maintenanceBlocked }: AdvisorFitFormProps) {
     { horizon, profitability, riskTolerance, limit },
     submitted && !maintenanceBlocked,
   );
+  const requireAuth = useRequireAuth();
 
   const horizonOptions: SelectOption<AdvisorHorizon>[] = [
     { value: "short", label: t("levels.horizon.short") },
@@ -93,14 +95,17 @@ export function AdvisorFitForm({ maintenanceBlocked }: AdvisorFitFormProps) {
           className="flex flex-col gap-4"
           onSubmit={(event) => {
             event.preventDefault();
-            if (maintenanceBlocked) {
-              return;
-            }
-            if (submitted) {
-              void query.refetch();
-            } else {
-              setSubmitted(true);
-            }
+            // 5C / X-04: anonimde analiz başlatılmaz; login'e yönlendirilir.
+            requireAuth(() => {
+              if (maintenanceBlocked) {
+                return;
+              }
+              if (submitted) {
+                void query.refetch();
+              } else {
+                setSubmitted(true);
+              }
+            });
           }}
         >
           <p className="text-sm text-muted-foreground">{t("fit.description")}</p>

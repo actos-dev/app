@@ -41,6 +41,17 @@ frontend'te hangi maddenin askıya alındığını gösterir.
 - **Bloke ettiği:** U-12 (tek takip listesi; FX/metal favorileri).
 - **Kabul kriteri:** `POST /favorites/USD` 200; `GET /favorites` BIST ve ekonomi sembollerini birlikte döner; geçersiz sembol 400/404.
 
+### B-17 — Anonim piyasa okuması (public-first) + IP bazlı limit
+
+- **Amaç:** Ürün kararı: piyasa verisi çoğunlukla public (TradingView gibi); yalnız kişisel varlıklar/aksiyonlar login ister. Bugün `/api/*` auth middleware'i anonim isteği 401'le reddediyor (ISSUES.md A7).
+- **Önerilen değişiklik:** Şu **okuma** uçlarını anonim erişime aç (mevcut şemalar korunur):
+  `GET /companies/summary`, `/companies/info/{ticker}`, `/companies/search`, `/price/current`, `/price/history/{ticker}`, `/economy/quotes`, `/economy/history/{symbol}`, `/ipo/{upcoming,draft,active,slug}`, `/news/{ticker}`, `/digest`.
+  Anonim erişimde **IP başına sıkı rate limit** (ör. `/price/*` ve `/companies/summary` 60/dk, `/news` 10/dk) + `429` + `Retry-After`; cache başlıkları. Kişisel uçlar (`/favorites`, `/portfolios*`, `/reports*`, `/simulations*`, `/credits`, `/profile`, `/bots`, `/data/*`, `/announcements` yazma) AUTH'lu kalır.
+- **Alternatif:** Ayrı `/public/*` uçları — şema tekrarı yüzünden önerilmez.
+- **Öncelik:** P1 · **Efor:** M · **Faz:** 5C
+- **Bloke ettiği:** X-01…X-09 (public piyasalar, SEO sembol sayfaları).
+- **Kabul kriteri:** Anonim `GET /api/v1/companies/summary` ve `/economy/quotes` 200; kişisel uçlar anonime 401; limit aşımı 429 + `Retry-After`; mevcut testler bozulmaz.
+
 ### B-03 — Server-side oturum doğrulaması için `JWT_SECRET` paylaşımı
 
 - **Amaç:** Next middleware, korumalı sayfayı render etmeden önce access token'ı **yerel**

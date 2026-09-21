@@ -13,11 +13,13 @@
  */
 import { Star, StarOff, Wallet } from "lucide-react";
 import dynamic from "next/dynamic";
+import type { Route } from "next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useCallback, useState, type ReactNode } from "react";
 
+import { useRequireAuth, useSession } from "@/components/auth/SessionProvider";
 import { Delta } from "@/components/market/Delta";
 import { MarketStatusPill } from "@/components/market/MarketStatusPill";
 import { PriceText } from "@/components/market/PriceText";
@@ -30,6 +32,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs } from "@/components/ui/tabs";
 import { useFavorites } from "@/hooks/useFavorites";
+import { buildLoginRedirect } from "@/lib/auth/next-path";
 import { useFormatters } from "@/lib/format";
 import { buildSymbolHref, type ChartPeriod } from "@/lib/markets/periods";
 import { safeExternalUrl } from "@/lib/safe-url";
@@ -88,6 +91,7 @@ function StatItem({ label, value }: StatItemProps) {
 function FavoriteToggle({ ticker }: { ticker: string }) {
   const t = useTranslations("symbol.favorite");
   const favorites = useFavorites();
+  const requireAuth = useRequireAuth();
   const isFavorite = favorites.isFavorite(ticker);
 
   return (
@@ -98,7 +102,7 @@ function FavoriteToggle({ ticker }: { ticker: string }) {
       aria-pressed={isFavorite}
       aria-label={isFavorite ? t("remove") : t("add")}
       disabled={favorites.isLoading || favorites.isPending}
-      onClick={() => favorites.toggle(ticker)}
+      onClick={() => requireAuth(() => favorites.toggle(ticker))}
     >
       {isFavorite ? (
         <Star aria-hidden="true" className="size-4" />
@@ -106,6 +110,29 @@ function FavoriteToggle({ ticker }: { ticker: string }) {
         <StarOff aria-hidden="true" className="size-4" />
       )}
       {isFavorite ? t("remove") : t("add")}
+    </Button>
+  );
+}
+
+/**
+ * Anonim favori düğmesi (5C / X-04): buton görünür ve açıklayıcıdır; tıklanınca
+ * `/login?next=<mevcut yol>`'a gider. `useFavorites` BİLİNÇLİ olarak
+ * çağrılmaz, böylece anonimde `/favorites` isteği atılmaz (401 → yanlış
+ * yönlendirme olmaz).
+ */
+function FavoriteLoginButton() {
+  const t = useTranslations("symbol.favorite");
+  const requireAuth = useRequireAuth();
+
+  return (
+    <Button
+      type="button"
+      variant="secondary"
+      size="sm"
+      onClick={() => requireAuth(() => undefined)}
+    >
+      <StarOff aria-hidden="true" className="size-4" />
+      {t("loginToAdd")}
     </Button>
   );
 }
@@ -125,6 +152,9 @@ export function SymbolDetail({
   const { formatPrice, formatChangePercent, formatCompactNumber, formatDateTime } =
     useFormatters();
   const router = useRouter();
+  // 5C / X-04: aksiyon kapısı. Provider yoksa `session` null (kapı uygulanmaz).
+  const session = useSession();
+  const anonymous = session !== null && !session.authenticated;
 
   const [period, setPeriod] = useState<ChartPeriod>(initialPeriod);
   const [syncedInitial, setSyncedInitial] = useState<ChartPeriod>(initialPeriod);
@@ -391,9 +421,15 @@ export function SymbolDetail({
                 {t("market.economyBadge")}
               </Badge>
             )}
-            {isBist ? <FavoriteToggle ticker={canonical} /> : null}
+            {isBist ? (
+              anonymous ? (
+                <FavoriteLoginButton />
+              ) : (
+                <FavoriteToggle ticker={canonical} />
+              )
+            ) : null}
             <Link
-              href="/portfolio"
+              href={(anonymous ? buildLoginRedirect("/portfolio") : "/portfolio") as Route}
               className={cn(buttonVariants({ variant: "secondary", size: "sm" }))}
             >
               <Wallet aria-hidden="true" className="size-4" />

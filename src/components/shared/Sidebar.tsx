@@ -1,17 +1,24 @@
 "use client";
 
 /**
- * Sol navigasyon (plan §4, A-04, A-06).
+ * Sol navigasyon (plan §4, A-04, A-06; 5C / X-03).
  *
  * Masaüstünde sabit sidebar; mobilde aynı `NavLinks` gövdesi `MobileNav`
  * panelinde kullanılır. Aktif öğe `usePathname` ile bulunur ve
  * `aria-current="page"` ile işaretlenir; görsel vurgu `bg-surface-hover`.
+ *
+ * Kişisel öğeler (`item.personal`) anonimde kilitli görünür: tıklanınca
+ * `/login?next=<href>` hedefine gider (open-redirect savunması
+ * `lib/auth/next-path.ts`).
  */
+import { Lock } from "lucide-react";
+import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { navGroups, primaryNavItem, type NavItem } from "@/config/navigation";
+import { buildLoginRedirect } from "@/lib/auth/next-path";
 import { cn } from "@/lib/utils";
 
 function isActive(pathname: string, item: NavItem): boolean {
@@ -21,33 +28,48 @@ function isActive(pathname: string, item: NavItem): boolean {
   return pathname === item.href || pathname.startsWith(`${item.href}/`);
 }
 
-function navLinkClassName(active: boolean): string {
+function navLinkClassName(active: boolean, locked: boolean): string {
   return cn(
     "flex min-h-11 items-center gap-2.5 rounded-md px-2.5 text-sm transition-colors duration-150 ease-out md:min-h-9",
     active
       ? "bg-surface-hover font-medium text-foreground"
       : "text-muted-foreground hover:bg-surface-hover hover:text-foreground",
+    locked && "opacity-60",
   );
 }
 
 /** Navigasyon bağlantıları; masaüstü ve mobil panel aynı listeyi paylaşır. */
-export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
+export function NavLinks({
+  authenticated = true,
+  onNavigate,
+}: {
+  authenticated?: boolean;
+  onNavigate?: () => void;
+}) {
   const t = useTranslations("nav");
   const tCommon = useTranslations("common");
   const pathname = usePathname();
 
   const renderItem = (item: NavItem) => {
-    const active = isActive(pathname, item);
+    const locked = !authenticated && item.personal === true;
+    const active = !locked && isActive(pathname, item);
     const Icon = item.icon;
+    const href = locked ? (buildLoginRedirect(item.href) as Route) : item.href;
     return (
       <li key={item.href}>
         <Link
-          href={item.href}
+          href={href}
           aria-current={active ? "page" : undefined}
+          aria-disabled={locked || undefined}
+          title={locked ? tCommon("loginRequired") : undefined}
           onClick={onNavigate}
-          className={navLinkClassName(active)}
+          className={navLinkClassName(active, locked)}
         >
-          <Icon aria-hidden="true" className="size-4 shrink-0" />
+          {locked ? (
+            <Lock aria-hidden="true" className="size-4 shrink-0" />
+          ) : (
+            <Icon aria-hidden="true" className="size-4 shrink-0" />
+          )}
           <span>{t(item.labelKey)}</span>
         </Link>
       </li>
@@ -77,7 +99,7 @@ export function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ authenticated = true }: { authenticated?: boolean }) {
   const t = useTranslations("app");
 
   return (
@@ -85,7 +107,7 @@ export function Sidebar() {
       <div className="flex h-8 items-center px-2.5">
         <span className="text-sm font-semibold text-foreground">{t("name")}</span>
       </div>
-      <NavLinks />
+      <NavLinks authenticated={authenticated} />
     </aside>
   );
 }

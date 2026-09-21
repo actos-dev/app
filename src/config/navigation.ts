@@ -46,6 +46,12 @@ export type NavItem = {
   exact?: boolean;
   /** Yalnızca geliştirme ortamında gösterilir (ör. bileşen kataloğu). */
   devOnly?: boolean;
+  /**
+   * Kişisel rota (5C / X-03): anonimde kilitli görünür ve `/login?next=`
+   * hedefine gider. Piyasa okuma rotaları (`/markets`, `/dashboard`, `/digest`)
+   * herkese açıktır.
+   */
+  personal?: boolean;
 };
 
 export type NavGroup = {
@@ -66,28 +72,34 @@ export const navGroups: readonly NavGroup[] = [
     id: "market",
     items: [
       { href: "/markets", labelKey: "markets", icon: TrendingUp },
-      { href: "/watchlist", labelKey: "watchlist", icon: Star },
+      { href: "/watchlist", labelKey: "watchlist", icon: Star, personal: true },
     ],
   },
   {
     id: "portfolio",
-    items: [{ href: "/portfolio", labelKey: "portfolio", icon: Briefcase }],
+    items: [{ href: "/portfolio", labelKey: "portfolio", icon: Briefcase, personal: true }],
   },
   {
     id: "research",
     items: [
-      { href: "/research/reports", labelKey: "reports", icon: FileText },
-      { href: "/research/simulation", labelKey: "simulation", icon: BarChart3 },
-      { href: "/research/advisor", labelKey: "advisor", icon: Compass },
+      { href: "/research/reports", labelKey: "reports", icon: FileText, personal: true },
+      { href: "/research/simulation", labelKey: "simulation", icon: BarChart3, personal: true },
+      { href: "/research/advisor", labelKey: "advisor", icon: Compass, personal: true },
       { href: "/digest", labelKey: "digest", icon: Newspaper },
     ],
   },
   {
     id: "account",
     items: [
-      { href: "/data", labelKey: "data", icon: Database },
-      { href: "/profile", labelKey: "profile", icon: UserRound },
-      { href: "/kitchen-sink", labelKey: "kitchenSink", icon: Wrench, devOnly: true },
+      { href: "/data", labelKey: "data", icon: Database, personal: true },
+      { href: "/profile", labelKey: "profile", icon: UserRound, personal: true },
+      {
+        href: "/kitchen-sink",
+        labelKey: "kitchenSink",
+        icon: Wrench,
+        devOnly: true,
+        personal: true,
+      },
     ],
   },
 ];

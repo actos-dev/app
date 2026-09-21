@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiFetch } from "@/lib/api/client";
 import { useFormatters } from "@/lib/format";
-import type { PulseSymbol } from "@/app/(app)/dashboard/dashboard-data";
+import type { PulseSymbol } from "@/app/(app)/(public-market)/dashboard/dashboard-data";
 import { qk } from "@/lib/query/keys";
 import { usePollingInterval } from "@/lib/query/polling";
 import type { EconomyQuote, EconomyQuoteBundle } from "@/types/market";

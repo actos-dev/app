@@ -15,7 +15,8 @@
     "comingSoonTitle": "Coming soon",
     "comingSoonDescription": "This section isn't ready yet; content will arrive in a later release.",
     "featureTitle": "Feature under maintenance",
-    "featureDescription": "This feature is temporarily disabled. Please try again later."
+    "featureDescription": "This feature is temporarily disabled. Please try again later.",
+    "loginRequired": "You need to sign in to access this section"
   },
   "nav": {
     "groups": {
@@ -711,6 +712,7 @@
     "favorite": {
       "add": "Add to favorites",
       "remove": "Remove from favorites",
+      "loginToAdd": "Sign in to follow",
       "added": "Added to favorites.",
       "removed": "Removed from favorites.",
       "error": "Favorite could not be updated."
@@ -1102,6 +1104,13 @@
       "reports": "Generate report",
       "simulation": "Simulation",
       "markets": "Markets"
+    },
+    "guest": {
+      "noticeTitle": "Your personal panel opens after sign-in",
+      "noticeDescription": "Your portfolios, watchlist and credit balance are only shown when you are signed in. You can explore market data without signing in.",
+      "login": "Sign in",
+      "register": "Register",
+      "markets": "Browse markets"
     }
   },
   "credits": {

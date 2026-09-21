@@ -42,14 +42,23 @@ function buildUrl(path: ServerApiPath, query: ServerApiOptions["query"]): string
   return suffix.length > 0 ? `${url}?${suffix}` : url;
 }
 
+/** Durum kodlu public fetch sonucu; ağ hatasında `status: 0`. */
+export type ServerApiResult<T> = {
+  status: number;
+  data: T | null;
+};
+
 /**
- * Public ucu sunucudan okur. Başarısızlıkta (`2xx` dışı, ağ hatası, JSON
- * çözümleme hatası) `null` döner; çağıran taraf içeriği opsiyonel sayar.
+ * Public ucu sunucudan okur ve durum kodunu ayırt eder (Faz 5C / X-05).
+ *
+ * `404` (kaynak yok) ile `5xx`/ağ kesintisi (`status: 0`) ayrılır; public
+ * sembol sayfası bilinmeyen ticker'ı gerçek 404'e çevirebilsin diye vardır.
+ * Çerez GÖNDERİLMEZ; anonim yanıt paylaşılan önbelleğe düşebilir.
  */
-export async function serverApiFetch<T>(
+export async function serverApiFetchWithStatus<T>(
   path: ServerApiPath,
   options: ServerApiOptions = {},
-): Promise<T | null> {
+): Promise<ServerApiResult<T>> {
   const init: ServerFetchInit = {
     headers: { accept: "application/json" },
     ...(options.revalidate === undefined
@@ -60,11 +69,26 @@ export async function serverApiFetch<T>(
   try {
     const response = await fetch(buildUrl(path, options.query), init);
     if (!response.ok) {
-      return null;
+      return { status: response.status, data: null };
     }
-    const data: T = await response.json();
-    return data;
+    try {
+      return { status: response.status, data: (await response.json()) as T };
+    } catch {
+      return { status: response.status, data: null };
+    }
   } catch {
-    return null;
+    return { status: 0, data: null };
   }
+}
+
+/**
+ * Public ucu sunucudan okur. Başarısızlıkta (`2xx` dışı, ağ hatası, JSON
+ * çözümleme hatası) `null` döner; çağıran taraf içeriği opsiyonel sayar.
+ */
+export async function serverApiFetch<T>(
+  path: ServerApiPath,
+  options: ServerApiOptions = {},
+): Promise<T | null> {
+  const { data } = await serverApiFetchWithStatus<T>(path, options);
+  return data;
 }

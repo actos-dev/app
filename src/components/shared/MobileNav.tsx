@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 
 import { NavLinks } from "./Sidebar";
 
-export function MobileNav() {
+export function MobileNav({ authenticated = true }: { authenticated?: boolean }) {
   const t = useTranslations("common");
   const tApp = useTranslations("app");
   const [open, setOpen] = useState(false);
@@ -50,7 +50,7 @@ export function MobileNav() {
               }
             />
           </div>
-          <NavLinks onNavigate={() => setOpen(false)} />
+          <NavLinks authenticated={authenticated} onNavigate={() => setOpen(false)} />
         </BaseDialog.Popup>
       </BaseDialog.Portal>
     </BaseDialog.Root>

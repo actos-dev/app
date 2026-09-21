@@ -19,6 +19,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
+import { useRequireAuth } from "@/components/auth/SessionProvider";
 import { SymbolSearch } from "@/components/market/SymbolSearch";
 import { Panel } from "@/components/shared/Panel";
 import { Badge } from "@/components/ui/badge";
@@ -46,6 +47,7 @@ export function ReportWizard({ initialInfo, initialCredits }: ReportWizardProps)
   const infoQuery = useReportInfo(initialInfo);
   const creditsQuery = useCredits(initialCredits);
   const generate = useGenerateReport();
+  const requireAuth = useRequireAuth();
 
   const [type, setType] = useState<ReportType | null>(null);
   const [ticker, setTicker] = useState("");
@@ -91,16 +93,19 @@ export function ReportWizard({ initialInfo, initialCredits }: ReportWizardProps)
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setShowValidation(true);
-    if (!type || missingTicker || purposeTooLong || insufficient) {
-      return;
-    }
-    setElapsed(0);
-    const normalizedPurpose = normalizePurpose(purpose);
-    generate.mutate({
-      ticker: ticker.trim().toUpperCase(),
-      type,
-      ...(normalizedPurpose ? { purpose: normalizedPurpose } : {}),
+    // 5C / X-04: anonimde üretim başlatılmaz; login'e yönlendirilir.
+    requireAuth(() => {
+      setShowValidation(true);
+      if (!type || missingTicker || purposeTooLong || insufficient) {
+        return;
+      }
+      setElapsed(0);
+      const normalizedPurpose = normalizePurpose(purpose);
+      generate.mutate({
+        ticker: ticker.trim().toUpperCase(),
+        type,
+        ...(normalizedPurpose ? { purpose: normalizedPurpose } : {}),
+      });
     });
   };
 
