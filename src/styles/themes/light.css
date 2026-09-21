@@ -1,0 +1,46 @@
+/**
+ * Florence Açık tema — `tokens.css` rollerinin override'ı.
+ *
+ * `:root[data-theme=...]` seçicisi `:root`'tan daha özgüldür; efektif token
+ * seti `:root` (koyu) + bu blok birleşimidir. Tüm roller açıkça yazılır ki
+ * koyu değerler sızmasın.
+ */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #f7f8fa;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-hover: #f1f3f7;
+
+  --border: #e2e5eb;
+  --border-strong: #c9ced9;
+
+  --foreground: #0f1218;
+  --surface-foreground: #0f1218;
+  --muted-foreground: #5b6577;
+
+  --primary: #1d4ed8;
+  --primary-foreground: #ffffff;
+  --primary-hover: #1b44be;
+
+  --accent: #6d28d9;
+  --accent-foreground: #ffffff;
+
+  --positive: #15803d;
+  --positive-foreground: #ffffff;
+  --negative: #b91c1c;
+  --negative-foreground: #ffffff;
+  --warning: #b45309;
+  --warning-foreground: #ffffff;
+  --info: #0369a1;
+  --info-foreground: #ffffff;
+
+  --focus-ring: #1d4ed8;
+  --overlay: #0f121866;
+
+  --chart-up: #15803d;
+  --chart-down: #b91c1c;
+  --chart-grid: #d8dce4;
+  --chart-text: #5b6577;
+}

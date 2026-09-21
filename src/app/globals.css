@@ -1,1 +1,47 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
+@import "../styles/themes/light.css";
+@import "../styles/themes/sepia.css";
+
+@layer base {
+  /* Kenarlık rengi tek yerden yönetilir; her utility `border` ile uyumludur. */
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+
+  html {
+    background-color: var(--background);
+  }
+
+  /* font-sans rolü `--font-geist-sans`'a bağlıdır (tokens.css @theme inline). */
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply font-sans antialiased;
+  }
+
+  /* A-02: görünür odak varsayılan; klavye gezintisinde asla kaldırılmaz. */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  /* D-08: hareket azaltma tercihi global olarak kısılır. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

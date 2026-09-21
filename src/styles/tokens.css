@@ -1,0 +1,109 @@
+/**
+ * Florence tasarım token'ları — tek kaynak (WEB_REFACTOR_PLAN.md §3.2).
+ *
+ * Varsayılan tema KOYU'dur ve `:root` içinde tanımlanır. Açık ve sepya temalar
+ * `src/styles/themes/` altında `:root[data-theme="..."]` bloklarıyla yalnızca
+ * değerleri geçersiz kılar; roller burada bir kez tanımlanır.
+ *
+ * `@theme inline` bloğu her rolü Tailwind utility'sine bağlar
+ * (`--color-surface` → `bg-surface`, `text-surface`, `border-surface` ...).
+ *
+ * Kural: metin rollerinde alfa yasak; renkler opak HEX'tir. Kontrast eşikleri
+ * `src/test/contrast.test.ts` ile otomatik doğrulanır.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Zemin ve yüzeyler */
+  --background: #0b0e14;
+  --surface: #131722;
+  --surface-raised: #1b2130;
+  --surface-hover: #1e2739;
+
+  /* Kenarlıklar */
+  --border: #262f42;
+  --border-strong: #35415a;
+
+  /* Metin */
+  --foreground: #e8ecf4;
+  --surface-foreground: #e8ecf4;
+  --muted-foreground: #9aa7bd;
+
+  /* Ana marka rengi (azure) — koyu zeminde hem metin hem dolgu olarak kullanılır */
+  --primary: #5b9dff;
+  --primary-foreground: #0b0e14;
+  --primary-hover: #79b0ff;
+
+  /* Vurgu */
+  --accent: #a78bfa;
+  --accent-foreground: #0b0e14;
+
+  /* Durum renkleri — dolgu üstünde koyu metin */
+  --positive: #34d399;
+  --positive-foreground: #0b0e14;
+  --negative: #f87171;
+  --negative-foreground: #0b0e14;
+  --warning: #fbbf24;
+  --warning-foreground: #0b0e14;
+  --info: #38bdf8;
+  --info-foreground: #0b0e14;
+
+  /* Odak halkası ve katman örtüsü */
+  --focus-ring: #5b9dff;
+  --overlay: #05070bb8;
+
+  /* Grafikler */
+  --chart-up: #34d399;
+  --chart-down: #f87171;
+  --chart-grid: #232b3d;
+  --chart-text: #9aa7bd;
+
+  /* Geometri tabanı: 6/8/10/12 px ölçeği buradan türetilir (plan §3.3) */
+  --radius: 0.5rem;
+}
+
+@theme inline {
+  /* Semantic renk rolleri → Tailwind utility'leri */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-foreground: var(--surface-foreground);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-positive: var(--positive);
+  --color-positive-foreground: var(--positive-foreground);
+  --color-negative: var(--negative);
+  --color-negative-foreground: var(--negative-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-focus-ring: var(--focus-ring);
+  --color-overlay: var(--overlay);
+  --color-chart-up: var(--chart-up);
+  --color-chart-down: var(--chart-down);
+  --color-chart-grid: var(--chart-grid);
+  --color-chart-text: var(--chart-text);
+
+  /* Tipografi: `next/font` değişkenleri `src/app/layout.tsx`'te bağlanır */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Köşe yarıçapları */
+  --radius-sm: calc(var(--radius) - 0.125rem);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) + 0.125rem);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+
+  /* Gölge neredeyse yok; ayrım border ile yapılır (plan §3.1) */
+  --shadow-panel: 0 1px 2px rgb(9 12 20 / 0.18), 0 6px 20px -8px rgb(9 12 20 / 0.28);
+  --shadow-pop: 0 2px 8px rgb(9 12 20 / 0.24), 0 8px 32px -8px rgb(9 12 20 / 0.45);
+}
