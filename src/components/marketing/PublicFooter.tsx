@@ -8,14 +8,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
-import type { paths } from "@/types/generated";
-
 import { serverApiFetch } from "@/lib/api/server";
-
-// Backend bu uç için response_model tanımlamadığından generated şeması boştur;
-// tip yine de tek kaynaktan türetilir, değer çalışma zamanında daraltılır.
-type VersionResponse =
-  paths["/api/v1/version"]["get"]["responses"][200]["content"]["application/json"];
+import { parseVersionResponse, type VersionResponse } from "@/lib/public-content";
 
 const LEGAL_LINKS = [
   { href: "/legal/terms", labelKey: "footer.terms" },
@@ -24,22 +18,13 @@ const LEGAL_LINKS = [
   { href: "/legal/disclaimer", labelKey: "footer.disclaimer" },
 ] as const;
 
-/** Bilinmeyen gövdeden `version` string'ini güvenle çıkarır. */
-function extractVersion(value: unknown): string | null {
-  if (value !== null && typeof value === "object" && "version" in value) {
-    const candidate = value.version;
-    return typeof candidate === "string" && candidate.length > 0 ? candidate : null;
-  }
-  return null;
-}
-
 export async function PublicFooter() {
   const [t, common, versionResponse] = await Promise.all([
     getTranslations("public"),
     getTranslations("common"),
     serverApiFetch<VersionResponse>("/api/v1/version", { revalidate: 3600 }),
   ]);
-  const version = versionResponse ? extractVersion(versionResponse) : null;
+  const version = parseVersionResponse(versionResponse);
   const year = new Date().getFullYear();
 
   return (

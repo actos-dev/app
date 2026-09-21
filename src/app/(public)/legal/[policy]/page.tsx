@@ -1,43 +1,101 @@
 /**
- * `/legal/[policy]` (Faz 2 / Birim 2.3a stub).
+ * `/legal/[policy]` (Faz 2 / Birim 2.3b).
  *
- * Bilinen politikalar allowlist ile eşlenir (keyfi anahtar erişimi yok);
- * içerik backend `GET /api/v1/legal?policy=&lang=` ile Birim 2.3b'de gelecek.
+ * Geçerli policy anahtarları backend `src/api/legal.py::POLICIES` ile senkron
+ * allowlist'tir (`@/lib/public-content`); bilinmeyen slug `notFound()` ile
+ * gerçek 404 döner, keyfi anahtar backend'e taşınmaz. İçerik `GET /api/v1/legal`
+ * ucundan SSR ile gelir ve boş satır/madde bloklarına ayrılarak okunur
+ * tipografiyle çizilir.
  */
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
-import { ComingSoonSection } from "@/components/marketing/ComingSoonSection";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { serverApiFetch } from "@/lib/api/server";
+import {
+  isLegalPolicy,
+  parseLegalResponse,
+  type LegalPolicy,
+  type LegalResponse,
+  LEGAL_POLICIES,
+} from "@/lib/public-content";
 
 const POLICY_LABEL_KEYS = {
   terms: "policies.terms",
   privacy_policy: "policies.privacyPolicy",
   cookie_policy: "policies.cookiePolicy",
   disclaimer: "policies.disclaimer",
-} as const;
+} as const satisfies Record<LegalPolicy, string>;
 
-type PolicySlug = keyof typeof POLICY_LABEL_KEYS;
-
-function isPolicySlug(value: string): value is PolicySlug {
-  return value in POLICY_LABEL_KEYS;
+export function generateStaticParams() {
+  return LEGAL_POLICIES.map((policy) => ({ policy }));
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/legal/[policy]">): Promise<Metadata> {
   const [t, { policy }] = await Promise.all([getTranslations("public"), params]);
-  if (!isPolicySlug(policy)) {
-    return { title: t("policies.unknown") };
+  if (!isLegalPolicy(policy)) {
+    notFound();
   }
-  return { title: t(POLICY_LABEL_KEYS[policy]) };
+  return {
+    title: t(POLICY_LABEL_KEYS[policy]),
+    alternates: { canonical: `/legal/${policy}` },
+  };
 }
 
 export default async function LegalPage({ params }: PageProps<"/legal/[policy]">) {
-  const [t, { policy }] = await Promise.all([getTranslations("public"), params]);
-  if (!isPolicySlug(policy)) {
+  const [t, locale, { policy }] = await Promise.all([
+    getTranslations("public"),
+    getLocale(),
+    params,
+  ]);
+  if (!isLegalPolicy(policy)) {
     notFound();
   }
 
-  return <ComingSoonSection title={t(POLICY_LABEL_KEYS[policy])} description={t("legalDescription")} />;
+  const response = await serverApiFetch<LegalResponse>("/api/v1/legal", {
+    query: { policy, lang: locale },
+    revalidate: 3600,
+  });
+  const legal = parseLegalResponse(response);
+  const blocks = legal?.blocks ?? [];
+
+  return (
+    <div className="mx-auto w-full max-w-3xl px-4 py-12 md:px-6 md:py-16">
+      <PageHeader
+        title={t(POLICY_LABEL_KEYS[policy])}
+        description={
+          legal?.lastUpdated ? t("legal.lastUpdated", { date: legal.lastUpdated }) : undefined
+        }
+      />
+      {blocks.length > 0 ? (
+        <div className="flex flex-col gap-4">
+          {blocks.map((block, index) =>
+            block.type === "list" ? (
+              <ul
+                key={`list-${index}`}
+                className="flex list-disc flex-col gap-1.5 pl-5 text-sm leading-relaxed text-muted-foreground"
+              >
+                {block.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p
+                key={`paragraph-${index}`}
+                className="text-sm leading-relaxed text-muted-foreground"
+              >
+                {block.text}
+              </p>
+            ),
+          )}
+        </div>
+      ) : (
+        <EmptyState title={t("legal.emptyTitle")} description={t("legal.emptyDescription")} />
+      )}
+    </div>
+  );
 }

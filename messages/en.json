@@ -118,23 +118,48 @@
     },
     "about": {
       "title": "About",
-      "description": "Who builds Florence and what the product covers will be here soon."
+      "description": "Florence's purpose, scope and independent development story.",
+      "emptyTitle": "No content",
+      "emptyDescription": "The about text can't be loaded right now. Please try again later."
     },
     "contact": {
       "title": "Contact",
-      "description": "Feedback, suggestions and support channels will be here soon."
+      "description": "Reach us by email or on GitHub.",
+      "emailTitle": "Email",
+      "githubTitle": "GitHub",
+      "emptyTitle": "No contact details",
+      "emptyDescription": "Contact channels can't be loaded right now. Please try again later."
     },
     "downloads": {
       "title": "Download",
-      "description": "Desktop and mobile app links will be here soon."
+      "description": "Latest releases of the frozen desktop client.",
+      "frozenNote": "The desktop client is frozen; no new releases are published. This page only lists the current last release.",
+      "emptyTitle": "No downloadable release right now",
+      "emptyDescription": "No published desktop release was found. New releases will be listed here once available.",
+      "version": "Version {version}",
+      "platforms": {
+        "windows": "Windows",
+        "macos": "macOS",
+        "linux": "Linux"
+      },
+      "fileTypes": {
+        "installer": "Installer",
+        "disk": "Disk image",
+        "archive": "Archive",
+        "package": "Package",
+        "executable": "Executable"
+      }
     },
-    "legalDescription": "The full text of this legal document will be published soon.",
+    "legal": {
+      "lastUpdated": "Last updated: {date}",
+      "emptyTitle": "No text",
+      "emptyDescription": "This legal text can't be loaded right now. Please try again later."
+    },
     "policies": {
       "terms": "Terms of Service",
       "privacyPolicy": "Privacy Policy",
       "cookiePolicy": "Cookie Policy",
-      "disclaimer": "Disclaimer",
-      "unknown": "Legal document"
+      "disclaimer": "Disclaimer"
     }
   },
   "errors": {

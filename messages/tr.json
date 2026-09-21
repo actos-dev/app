@@ -118,23 +118,48 @@
     },
     "about": {
       "title": "Hakkında",
-      "description": "Florence'ı kimin geliştirdiği ve ürünün kapsamı yakında burada olacak."
+      "description": "Florence'ın amacı, kapsamı ve bağımsız geliştirme hikayesi.",
+      "emptyTitle": "İçerik yok",
+      "emptyDescription": "Hakkında metni şu an yüklenemiyor. Lütfen daha sonra tekrar dene."
     },
     "contact": {
       "title": "İletişim",
-      "description": "Görüş, öneri ve destek kanalları yakında burada olacak."
+      "description": "Bize e-posta veya GitHub üzerinden ulaş.",
+      "emailTitle": "E-posta",
+      "githubTitle": "GitHub",
+      "emptyTitle": "İletişim bilgisi yok",
+      "emptyDescription": "İletişim kanalları şu an yüklenemiyor. Lütfen daha sonra tekrar dene."
     },
     "downloads": {
       "title": "İndir",
-      "description": "Masaüstü ve mobil uygulama bağlantıları yakında burada olacak."
+      "description": "Dondurulmuş masaüstü istemcinin son sürümleri.",
+      "frozenNote": "Masaüstü istemci donduruldu; yeni sürüm yayınlanmıyor. Bu sayfa yalnızca mevcut son sürümü listeler.",
+      "emptyTitle": "Şu an indirilebilir sürüm yok",
+      "emptyDescription": "Yayınlanmış bir masaüstü sürümü bulunamadı. Yeni bir sürüm yayınlandığında burada listelenecek.",
+      "version": "Sürüm {version}",
+      "platforms": {
+        "windows": "Windows",
+        "macos": "macOS",
+        "linux": "Linux"
+      },
+      "fileTypes": {
+        "installer": "Kurulum",
+        "disk": "Disk imajı",
+        "archive": "Arşiv",
+        "package": "Paket",
+        "executable": "Çalıştırılabilir"
+      }
     },
-    "legalDescription": "Bu yasal metnin tam içeriği yakında yayınlanacak.",
+    "legal": {
+      "lastUpdated": "Son güncelleme: {date}",
+      "emptyTitle": "Metin yok",
+      "emptyDescription": "Bu yasal metin şu an yüklenemiyor. Lütfen daha sonra tekrar dene."
+    },
     "policies": {
       "terms": "Kullanım Şartları",
       "privacyPolicy": "Gizlilik Politikası",
       "cookiePolicy": "Çerez Politikası",
-      "disclaimer": "Yasal Uyarı",
-      "unknown": "Yasal metin"
+      "disclaimer": "Yasal Uyarı"
     }
   },
   "errors": {
