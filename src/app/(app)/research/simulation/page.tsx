@@ -1,15 +1,28 @@
 /**
- * `/research/simulation` iskeleti (Faz 1 / Birim 1.4).
+ * `/research/simulation` — Monte-Carlo simülasyonu (Faz 5 / Birim 5A.2).
  *
- * Auth koruması henüz yok; Faz 2'de middleware ile korunacak. Monte-Carlo
- * akışı (aşamalı ilerleme, iptal) Faz 5A'da gelecek.
+ * Sunucu bileşeni: gün başına maliyet şeması, simülasyon geçmişi ve kredi
+ * bakiyesi PARALEL çekilir (çerez forward edilerek) ve istemci adasına
+ * `initialData` olarak geçirilir; böylece ilk boyamada çift istek olmaz.
+ *
+ * Koşu SENKRONdur (B-09 job altyapısı yok): `GET /simulations/{ticker}` tek
+ * istekte 600 sn'ye kadar sürebilir ve iptal edilemez. Bu karar
+ * `SimulationForm` başında belgelenmiştir.
  */
-import { Construction } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "@/components/shared/EmptyState";
-import { PageHeader } from "@/components/shared/PageHeader";
+import { SimulationWorkspace } from "@/components/simulation/SimulationWorkspace";
+import { serverAuthApiFetch } from "@/lib/api/server-auth";
+import {
+  simulationsCreditsServerPath,
+  simulationsHistoryServerPath,
+} from "@/lib/simulations/api-paths";
+import type {
+  PerDayCostResponse,
+  SimulationCreditsResponse,
+  SimulationHistoryItem,
+} from "@/lib/simulations/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -17,16 +30,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function SimulationPage() {
-  const t = await getTranslations();
+  const [perDayCost, history, credits] = await Promise.all([
+    serverAuthApiFetch<PerDayCostResponse>("/api/v1/simulations/per-day-cost"),
+    serverAuthApiFetch<SimulationHistoryItem[]>(simulationsHistoryServerPath()),
+    serverAuthApiFetch<SimulationCreditsResponse>(simulationsCreditsServerPath()),
+  ]);
 
   return (
-    <>
-      <PageHeader title={t("nav.simulation")} />
-      <EmptyState
-        icon={<Construction aria-hidden="true" className="size-5" />}
-        title={t("common.comingSoonTitle")}
-        description={t("common.comingSoonDescription")}
-      />
-    </>
+    <SimulationWorkspace
+      {...(perDayCost ? { initialPerDayCost: perDayCost } : {})}
+      {...(Array.isArray(history) ? { initialHistory: history } : {})}
+      {...(credits ? { initialCredits: credits } : {})}
+    />
   );
 }

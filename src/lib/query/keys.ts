@@ -187,13 +187,63 @@ export const qk = {
   /** `GET /credits` — toplam kredi bakiyesi (U-03). */
   credits: () => [...qk.all, "credits"] as const,
 
-  /** Simülasyon anahtarları ileride genişler (Faz 5). */
+  /** `GET /maintenance` — bakımda olan özellik listesi (Faz 5A.2). */
+  maintenance: () => [...qk.all, "maintenance"] as const,
+
+  /**
+   * Simülasyon anahtarları (Faz 5 / Birim 5A.2, U-03, U-06).
+   *
+   * `perDayCost` statiktir (maliyet şeması) ve ayrı durur; `estimate` sembol+gün
+   * başına maliyet tahminidir. Geçmiş + detay `qk.simulations.list()` altında
+   * toplanır; koşu sonrası tek invalidation ikisini de tazeler.
+   */
   simulations: {
     all: () => [...qk.all, "simulations"] as const,
+    perDayCost: () => [...qk.simulations.all(), "per-day-cost"] as const,
+    estimate: (ticker: string, days: number) =>
+      [...qk.simulations.all(), "estimate", ticker.trim().toUpperCase(), days] as const,
     list: () => [...qk.simulations.all(), "list"] as const,
-    detail: (id: string) => [...qk.simulations.all(), "detail", id] as const,
+    detail: (id: number | string) =>
+      [...qk.simulations.list(), "detail", String(id)] as const,
+  },
+
+  /**
+   * Danışman anahtarları (Faz 5 / Birim 5A.2).
+   *
+   * "fit" (profil → öneri) ve "portfolio" (varlık listesi → profil) ayrı
+   * köklerdir; ikisi de `POST` olduğundan React Query ile mutation olarak
+   * değil, kullanıcı eylemiyle gönderilen istekler olarak yönetilir. Anahtarlar
+   * yine de tek fabrikada durur (P-03).
+   */
+  advisor: {
+    all: () => [...qk.all, "advisor"] as const,
+    fit: (params: AdvisorFitParams) =>
+      [
+        ...qk.advisor.all(),
+        "fit",
+        {
+          horizon: params.horizon,
+          profitability: params.profitability,
+          riskTolerance: params.riskTolerance,
+          limit: params.limit ?? 5,
+        },
+      ] as const,
+    profile: (tickers: readonly string[], limit: number) =>
+      [
+        ...qk.advisor.all(),
+        "profile",
+        { tickers: normalizeSymbols(tickers) ?? [], limit },
+      ] as const,
   },
 } as const;
+
+/** Danışman "fit" isteği parametreleri (backend `FitRequest`). */
+export type AdvisorFitParams = {
+  horizon: "short" | "medium" | "long";
+  profitability: "low" | "medium" | "high";
+  riskTolerance: "low" | "medium" | "high";
+  limit?: number;
+};
 
 /** Rapor geçmişi sıralama parametreleri (backend allowlist'i). */
 export type ReportHistoryParams = {

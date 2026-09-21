@@ -1,32 +1,21 @@
 /**
- * `/research/advisor` iskeleti (Faz 1 / Birim 1.4).
+ * `/research/advisor` — yatırım danışmanı (Faz 5 / Birim 5A.2).
  *
- * Auth koruması henüz yok; Faz 2'de middleware ile korunacak. Vade/risk
- * profiline göre öneri akışı Faz 5A'da gelecek.
+ * İki uç da `POST`'tur (`/stocks/fit`, `/portfolio/profile`) ve girdi kullanıcı
+ * formundan geldiğinden SSR ön yüklemesi yoktur; sayfa bir RSC kabuğudur ve
+ * veri istemci adasında çekilir. Bakım durumu istemcide `GET /maintenance` ile
+ * okunur; backend kapalıyken uç hata verse bile sayfa çökmez (boş liste).
  */
-import { Construction } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "@/components/shared/EmptyState";
-import { PageHeader } from "@/components/shared/PageHeader";
+import { AdvisorWorkspace } from "@/components/advisor/AdvisorWorkspace";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
   return { title: t("advisor") };
 }
 
-export default async function AdvisorPage() {
-  const t = await getTranslations();
-
-  return (
-    <>
-      <PageHeader title={t("nav.advisor")} />
-      <EmptyState
-        icon={<Construction aria-hidden="true" className="size-5" />}
-        title={t("common.comingSoonTitle")}
-        description={t("common.comingSoonDescription")}
-      />
-    </>
-  );
+export default function AdvisorPage() {
+  return <AdvisorWorkspace />;
 }

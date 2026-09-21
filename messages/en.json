@@ -13,7 +13,9 @@
     "back": "Back",
     "retry": "Try again",
     "comingSoonTitle": "Coming soon",
-    "comingSoonDescription": "This section isn't ready yet; content will arrive in a later release."
+    "comingSoonDescription": "This section isn't ready yet; content will arrive in a later release.",
+    "featureTitle": "Feature under maintenance",
+    "featureDescription": "This feature is temporarily disabled. Please try again later."
   },
   "nav": {
     "groups": {
@@ -822,6 +824,200 @@
       "retry": "Try again"
     }
   },
+  "simulation": {
+    "title": "Simulation",
+    "description": "Generate a price distribution with Monte-Carlo from a symbol's historical volatility.",
+    "tabs": {
+      "run": "Simulation",
+      "history": "History"
+    },
+    "form": {
+      "symbolLabel": "Symbol",
+      "symbolHint": "Search among BIST stocks.",
+      "symbolRequired": "Please select a symbol.",
+      "currentPrice": "Current price",
+      "daysLabel": "Horizon (days)",
+      "daysHint": "Between 1 and 370 days.",
+      "daysRange": "1-370 days",
+      "daysValue": "{days} days",
+      "daysRequired": "Days must be between 1 and 370.",
+      "boundsLabel": "Confidence interval",
+      "boundsHint": "Tail slices are excluded; the band covers this probability.",
+      "boundsOption": "{percent}% ({bounds})",
+      "targetLabel": "Target price (optional)",
+      "targetPlaceholder": "Leave empty for automatic +10%",
+      "targetHint": "Enter a positive number; if empty, an automatic target is generated.",
+      "targetInvalid": "Target price must be a number greater than zero."
+    },
+    "cost": {
+      "perDay": "{cost} credits per day",
+      "estimateLabel": "Estimated cost",
+      "estimatePending": "—",
+      "value": "{credits} credits",
+      "balanceLabel": "Credit balance",
+      "loading": "Loading balance…",
+      "insufficient": "Insufficient credits: this simulation needs {cost} credits, your balance is {balance}.",
+      "insufficientHint": "Credits refill automatically up to the cap each day."
+    },
+    "run": {
+      "submit": "Run simulation",
+      "running": {
+        "title": "Simulation running…",
+        "stage": "Extracting historical returns and simulating 10,000 scenarios.",
+        "elapsed": "Elapsed: {seconds}s",
+        "warning": "This may take a few minutes. Do not close the page until it completes.",
+        "noCancel": "This run cannot be cancelled in this version; credits are refunded only on failure."
+      },
+      "success": {
+        "title": "Simulation completed."
+      },
+      "title": "New simulation"
+    },
+    "result": {
+      "title": "Result",
+      "probabilityLabel": "Probability of reaching target",
+      "probabilityBelowLabel": "Probability of falling below target",
+      "probabilityAutoLabel": "Probability of reaching automatic target",
+      "probabilityValue": "{percent}%",
+      "summary": "Probability of {direction} {target} within {days} days for {ticker}.",
+      "directionAbove": "reaching",
+      "directionBelow": "falling below",
+      "targetAuto": "automatic target",
+      "targetValue": "target {target}",
+      "confidenceTitle": "{percent}% confidence interval",
+      "confidenceLower": "Lower bound",
+      "confidenceUpper": "Upper bound",
+      "confidenceMeta": "bounds {bounds} · {days} days",
+      "costLabel": "Credits spent",
+      "remainingLabel": "Remaining credits",
+      "viewSymbol": "{ticker} symbol detail",
+      "directionBadgeAbove": "Upward",
+      "directionBadgeBelow": "Downward",
+      "tonePositive": "Strong",
+      "toneNeutral": "Uncertain",
+      "toneNegative": "Weak"
+    },
+    "history": {
+      "title": "Simulation history",
+      "columns": {
+        "ticker": "Symbol",
+        "days": "Days",
+        "bounds": "Interval",
+        "target": "Target",
+        "cost": "Cost",
+        "date": "Date"
+      },
+      "boundsValue": "{percent}%",
+      "targetAuto": "Automatic",
+      "costValue": "{credits} credits",
+      "rowAction": "Detail",
+      "total": "{count} simulations",
+      "emptyTitle": "No simulations yet",
+      "emptyDescription": "Use the Simulation tab to run your first simulation.",
+      "errorTitle": "Simulation history could not be loaded",
+      "errorDescription": "Check your connection and try again.",
+      "retry": "Try again",
+      "detailTitle": "{ticker} simulation",
+      "detailDescription": "{days} days · bounds {bounds}",
+      "detailLoading": "Loading detail…",
+      "detailErrorTitle": "Detail could not be loaded",
+      "detailErrorDescription": "Simulation detail could not be fetched. Please try again.",
+      "close": "Close"
+    },
+    "errors": {
+      "invalidParams": "Invalid parameters. Check the day count and target price.",
+      "failed": "Simulation could not be completed. Credits were refunded.",
+      "insufficientCredit": "You do not have enough credits."
+    },
+    "maintenance": {
+      "title": "Simulation under maintenance",
+      "description": "This feature is temporarily disabled. Simulation cannot start; please try again later."
+    }
+  },
+  "advisor": {
+    "title": "Investment Advisor",
+    "description": "Find stocks that fit your horizon and risk profile; optionally derive your portfolio's profile.",
+    "modes": {
+      "fit": "Stock suggestions",
+      "portfolio": "Portfolio profile"
+    },
+    "fit": {
+      "title": "Choose your profile",
+      "description": "Stocks from the popular universe are ranked by closeness to your horizon, profitability and risk tolerance.",
+      "horizon": "Horizon",
+      "profitability": "Profitability expectation",
+      "riskTolerance": "Risk tolerance",
+      "limit": "Result count",
+      "limitHint": "Between 1 and 100.",
+      "submit": "Analyze",
+      "noCredits": "This analysis does not spend credits."
+    },
+    "levels": {
+      "horizon": {
+        "short": "Short",
+        "medium": "Medium",
+        "long": "Long"
+      },
+      "profitability": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "risk": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      }
+    },
+    "results": {
+      "title": "Suggestions",
+      "count": "{count} stocks found",
+      "scoreLabel": "Fit",
+      "scoreValue": "{percent}%",
+      "distanceLabel": "Distance",
+      "emptyTitle": "No results found",
+      "emptyDescription": "Try a different profile.",
+      "viewSymbol": "{ticker} symbol detail"
+    },
+    "vector": {
+      "risk": "Risk",
+      "horizon": "Horizon",
+      "profitability": "Profitability"
+    },
+    "portfolio": {
+      "title": "Derive portfolio profile",
+      "description": "Add your stocks; we will show the average profile and similar stocks.",
+      "addTicker": "Add stock",
+      "symbolLabel": "Stock",
+      "selected": "Selected stocks",
+      "remove": "Remove {ticker}",
+      "count": "{count}/{max} stocks",
+      "empty": "You have not added any stocks yet.",
+      "limit": "Suggestion count",
+      "limitHint": "Between 1 and 50.",
+      "submit": "Derive profile",
+      "maxReached": "You can add at most {max} stocks.",
+      "duplicate": "{ticker} is already in the list."
+    },
+    "profile": {
+      "title": "Estimated profile",
+      "avgTitle": "Average profile",
+      "portfolioTitle": "Your portfolio",
+      "similarTitle": "Similar stocks",
+      "noSimilar": "No similar stocks found."
+    },
+    "maintenance": {
+      "title": "Advisor under maintenance",
+      "description": "This feature is temporarily disabled. Analysis cannot start; please try again later."
+    },
+    "noCredits": "Advisor analysis does not spend credits.",
+    "errors": {
+      "genericTitle": "Analysis could not be completed",
+      "genericDescription": "The request could not be processed. Please try again.",
+      "emptyPortfolio": "You must add at least one stock.",
+      "retry": "Try again"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",
@@ -856,6 +1052,8 @@
     "simulationNotFound": "Simulation not found.",
     "invalidTargetPrice": "Invalid target price.",
     "invalidSimulationParameters": "Invalid simulation parameters.",
+    "simulationFailed": "Simulation could not be completed. Please try again.",
+    "featureMaintenance": "This feature is under maintenance. Please try again later.",
     "backendUnreachable": "The server is unreachable. Please try again.",
     "csrfRejected": "The request was rejected. Refresh the page and try again.",
     "validation": "The information you entered is invalid.",

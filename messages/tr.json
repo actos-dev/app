@@ -13,7 +13,9 @@
     "back": "Geri",
     "retry": "Tekrar dene",
     "comingSoonTitle": "Yakında",
-    "comingSoonDescription": "Bu bölüm henüz hazır değil; içerik sonraki sürümlerde eklenecek."
+    "comingSoonDescription": "Bu bölüm henüz hazır değil; içerik sonraki sürümlerde eklenecek.",
+    "featureTitle": "Özellik bakımda",
+    "featureDescription": "Bu özellik geçici olarak devre dışı. Lütfen daha sonra tekrar dene."
   },
   "nav": {
     "groups": {
@@ -822,6 +824,200 @@
       "retry": "Tekrar dene"
     }
   },
+  "simulation": {
+    "title": "Simülasyon",
+    "description": "Sembolün geçmiş oynaklığından Monte-Carlo ile fiyat dağılımı üret.",
+    "tabs": {
+      "run": "Simülasyon",
+      "history": "Geçmiş"
+    },
+    "form": {
+      "symbolLabel": "Sembol",
+      "symbolHint": "BIST hisseleri arasında ara.",
+      "symbolRequired": "Lütfen bir sembol seç.",
+      "currentPrice": "Güncel fiyat",
+      "daysLabel": "Vade (gün)",
+      "daysHint": "1 ile 370 gün arasında.",
+      "daysRange": "1-370 gün",
+      "daysValue": "{days} gün",
+      "daysRequired": "Gün sayısı 1 ile 370 arasında olmalı.",
+      "boundsLabel": "Güven aralığı",
+      "boundsHint": "Uç dilimler dışarıda bırakılır; bant bu olasılığı kapsar.",
+      "boundsOption": "%{percent} ({bounds})",
+      "targetLabel": "Hedef fiyat (opsiyonel)",
+      "targetPlaceholder": "Boş bırakılırsa otomatik +%10",
+      "targetHint": "Pozitif bir sayı gir; boş bırakırsan otomatik hedef üretilir.",
+      "targetInvalid": "Hedef fiyat sıfırdan büyük bir sayı olmalı."
+    },
+    "cost": {
+      "perDay": "Gün başına {cost} kredi",
+      "estimateLabel": "Tahmini maliyet",
+      "estimatePending": "—",
+      "value": "{credits} kredi",
+      "balanceLabel": "Kredi bakiyesi",
+      "loading": "Bakiye yükleniyor…",
+      "insufficient": "Yetersiz kredi: bu simülasyon {cost} kredi gerektiriyor, bakiyen {balance} kredi.",
+      "insufficientHint": "Kredi her gün tavana kadar otomatik olarak dolar."
+    },
+    "run": {
+      "submit": "Simülasyonu çalıştır",
+      "running": {
+        "title": "Simülasyon çalışıyor…",
+        "stage": "Geçmiş fiyat getirileri çıkarılıyor ve 10.000 senaryo simüle ediliyor.",
+        "elapsed": "Geçen süre: {seconds} sn",
+        "warning": "Bu işlem birkaç dakika sürebilir. Tamamlanana kadar sayfayı kapatmayın.",
+        "noCancel": "Bu sürümde çalıştırma iptal edilemez; kredi yalnız hata durumunda iade edilir."
+      },
+      "success": {
+        "title": "Simülasyon tamamlandı."
+      },
+      "title": "Yeni simülasyon"
+    },
+    "result": {
+      "title": "Sonuç",
+      "probabilityLabel": "Hedefe ulaşma olasılığı",
+      "probabilityBelowLabel": "Hedefin altına düşme olasılığı",
+      "probabilityAutoLabel": "Otomatik hedefe ulaşma olasılığı",
+      "probabilityValue": "%{percent}",
+      "summary": "{ticker} için {days} günde {target} hedefine {direction} olasılığı.",
+      "directionAbove": "ulaşma",
+      "directionBelow": "düşme",
+      "targetAuto": "otomatik hedef",
+      "targetValue": "hedef {target}",
+      "confidenceTitle": "%{percent} güven aralığı",
+      "confidenceLower": "Alt sınır",
+      "confidenceUpper": "Üst sınır",
+      "confidenceMeta": "bounds {bounds} · {days} gün",
+      "costLabel": "Harcanan kredi",
+      "remainingLabel": "Kalan kredi",
+      "viewSymbol": "{ticker} hisse detayı",
+      "directionBadgeAbove": "Yukarı yönlü",
+      "directionBadgeBelow": "Aşağı yönlü",
+      "tonePositive": "Güçlü",
+      "toneNeutral": "Belirsiz",
+      "toneNegative": "Zayıf"
+    },
+    "history": {
+      "title": "Simülasyon geçmişi",
+      "columns": {
+        "ticker": "Sembol",
+        "days": "Gün",
+        "bounds": "Aralık",
+        "target": "Hedef",
+        "cost": "Maliyet",
+        "date": "Tarih"
+      },
+      "boundsValue": "%{percent}",
+      "targetAuto": "Otomatik",
+      "costValue": "{credits} kredi",
+      "rowAction": "Detay",
+      "total": "{count} simülasyon",
+      "emptyTitle": "Henüz simülasyon yok",
+      "emptyDescription": "İlk simülasyonunu çalıştırmak için Simülasyon sekmesini kullan.",
+      "errorTitle": "Simülasyon geçmişi yüklenemedi",
+      "errorDescription": "Bağlantını kontrol edip tekrar dene.",
+      "retry": "Tekrar dene",
+      "detailTitle": "{ticker} simülasyonu",
+      "detailDescription": "{days} gün · bounds {bounds}",
+      "detailLoading": "Detay yükleniyor…",
+      "detailErrorTitle": "Detay yüklenemedi",
+      "detailErrorDescription": "Simülasyon detayı getirilemedi. Lütfen tekrar dene.",
+      "close": "Kapat"
+    },
+    "errors": {
+      "invalidParams": "Parametreler geçersiz. Gün sayısını ve hedef fiyatı kontrol et.",
+      "failed": "Simülasyon tamamlanamadı. Kredi iade edildi.",
+      "insufficientCredit": "Yeterli kredin yok."
+    },
+    "maintenance": {
+      "title": "Simülasyon bakımda",
+      "description": "Bu özellik geçici olarak devre dışı. Simülasyon başlatılamaz; lütfen daha sonra tekrar dene."
+    }
+  },
+  "advisor": {
+    "title": "Yatırım Danışmanı",
+    "description": "Vade ve risk profiline göre sana uygun hisseleri bul; istersen portföyünün profilini çıkar.",
+    "modes": {
+      "fit": "Hisse önerisi",
+      "portfolio": "Portföy profili"
+    },
+    "fit": {
+      "title": "Profilini seç",
+      "description": "Vade, kârlılık ve risk toleransına göre popüler evrenden en yakın hisseler sıralanır.",
+      "horizon": "Vade",
+      "profitability": "Kârlılık beklentisi",
+      "riskTolerance": "Risk toleransı",
+      "limit": "Sonuç sayısı",
+      "limitHint": "1 ile 100 arasında.",
+      "submit": "Analiz et",
+      "noCredits": "Bu analiz kredi harcamaz."
+    },
+    "levels": {
+      "horizon": {
+        "short": "Kısa",
+        "medium": "Orta",
+        "long": "Uzun"
+      },
+      "profitability": {
+        "low": "Düşük",
+        "medium": "Orta",
+        "high": "Yüksek"
+      },
+      "risk": {
+        "low": "Düşük",
+        "medium": "Orta",
+        "high": "Yüksek"
+      }
+    },
+    "results": {
+      "title": "Öneriler",
+      "count": "{count} hisse bulundu",
+      "scoreLabel": "Uygunluk",
+      "scoreValue": "%{percent}",
+      "distanceLabel": "Uzaklık",
+      "emptyTitle": "Sonuç bulunamadı",
+      "emptyDescription": "Farklı bir profil deneyebilirsin.",
+      "viewSymbol": "{ticker} hisse detayı"
+    },
+    "vector": {
+      "risk": "Risk",
+      "horizon": "Vade",
+      "profitability": "Kârlılık"
+    },
+    "portfolio": {
+      "title": "Portföy profilini çıkar",
+      "description": "Hisselerini ekle; ortalama profilini ve ona benzeyen hisseleri gösterelim.",
+      "addTicker": "Hisse ekle",
+      "symbolLabel": "Hisse",
+      "selected": "Seçilen hisseler",
+      "remove": "{ticker} hissesini kaldır",
+      "count": "{count}/{max} hisse",
+      "empty": "Henüz hisse eklemedin.",
+      "limit": "Öneri sayısı",
+      "limitHint": "1 ile 50 arasında.",
+      "submit": "Profili çıkar",
+      "maxReached": "En fazla {max} hisse ekleyebilirsin.",
+      "duplicate": "{ticker} zaten listede."
+    },
+    "profile": {
+      "title": "Tahmini profil",
+      "avgTitle": "Ortalama profil",
+      "portfolioTitle": "Portföyün",
+      "similarTitle": "Benzer hisseler",
+      "noSimilar": "Benzer hisse bulunamadı."
+    },
+    "maintenance": {
+      "title": "Danışman bakımda",
+      "description": "Bu özellik geçici olarak devre dışı. Analiz başlatılamaz; lütfen daha sonra tekrar dene."
+    },
+    "noCredits": "Danışman analizi kredi harcamaz.",
+    "errors": {
+      "genericTitle": "Analiz tamamlanamadı",
+      "genericDescription": "İstek işlenemedi. Lütfen tekrar dene.",
+      "emptyPortfolio": "En az bir hisse eklemelisin.",
+      "retry": "Tekrar dene"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",
@@ -856,6 +1052,8 @@
     "simulationNotFound": "Simülasyon bulunamadı.",
     "invalidTargetPrice": "Hedef fiyat geçersiz.",
     "invalidSimulationParameters": "Simülasyon parametreleri geçersiz.",
+    "simulationFailed": "Simülasyon tamamlanamadı. Lütfen tekrar dene.",
+    "featureMaintenance": "Bu özellik bakımda. Lütfen daha sonra tekrar dene.",
     "backendUnreachable": "Sunucuya ulaşılamadı. Lütfen tekrar dene.",
     "csrfRejected": "İstek reddedildi. Sayfayı yenileyip tekrar dene.",
     "validation": "Girdiğin bilgiler geçersiz.",

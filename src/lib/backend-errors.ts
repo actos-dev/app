@@ -61,6 +61,12 @@ const BACKEND_ERROR_KEYS: Readonly<Record<string, string>> = {
   error_invalid_order: "apiErrors.generic",
   error_database: "apiErrors.database",
 
+  // Simülasyon — kodlaştırılmış sabit `detail` değerleri (Faz 5A.2).
+  error_simulation_failed: "apiErrors.simulationFailed",
+  error_simulation_not_found: "apiErrors.simulationNotFound",
+  error_invalid_simulation_params: "apiErrors.invalidSimulationParameters",
+  error_invalid_target: "apiErrors.invalidTargetPrice",
+
   // Rapor / simülasyon / kredi — düz İngilizce metinler (backend geçiş dönemi).
   "insufficient credit": "apiErrors.insufficientCredit",
   "Report not found or you do not have permission to view it.": "apiErrors.reportNotFound",
@@ -75,6 +81,9 @@ const BACKEND_ERROR_KEYS: Readonly<Record<string, string>> = {
   error_validation: "apiErrors.validation",
   error_unknown: "apiErrors.generic",
 };
+
+/** Bakım modu `detail` deseni: `"{feature} is temporarily disabled for maintenance"`. */
+const MAINTENANCE_DETAIL_PATTERN = /temporarily disabled for maintenance/i;
 
 /**
  * Backend `detail` değerini i18n anahtarına çevirir.
@@ -92,4 +101,22 @@ export function translateBackendError(detail: unknown): string {
     return "apiErrors.validation";
   }
   return "apiErrors.generic";
+}
+
+/**
+ * Hatanın bakım modundan (`require_feature`) gelip gelmediğini söyler.
+ *
+ * `require_feature` `503` + `detail="<feature> is temporarily disabled for
+ * maintenance"` döner; bu düz İngilizce metin `translateBackendError`'da
+ * jenerik anahtara düşer. UI bakım durumunu net göstermek için bu kapıyı
+ * ayrıca kontrol eder (eski uygulamadaki sessiz başarısızlık tekrarlanmaz).
+ */
+export function isMaintenanceError(error: { status?: number; code?: string } | null | undefined): boolean {
+  if (!error) {
+    return false;
+  }
+  if (error.status === 503) {
+    return true;
+  }
+  return typeof error.code === "string" && MAINTENANCE_DETAIL_PATTERN.test(error.code);
 }
