@@ -18,8 +18,15 @@ import { toast } from "sonner";
 import { ApiError, apiFetch } from "@/lib/api/client";
 import {
   PORTFOLIOS_PATH,
+  portfolioBenchmarkPath,
+  portfolioDiversificationPath,
   portfolioDuplicatePath,
+  portfolioHistoryPath,
   portfolioPath,
+  portfolioPerformancePath,
+  portfolioPerformersPath,
+  portfolioReturnsPath,
+  portfolioRiskPath,
   portfolioSummariesPath,
   portfolioTransactionPath,
   portfolioTransactionsPath,
@@ -29,12 +36,20 @@ import {
 import type {
   AddTransactionInput,
   Portfolio,
+  PortfolioBenchmark,
+  PortfolioDiversification,
+  PortfolioHistoryPoint,
   PortfolioMetadata,
+  PortfolioPerformance,
+  PortfolioPerformers,
+  PortfolioReturns,
+  PortfolioRiskMetrics,
   PortfolioSummaryResponse,
   PortfolioTransaction,
   PortfolioValuation,
   UpdateTransactionInput,
 } from "@/lib/portfolio/types";
+import type { AnalyticsPeriod } from "@/lib/portfolio/periods";
 import { qk } from "@/lib/query/keys";
 import { translateBackendError } from "@/lib/backend-errors";
 
@@ -90,6 +105,96 @@ export function usePortfolioTransactions(id: string, initialData?: PortfolioTran
     queryKey: qk.portfolioTransactions(id),
     queryFn: () => apiFetch<PortfolioTransaction[]>(portfolioTransactionsPath(id)),
     ...(initialData ? { initialData } : {}),
+  });
+}
+
+/**
+ * Analiz sorguları (Faz 4 / Birim 4.3).
+ *
+ * Bu uçlar pahalıdır (fiyat geçmişi fan-out'u) ve yalnız ilgili sekme
+ * açıldığında çağrılmalıdır. Sekme içerikleri `Tabs` tarafından koşullu
+ * mount edildiğinden varsayılan `enabled: true` güvenlidir; çağıran taraf
+ * gerekirse `enabled` ile kapatabilir.
+ */
+type AnalyticsOptions = { enabled?: boolean };
+
+/** `GET /portfolios/{id}/diversification` — varlık sınıfı/pozisyon dağılımı. */
+export function usePortfolioDiversification(id: string, options: AnalyticsOptions = {}) {
+  return useQuery({
+    queryKey: qk.portfolioDiversification(id),
+    queryFn: () => apiFetch<PortfolioDiversification>(portfolioDiversificationPath(id)),
+    enabled: options.enabled ?? true,
+  });
+}
+
+/** `GET /portfolios/{id}/performers` — en iyi/en kötü pozisyonlar (top 5). */
+export function usePortfolioPerformers(id: string, options: AnalyticsOptions = {}) {
+  return useQuery({
+    queryKey: qk.portfolioPerformers(id),
+    queryFn: () => apiFetch<PortfolioPerformers>(portfolioPerformersPath(id)),
+    enabled: options.enabled ?? true,
+  });
+}
+
+/** `GET /portfolios/{id}/history?period=` — portföy değeri zaman serisi. */
+export function usePortfolioHistory(
+  id: string,
+  period: AnalyticsPeriod,
+  options: AnalyticsOptions = {},
+) {
+  return useQuery({
+    queryKey: qk.portfolioHistory(id, period),
+    queryFn: () =>
+      apiFetch<PortfolioHistoryPoint[]>(portfolioHistoryPath(id), { query: { period } }),
+    enabled: options.enabled ?? true,
+  });
+}
+
+/** `GET /portfolios/{id}/returns?period=` — dönem getirisi ve CAGR. */
+export function usePortfolioReturns(
+  id: string,
+  period: AnalyticsPeriod,
+  options: AnalyticsOptions = {},
+) {
+  return useQuery({
+    queryKey: qk.portfolioReturns(id, period),
+    queryFn: () => apiFetch<PortfolioReturns>(portfolioReturnsPath(id), { query: { period } }),
+    enabled: options.enabled ?? true,
+  });
+}
+
+/** `GET /portfolios/{id}/risk?period=` — volatilite, max drawdown, Sharpe. */
+export function usePortfolioRisk(
+  id: string,
+  period: AnalyticsPeriod,
+  options: AnalyticsOptions = {},
+) {
+  return useQuery({
+    queryKey: qk.portfolioRisk(id, period),
+    queryFn: () => apiFetch<PortfolioRiskMetrics>(portfolioRiskPath(id), { query: { period } }),
+    enabled: options.enabled ?? true,
+  });
+}
+
+/** `GET /portfolios/{id}/benchmark?ticker=XU100` — kıyas; veri yoksa `{}`. */
+export function usePortfolioBenchmark(
+  id: string,
+  ticker = "XU100",
+  options: AnalyticsOptions = {},
+) {
+  return useQuery({
+    queryKey: qk.portfolioBenchmark(id, ticker),
+    queryFn: () => apiFetch<PortfolioBenchmark>(portfolioBenchmarkPath(id), { query: { ticker } }),
+    enabled: options.enabled ?? true,
+  });
+}
+
+/** `GET /portfolios/{id}/performance` — işlem verimliliği analizi. */
+export function usePortfolioPerformance(id: string, options: AnalyticsOptions = {}) {
+  return useQuery({
+    queryKey: qk.portfolioPerformance(id),
+    queryFn: () => apiFetch<PortfolioPerformance>(portfolioPerformancePath(id)),
+    enabled: options.enabled ?? true,
   });
 }
 

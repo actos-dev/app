@@ -418,6 +418,7 @@
         "export": "İşlemleri CSV indir",
         "delete": "Portföyü sil"
       },
+      "exportFilenamePrefix": "portfoy",
       "valuationUnavailable": "Değerleme şu an alınamıyor; pozisyonlar gösterilemiyor.",
       "positions": {
         "title": "Pozisyonlar",
@@ -449,6 +450,97 @@
       "error": {
         "title": "Portföy yüklenemedi",
         "description": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene."
+      }
+    },
+    "analytics": {
+      "title": "Analiz",
+      "retry": "Tekrar dene",
+      "error": "Analiz verisi yüklenemedi",
+      "tabs": {
+        "returns": "Getiri",
+        "diversification": "Dağılım",
+        "risk": "Risk",
+        "performers": "Öne çıkanlar",
+        "history": "Geçmiş"
+      },
+      "periodLabel": "Periyot",
+      "period": {
+        "1w": "1H",
+        "1mo": "1A",
+        "3mo": "3A",
+        "6mo": "6A",
+        "1y": "1Y",
+        "max": "Tümü"
+      },
+      "returns": {
+        "title": "Dönem getirisi",
+        "startValue": "Dönem başı değeri",
+        "endValue": "Dönem sonu değeri",
+        "absoluteReturn": "Mutlak getiri",
+        "totalReturn": "Toplam getiri",
+        "cagr": "Yıllık bileşik getiri",
+        "cagrHint": "Getirinin yıllıklandırılmış bileşik oranı (CAGR)."
+      },
+      "benchmark": {
+        "title": "Kıyas",
+        "portfolioReturn": "Portföy getirisi",
+        "benchmarkReturn": "{ticker} getirisi",
+        "difference": "Fark",
+        "outperformed": "Endeksin üzerinde",
+        "underperformed": "Endeksin altında",
+        "empty": "Kıyas verisi yok",
+        "emptyHint": "Portföy geçmişi veya kıyas fiyat serisi bu dönem için yeterli değil."
+      },
+      "performance": {
+        "title": "İşlem verimliliği",
+        "efficiency": "Verimlilik",
+        "efficiencyHint": "Gerçek kârın mümkün olan en iyi kâra oranı (0-100).",
+        "actualPnl": "Gerçekleşen K/Z",
+        "optimalPnl": "En iyi senaryo K/Z",
+        "optimalPnlHint": "Dönemin en düşük alış ve en yüksek satış fiyatıyla elde edilebilecek K/Z.",
+        "empty": "Analiz için işlem yok",
+        "emptyHint": "Verimlilik, işlem geçmişi olduğunda hesaplanır."
+      },
+      "risk": {
+        "volatility": "Volatilite",
+        "volatilityHint": "Günlük getirilerin standart sapması.",
+        "maxDrawdown": "Maksimum düşüş",
+        "maxDrawdownHint": "Zirveden dibe en büyük değer kaybı.",
+        "sharpe": "Sharpe oranı",
+        "sharpeHint": "Getirinin riske göre ölçüsü; risksiz oran sıfır kabul edilir.",
+        "empty": "Risk verisi yok",
+        "emptyHint": "Hesaplama için en az üç geçmiş değer noktası gerekir."
+      },
+      "diversification": {
+        "byType": "Varlık sınıfına göre",
+        "byPosition": "Pozisyona göre",
+        "cash": "Nakit",
+        "types": {
+          "stock": "Hisse",
+          "forex": "Döviz",
+          "metal": "Kıymetli maden"
+        },
+        "tableLabel": "Dağılım verileri",
+        "typeTableLabel": "Varlık sınıfı dağılımı tablosu",
+        "positionTableLabel": "Pozisyon dağılımı tablosu",
+        "name": "Ad",
+        "value": "Değer",
+        "weight": "Ağırlık",
+        "empty": "Dağılım verisi yok",
+        "emptyHint": "Portföyde pozisyon veya nakit bulunmuyor."
+      },
+      "performers": {
+        "best": "En iyi pozisyonlar",
+        "worst": "En kötü pozisyonlar",
+        "empty": "Öne çıkan pozisyon yok",
+        "emptyHint": "Fiyatı alınabilen pozisyon bulunmuyor."
+      },
+      "history": {
+        "title": "Portföy değeri",
+        "loading": "Grafik yükleniyor…",
+        "ariaLabel": "Portföy değeri grafiği, {period} · {count} nokta",
+        "empty": "Geçmiş verisi yok",
+        "emptyHint": "Bu dönem için çizilecek değer noktası bulunmuyor."
       }
     },
     "trade": {

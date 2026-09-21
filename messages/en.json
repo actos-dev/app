@@ -418,6 +418,7 @@
         "export": "Download transactions as CSV",
         "delete": "Delete portfolio"
       },
+      "exportFilenamePrefix": "portfolio",
       "valuationUnavailable": "Valuation is unavailable right now; positions cannot be shown.",
       "positions": {
         "title": "Positions",
@@ -449,6 +450,97 @@
       "error": {
         "title": "Portfolio could not be loaded",
         "description": "The data provider may be unreachable. Please try again."
+      }
+    },
+    "analytics": {
+      "title": "Analytics",
+      "retry": "Try again",
+      "error": "Analytics data could not be loaded",
+      "tabs": {
+        "returns": "Returns",
+        "diversification": "Allocation",
+        "risk": "Risk",
+        "performers": "Top movers",
+        "history": "History"
+      },
+      "periodLabel": "Period",
+      "period": {
+        "1w": "1W",
+        "1mo": "1M",
+        "3mo": "3M",
+        "6mo": "6M",
+        "1y": "1Y",
+        "max": "All"
+      },
+      "returns": {
+        "title": "Period return",
+        "startValue": "Start value",
+        "endValue": "End value",
+        "absoluteReturn": "Absolute return",
+        "totalReturn": "Total return",
+        "cagr": "Compound annual return",
+        "cagrHint": "Annualised compound growth rate (CAGR)."
+      },
+      "benchmark": {
+        "title": "Benchmark",
+        "portfolioReturn": "Portfolio return",
+        "benchmarkReturn": "{ticker} return",
+        "difference": "Difference",
+        "outperformed": "Ahead of the index",
+        "underperformed": "Behind the index",
+        "empty": "No benchmark data",
+        "emptyHint": "Portfolio history or the benchmark price series is too short for this period."
+      },
+      "performance": {
+        "title": "Trade efficiency",
+        "efficiency": "Efficiency",
+        "efficiencyHint": "Actual profit compared with the best possible profit (0-100).",
+        "actualPnl": "Realised P/L",
+        "optimalPnl": "Best-case P/L",
+        "optimalPnlHint": "P/L attainable with the period's lowest buy and highest sell price.",
+        "empty": "No trades to analyse",
+        "emptyHint": "Efficiency is computed once there is trade history."
+      },
+      "risk": {
+        "volatility": "Volatility",
+        "volatilityHint": "Standard deviation of daily returns.",
+        "maxDrawdown": "Maximum drawdown",
+        "maxDrawdownHint": "Largest peak-to-trough loss.",
+        "sharpe": "Sharpe ratio",
+        "sharpeHint": "Return measured against risk; risk-free rate is taken as zero.",
+        "empty": "No risk data",
+        "emptyHint": "At least three history points are required."
+      },
+      "diversification": {
+        "byType": "By asset class",
+        "byPosition": "By position",
+        "cash": "Cash",
+        "types": {
+          "stock": "Stock",
+          "forex": "FX",
+          "metal": "Precious metal"
+        },
+        "tableLabel": "Allocation data",
+        "typeTableLabel": "Asset class allocation table",
+        "positionTableLabel": "Position allocation table",
+        "name": "Name",
+        "value": "Value",
+        "weight": "Weight",
+        "empty": "No allocation data",
+        "emptyHint": "The portfolio holds no positions or cash."
+      },
+      "performers": {
+        "best": "Best positions",
+        "worst": "Worst positions",
+        "empty": "No standout positions",
+        "emptyHint": "No position with an available price."
+      },
+      "history": {
+        "title": "Portfolio value",
+        "loading": "Loading chart…",
+        "ariaLabel": "Portfolio value chart, {period} · {count} points",
+        "empty": "No history data",
+        "emptyHint": "No value points to plot for this period."
       }
     },
     "trade": {

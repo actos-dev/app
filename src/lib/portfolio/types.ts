@@ -101,6 +101,116 @@ export type PortfolioValuation = {
   assets: PortfolioValuationAsset[];
 };
 
+/**
+ * Analiz uçlarının tel formatı tipleri (Faz 4 / Birim 4.3).
+ *
+ * Şekiller `backend/src/services/portfolio.py` içindeki dönüş sözlüklerinden
+ * birebir çıkarıldı; bu uçlar da `response_model` tanımlamaz. Backend `gen:api`
+ * ile şemayı yayınlayınca bu blok `generated.ts` lehine silinmelidir.
+ */
+
+/** `GET /portfolios/{id}/returns` (varsayılan periyot `1mo`). */
+export type PortfolioReturns = {
+  period: string;
+  start_value: number;
+  end_value: number;
+  absolute_return: number;
+  total_return_percentage: number | null;
+  cagr_percentage: number | null;
+};
+
+/**
+ * `GET /portfolios/{id}/risk`.
+ *
+ * Backend üçten az geçmiş noktası varsa tüm alanları `null` döner; UI "—" basar.
+ * `volatility` ve `max_drawdown` yüzde birimidir, `sharpe_ratio` oransızdır.
+ */
+export type PortfolioRiskMetrics = {
+  volatility: number | null;
+  max_drawdown: number | null;
+  sharpe_ratio: number | null;
+};
+
+/** Varlık sınıfı: hisse / döviz / kıymetli maden. */
+export type PortfolioAssetClass = "stock" | "forex" | "metal";
+
+/** `GET /portfolios/{id}/diversification` tek pozisyonu. */
+export type PortfolioDiversificationAsset = {
+  ticker: string;
+  amount: number;
+  value: number | null;
+  type: PortfolioAssetClass;
+  allocation_pct: number;
+};
+
+/**
+ * `GET /portfolios/{id}/diversification` yanıtı.
+ *
+ * Pozisyon yokken backend yalnız `total_value` + boş `assets` döner; bu yüzden
+ * nakit ve sınıf dağılımı alanları opsiyoneldir.
+ */
+export type PortfolioDiversification = {
+  total_value: number;
+  cash_balance?: number;
+  cash_allocation_pct?: number;
+  assets: PortfolioDiversificationAsset[];
+  allocation_by_type?: Partial<Record<PortfolioAssetClass, number>>;
+};
+
+/** `GET /portfolios/{id}/performers` tek kalem. */
+export type PortfolioPerformer = {
+  ticker: string;
+  amount: number;
+  pnl: number;
+  pnl_percentage: number;
+};
+
+/** `GET /portfolios/{id}/performers` yanıtı (top_n varsayılan 5). */
+export type PortfolioPerformers = {
+  best: PortfolioPerformer[];
+  worst: PortfolioPerformer[];
+};
+
+/** `GET /portfolios/{id}/history` tek zaman noktası. */
+export type PortfolioHistoryPoint = {
+  ts: string;
+  total_value: number;
+  cash_balance: number;
+  holdings_value: number;
+};
+
+/**
+ * `GET /portfolios/{id}/benchmark`.
+ *
+ * Backend kıyas verisi üretemezse `{}` döner; bu durumda alanlar eksik gelir
+ * ve UI zarif boş durum gösterir.
+ */
+export type PortfolioBenchmark = Partial<{
+  portfolio_return_pct: number;
+  benchmark_ticker: string;
+  benchmark_return_pct: number;
+  difference_pct: number;
+  outperformed: boolean;
+}>;
+
+/** `GET /portfolios/{id}/performance` tek sembol analizi (özet alanlar). */
+export type PortfolioPerformanceAsset = {
+  ticker: string;
+  efficiency_score: number | null;
+  actual_pnl: number;
+  optimal_pnl: number | null;
+};
+
+/** `GET /portfolios/{id}/performance` yanıtı. */
+export type PortfolioPerformance = {
+  overall: {
+    efficiency_score: number | null;
+    actual_pnl: number;
+    optimal_pnl: number;
+  } | null;
+  assets: PortfolioPerformanceAsset[];
+};
+
 /** İşlem yönü (backend `AddTransactionBody.type` deseni). */
 export type TradeType = "BUY" | "SELL";
 

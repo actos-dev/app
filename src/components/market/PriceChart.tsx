@@ -17,13 +17,9 @@ import { useQuery } from "@tanstack/react-query";
 import {
   AreaSeries,
   CandlestickSeries,
-  ColorType,
-  LineStyle,
   createChart,
   type AreaData,
   type CandlestickData,
-  type ChartOptions,
-  type DeepPartial,
   type IChartApi,
   type ISeriesApi,
   type UTCTimestamp,
@@ -36,6 +32,12 @@ import { ErrorState } from "@/components/shared/ErrorState";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { apiFetch } from "@/lib/api/client";
+import {
+  buildChartOptions,
+  readChartTokens,
+  withAlpha,
+  type ChartTokens,
+} from "@/lib/charts/theme";
 import { economyHistoryPath, priceHistoryPath } from "@/lib/markets/api-paths";
 import { CHART_INTERVAL, CHART_PERIODS, type ChartPeriod } from "@/lib/markets/periods";
 import { qk } from "@/lib/query/keys";
@@ -55,14 +57,6 @@ type PriceChartProps = {
   className?: string;
 };
 
-type ChartTokens = {
-  up: string;
-  down: string;
-  grid: string;
-  text: string;
-  background: string;
-};
-
 type NormalizedCandle = {
   time: UTCTimestamp;
   open: number;
@@ -70,45 +64,6 @@ type NormalizedCandle = {
   low: number;
   close: number;
 };
-
-/** Token okunamazsa (SSR/jsdom) koyu tema varsayılanları. */
-const FALLBACK_TOKENS: ChartTokens = {
-  up: "#34d399",
-  down: "#f87171",
-  grid: "#232b3d",
-  text: "#9aa7bd",
-  background: "#0b0e14",
-};
-
-function readChartTokens(): ChartTokens {
-  if (typeof document === "undefined") {
-    return FALLBACK_TOKENS;
-  }
-  const styles = getComputedStyle(document.documentElement);
-  const read = (name: string, fallback: string): string =>
-    styles.getPropertyValue(name).trim() || fallback;
-  return {
-    up: read("--chart-up", FALLBACK_TOKENS.up),
-    down: read("--chart-down", FALLBACK_TOKENS.down),
-    grid: read("--chart-grid", FALLBACK_TOKENS.grid),
-    text: read("--chart-text", FALLBACK_TOKENS.text),
-    background: read("--background", FALLBACK_TOKENS.background),
-  };
-}
-
-/** `#rrggbb` token rengine alfa ekler; tanınmayan biçimde rengi aynen döner. */
-function withAlpha(color: string, alpha: number): string {
-  const hex = color.replace("#", "").trim();
-  if (hex.length === 6 || hex.length === 8) {
-    const r = Number.parseInt(hex.slice(0, 2), 16);
-    const g = Number.parseInt(hex.slice(2, 4), 16);
-    const b = Number.parseInt(hex.slice(4, 6), 16);
-    if ([r, g, b].every((channel) => Number.isFinite(channel))) {
-      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-    }
-  }
-  return color;
-}
 
 function toTimestamp(ts: string): UTCTimestamp | null {
   const millis = Date.parse(ts);
@@ -137,33 +92,6 @@ function normalizeCandles(candles: HistoryCandle[] | undefined): NormalizedCandl
     byTime.set(time, { time, open, high, low, close });
   }
   return Array.from(byTime.values()).sort((a, b) => a.time - b.time);
-}
-
-function prefersReducedMotion(): boolean {
-  if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-    return false;
-  }
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-function buildChartOptions(tokens: ChartTokens): DeepPartial<ChartOptions> {
-  const reduceMotion = prefersReducedMotion();
-  return {
-    autoSize: false,
-    layout: {
-      background: { type: ColorType.Solid, color: tokens.background },
-      textColor: tokens.text,
-      fontFamily: "var(--font-geist-mono), monospace",
-    },
-    grid: {
-      vertLines: { color: tokens.grid, style: LineStyle.Solid },
-      horzLines: { color: tokens.grid, style: LineStyle.Solid },
-    },
-    rightPriceScale: { borderColor: tokens.grid },
-    timeScale: { borderColor: tokens.grid, timeVisible: false, secondsVisible: false },
-    // reduced-motion tercihinde kinetik kaydırma kapatılır (hareket minimumu).
-    kineticScroll: { touch: !reduceMotion, mouse: !reduceMotion },
-  };
 }
 
 export function PriceChart({ symbol, kind, period, onPeriodChange, className }: PriceChartProps) {

@@ -14,9 +14,14 @@ export type TabItem = {
 
 type TabsProps = {
   items: readonly TabItem[];
-  defaultValue?: string;
-  value?: string;
-  onValueChange?: (value: string) => void;
+  /**
+   * Başlangıç sekmesi. `null` verilirse hiçbir sekme aktif olmaz; Base UI
+   * varsayılanı `0` olduğundan "kapalı başla" isteyen çağıran `null` geçmeli.
+   */
+  defaultValue?: string | null;
+  /** Kontrollü değer; `null` iken hiçbir sekme aktif değildir. */
+  value?: string | null;
+  onValueChange?: (value: string | null) => void;
   /**
    * `true` iken pasif paneller DOM'da kalır (`data-hidden`, gizli); panel
    * içi state (form, tablo sayfası, grafik) korunur. Portföy sekmeleri gibi
@@ -50,7 +55,7 @@ export function Tabs({
     <BaseTabs.Root
       defaultValue={defaultValue}
       value={value}
-      onValueChange={(nextValue: string) => onValueChange?.(nextValue)}
+      onValueChange={(nextValue: string | null) => onValueChange?.(nextValue)}
       className={className}
     >
       <BaseTabs.List

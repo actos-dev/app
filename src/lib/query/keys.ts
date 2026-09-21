@@ -111,6 +111,34 @@ export const qk = {
   portfolioTransactions: (id: string) =>
     [...qk.portfolios(), "transactions", id.trim()] as const,
 
+  /** `GET /portfolios/{id}/diversification` — dağılım (4.3). */
+  portfolioDiversification: (id: string) =>
+    [...qk.portfolios(), "diversification", id.trim()] as const,
+
+  /** `GET /portfolios/{id}/performers` — öne çıkan pozisyonlar (4.3). */
+  portfolioPerformers: (id: string) =>
+    [...qk.portfolios(), "performers", id.trim()] as const,
+
+  /** `GET /portfolios/{id}/history?period=` — değer serisi (4.3). */
+  portfolioHistory: (id: string, period = "1mo") =>
+    [...qk.portfolios(), "history", id.trim(), period] as const,
+
+  /** `GET /portfolios/{id}/returns?period=` — dönem getirisi (4.3). */
+  portfolioReturns: (id: string, period = "1mo") =>
+    [...qk.portfolios(), "returns", id.trim(), period] as const,
+
+  /** `GET /portfolios/{id}/risk?period=` — risk metrikleri (4.3). */
+  portfolioRisk: (id: string, period = "1y") =>
+    [...qk.portfolios(), "risk", id.trim(), period] as const,
+
+  /** `GET /portfolios/{id}/benchmark?ticker=` — kıyas (4.3). */
+  portfolioBenchmark: (id: string, ticker = "XU100") =>
+    [...qk.portfolios(), "benchmark", id.trim(), ticker.trim().toUpperCase()] as const,
+
+  /** `GET /portfolios/{id}/performance` — işlem verimliliği (4.3). */
+  portfolioPerformance: (id: string) =>
+    [...qk.portfolios(), "performance", id.trim()] as const,
+
   /**
    * Al/sat diyaloğu birim fiyatı (Faz 4 / Birim 4.2).
    *

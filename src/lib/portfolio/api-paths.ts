@@ -85,3 +85,38 @@ export function portfolioTransactionsUndoPath(id: string): ApiPath {
 export function portfolioExportCsvPath(id: string): ApiPath {
   return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/export/csv`);
 }
+
+/** `GET /portfolios/{id}/diversification` — varlık sınıfı/pozisyon dağılımı. */
+export function portfolioDiversificationPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/diversification`);
+}
+
+/** `GET /portfolios/{id}/performers` — en iyi/en kötü pozisyonlar. */
+export function portfolioPerformersPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/performers`);
+}
+
+/** `GET /portfolios/{id}/history` — portföy değeri zaman serisi. */
+export function portfolioHistoryPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/history`);
+}
+
+/** `GET /portfolios/{id}/returns` — dönem getirileri. */
+export function portfolioReturnsPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/returns`);
+}
+
+/** `GET /portfolios/{id}/risk` — volatilite, max drawdown, Sharpe. */
+export function portfolioRiskPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/risk`);
+}
+
+/** `GET /portfolios/{id}/benchmark` — XU100 kıyası. */
+export function portfolioBenchmarkPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/benchmark`);
+}
+
+/** `GET /portfolios/{id}/performance` — işlem verimliliği. */
+export function portfolioPerformancePath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/performance`);
+}

@@ -30,6 +30,7 @@ import {
   usePortfolioValuation,
 } from "@/hooks/usePortfolios";
 import { portfolioExportCsvPath } from "@/lib/portfolio/api-paths";
+import { buildPortfolioCsvFilename } from "@/lib/portfolio/csv";
 import type {
   Portfolio,
   PortfolioSummary,
@@ -41,6 +42,7 @@ import { useFormatters } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { MarketStatus } from "@/types/market";
 
+import { PortfolioAnalytics } from "./analytics/PortfolioAnalytics";
 import { PortfolioDeleteDialog } from "./PortfolioDeleteDialog";
 import { PortfolioRenameDialog } from "./PortfolioRenameDialog";
 import { PositionsTable } from "./PositionsTable";
@@ -118,8 +120,15 @@ export function PortfolioDetail({
   const costBasis = currentSummary?.cost_basis ?? portfolio.metadata.initial_balance;
   const cash = currentValuation?.cash_balance ?? portfolio.metadata.balance;
   const positionCount =
-    currentValuation?.assets.length ?? currentSummary?.position_count ?? 0;
+     currentValuation?.assets.length ?? currentSummary?.position_count ?? 0;
   const asOf = currentSummary?.as_of ?? null;
+
+  // Backend `Content-Disposition` göndermiyor; dosya adını istemci belirler.
+  const csvFilename = buildPortfolioCsvFilename(
+    t("detail.exportFilenamePrefix"),
+    name,
+    id,
+  );
 
   const openTrade = (ticker?: string, type: TradeType = "BUY") =>
     setTrade({ open: true, ...(ticker ? { ticker } : {}), type });
@@ -157,7 +166,7 @@ export function PortfolioDetail({
             </Button>
             <a
               href={portfolioExportCsvPath(id)}
-              download={`portfolio-${id}.csv`}
+              download={csvFilename}
               aria-label={t("detail.actions.export")}
               className={cn(buttonVariants({ variant: "secondary", size: "icon" }))}
             >
@@ -227,6 +236,8 @@ export function PortfolioDetail({
       </Panel>
 
       <TransactionHistory portfolioId={id} transactions={currentTransactions} />
+
+      <PortfolioAnalytics portfolioId={id} />
 
       <TradeDialog
         key={`${trade.ticker ?? "none"}-${trade.type}`}
