@@ -23,3 +23,4 @@ sorusunu koda ve commit geçmişine bakmadan yanıtlamaktır. Plan maddeleri
 | [0004](0004-grafik-kutuphanesi.md) | Grafiklerde lightweight-charts | Kabul edildi |
 | [0005](0005-openapi-codegen.md) | `generated.ts` tek tip kaynağı, elle tip yasak | Kabul edildi |
 | [0006](0006-i18n-ve-tema-runtime.md) | i18n + tema çerezden SSR; URL'de dil öneki yok | Kabul edildi |
+| [0007](0007-bff-ve-oturum-katmani.md) | BFF proxy + sunucu oturum katmanı (B-03 fallback) | Kabul edildi |

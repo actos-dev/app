@@ -45,5 +45,18 @@
   },
   "home": {
     "placeholder": "Birim 1.2 doğrulaması için geçici metin."
+  },
+  "errors": {
+    "notFoundTitle": "Sayfa bulunamadı",
+    "notFoundDescription": "Aradığın sayfa taşınmış veya hiç var olmamış olabilir.",
+    "genericTitle": "Bir şeyler ters gitti",
+    "genericDescription": "Beklenmeyen bir hata oluştu. Tekrar deneyebilirsin.",
+    "retry": "Tekrar dene",
+    "goHome": "Ana sayfaya dön",
+    "errorId": "Hata kodu"
+  },
+  "auth": {
+    "loginTitle": "Giriş yap",
+    "loginPlaceholder": "Giriş formu Faz 2.2'de eklenecek."
   }
 }

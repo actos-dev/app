@@ -45,5 +45,18 @@
   },
   "home": {
     "placeholder": "Temporary text for unit 1.2 verification."
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page you are looking for may have moved or never existed.",
+    "genericTitle": "Something went wrong",
+    "genericDescription": "An unexpected error occurred. You can try again.",
+    "retry": "Try again",
+    "goHome": "Back to home",
+    "errorId": "Error ID"
+  },
+  "auth": {
+    "loginTitle": "Sign in",
+    "loginPlaceholder": "The sign-in form will arrive in phase 2.2."
   }
 }
