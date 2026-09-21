@@ -1,0 +1,22 @@
+{
+  "app": {
+    "name": "Florence",
+    "description": "BIST market tracking and paper portfolio simulator."
+  },
+  "common": {
+    "language": "Language",
+    "theme": "Theme"
+  },
+  "locale": {
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "theme": {
+    "dark": "Dark",
+    "light": "Light",
+    "sepia": "Sepia"
+  },
+  "home": {
+    "placeholder": "Temporary text for unit 1.2 verification."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "app": {
+    "name": "Florence",
+    "description": "BIST piyasa takibi ve sanal portföy simülatörü."
+  },
+  "common": {
+    "language": "Dil",
+    "theme": "Tema"
+  },
+  "locale": {
+    "tr": "Türkçe",
+    "en": "English"
+  },
+  "theme": {
+    "dark": "Koyu",
+    "light": "Açık",
+    "sepia": "Sepya"
+  },
+  "home": {
+    "placeholder": "Birim 1.2 doğrulaması için geçici metin."
+  }
+}
