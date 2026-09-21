@@ -11,6 +11,7 @@
  */
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Route } from "next";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
@@ -143,6 +144,15 @@ export function LoginForm({ nextPath }: LoginFormProps) {
             />
           )}
         </FormField>
+
+        <div className="flex justify-end">
+          <Link
+            href="/forgot-password"
+            className="text-sm text-primary transition-colors duration-150 ease-out hover:text-primary-hover"
+          >
+            {t("auth.forgotLink")}
+          </Link>
+        </div>
 
         <Button type="submit" loading={isSubmitting} className="w-full">
           {t("auth.loginButton")}

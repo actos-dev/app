@@ -28,6 +28,8 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
   ]);
 
   const nextPath = sanitizeNextPath(typeof params.next === "string" ? params.next : null);
+  // Şifre sıfırlama başarıyla `?reset=success`e yönlendirir (bkz. ResetPasswordForm).
+  const resetDone = params.reset === "success";
 
   if (session) {
     redirect(nextPath as Route);
@@ -49,6 +51,15 @@ export default async function LoginPage({ searchParams }: PageProps<"/login">) {
         </span>
       }
     >
+      {resetDone ? (
+        <p
+          role="status"
+          aria-live="polite"
+          className="rounded-md border border-border bg-surface px-3 py-2 text-sm text-foreground"
+        >
+          {t("resetSuccessNotice")}
+        </p>
+      ) : null}
       <LoginForm nextPath={nextPath} />
     </AuthCard>
   );
