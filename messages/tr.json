@@ -227,6 +227,45 @@
       "passwordMismatch": "Şifreler eşleşmiyor."
     }
   },
+  "market": {
+    "status": {
+      "open": "Açık",
+      "closed": "Kapalı",
+      "openDetail": "BIST işlem saatleri 10:00–18:10 (Europe/Istanbul).",
+      "holidayDetail": "Resmî tatil: {name}.",
+      "nextOpenDetail": "Sonraki açılış: {time}.",
+      "closedDetail": "BIST şu anda kapalı."
+    },
+    "delta": {
+      "aria": {
+        "up": "{value} artış",
+        "down": "{value} düşüş",
+        "flat": "Değişim yok",
+        "unavailable": "Değişim verisi yok"
+      }
+    },
+    "table": {
+      "empty": "Gösterilecek kayıt yok.",
+      "error": "Veriler yüklenemedi.",
+      "retry": "Tekrar dene",
+      "pagination": {
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "pageOf": "Sayfa {page} / {total}"
+      },
+      "columns": {
+        "symbol": "Sembol",
+        "name": "Ad",
+        "price": "Fiyat",
+        "change": "Değişim",
+        "changePercent": "Değişim %",
+        "volume": "Hacim",
+        "marketCap": "Piyasa değeri",
+        "dayHigh": "Gün yüksek",
+        "dayLow": "Gün düşük"
+      }
+    }
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",

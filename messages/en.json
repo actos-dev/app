@@ -227,6 +227,45 @@
       "passwordMismatch": "Passwords do not match."
     }
   },
+  "market": {
+    "status": {
+      "open": "Open",
+      "closed": "Closed",
+      "openDetail": "BIST trading hours are 10:00–18:10 (Europe/Istanbul).",
+      "holidayDetail": "Public holiday: {name}.",
+      "nextOpenDetail": "Next open: {time}.",
+      "closedDetail": "BIST is currently closed."
+    },
+    "delta": {
+      "aria": {
+        "up": "{value} increase",
+        "down": "{value} decrease",
+        "flat": "No change",
+        "unavailable": "Change data unavailable"
+      }
+    },
+    "table": {
+      "empty": "No records to display.",
+      "error": "Couldn't load the data.",
+      "retry": "Try again",
+      "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "pageOf": "Page {page} of {total}"
+      },
+      "columns": {
+        "symbol": "Symbol",
+        "name": "Name",
+        "price": "Price",
+        "change": "Change",
+        "changePercent": "Change %",
+        "volume": "Volume",
+        "marketCap": "Market cap",
+        "dayHigh": "Day high",
+        "dayLow": "Day low"
+      }
+    }
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",

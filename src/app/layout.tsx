@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 
 import { AuthUnauthorizedListener } from "@/components/auth/AuthUnauthorizedListener";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 import { Toaster } from "@/components/ui/toaster";
 import { getSiteUrl } from "@/config/site";
 import { resolveTheme, THEME_COOKIE, themeColors } from "@/i18n/config";
@@ -48,7 +49,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body>
         <AuthUnauthorizedListener />
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </NextIntlClientProvider>
         <Toaster theme={theme} />
       </body>
     </html>
