@@ -9,9 +9,14 @@ import { useLocale, useTranslations } from "next-intl";
 import { useTransition } from "react";
 
 import { setLocale } from "@/i18n/actions";
-import { isLocale, locales } from "@/i18n/config";
+import { isLocale, locales, type Locale } from "@/i18n/config";
 
-export function LocaleSwitcher() {
+export function LocaleSwitcher({
+  onChange,
+}: {
+  /** Çerez yazımından sonra çalışır; hesaba senkron (B-15) için kullanılır. */
+  onChange?: (locale: Locale) => void;
+}) {
   const locale = useLocale();
   const t = useTranslations("common");
   const localeNames = useTranslations("locale");
@@ -32,6 +37,7 @@ export function LocaleSwitcher() {
           startTransition(() => {
             void setLocale(nextLocale);
           });
+          onChange?.(nextLocale);
         }}
       >
         {locales.map((value) => (

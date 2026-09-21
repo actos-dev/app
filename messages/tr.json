@@ -1119,6 +1119,76 @@
     "logout": "Çıkış yap",
     "logoutError": "Çıkış yapılamadı. Lütfen tekrar dene."
   },
+  "profile": {
+    "title": "Profil",
+    "description": "Hesabını, görünümünü ve güvenlik ayarlarını yönet.",
+    "unavailableTitle": "Profil yüklenemedi",
+    "unavailableDescription": "Profil bilgilerine şu an ulaşılamıyor. Lütfen tekrar dene.",
+    "retry": "Tekrar dene",
+    "tabs": {
+      "account": "Hesap",
+      "appearance": "Görünüm",
+      "security": "Güvenlik"
+    },
+    "account": {
+      "summaryTitle": "Hesap bilgileri",
+      "username": "Kullanıcı adı",
+      "email": "E-posta",
+      "verified": "Doğrulanmış",
+      "unverified": "Doğrulanmamış",
+      "credits": "Kredi bakiyesi",
+      "memberSince": "Üyelik tarihi",
+      "changeUsername": "Kullanıcı adını değiştir",
+      "changeEmail": "E-postayı değiştir",
+      "newUsername": "Yeni kullanıcı adı",
+      "newEmail": "Yeni e-posta",
+      "currentValue": "Şu anki değer: {value}",
+      "currentPassword": "Mevcut şifre",
+      "passwordRequired": "Mevcut şifreni gir.",
+      "usernameRequired": "Kullanıcı adı gerekli.",
+      "emailRequired": "Geçerli bir e-posta gir.",
+      "saveUsername": "Kullanıcı adını kaydet",
+      "saveEmail": "E-postayı kaydet",
+      "usernameSuccess": "Kullanıcı adın güncellendi.",
+      "emailSuccess": "E-posta adresin güncellendi.",
+      "emailHint": "Yeni adres bundan sonra giriş adresin olacak."
+    },
+    "avatar": {
+      "label": "Avatar",
+      "description": "Bir avatar seç; profilinde görünür.",
+      "empty": "Şu an seçilebilir avatar yok.",
+      "option": "Avatar {index}",
+      "save": "Avatarı kaydet",
+      "success": "Avatar güncellendi."
+    },
+    "appearance": {
+      "theme": "Tema",
+      "language": "Dil",
+      "description": "Seçtiğin tema ve dil bu cihazda saklanır; giriş yaptığında hesabına da kaydedilir.",
+      "saved": "Tercihler hesabına kaydedildi."
+    },
+    "security": {
+      "passwordTitle": "Şifre değiştir",
+      "passwordRequired": "Şifre gerekli.",
+      "passwordTooShort": "Şifre en az 10 karakter olmalı.",
+      "passwordMismatch": "Şifreler eşleşmiyor.",
+      "currentPassword": "Mevcut şifre",
+      "newPassword": "Yeni şifre",
+      "confirmPassword": "Yeni şifre (tekrar)",
+      "passwordHint": "En az 10 karakter.",
+      "submitPassword": "Şifreyi güncelle",
+      "passwordSuccess": "Şifren güncellendi. Güvenliğin için oturumun kapatıldı; lütfen tekrar giriş yap.",
+      "signInAgain": "Giriş ekranına dön",
+      "deleteTitle": "Hesabı sil",
+      "deleteWarning": "Hesabın, portföylerin, raporların ve tüm verilerin kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+      "deleteAction": "Hesabımı sil",
+      "deleteContinue": "Anladım, devam et",
+      "deleteConfirmLabel": "Onaylamak için kullanıcı adını yaz",
+      "deleteConfirmHint": "Silmek için kullanıcı adını tam olarak yaz: {username}",
+      "deleteConfirmButton": "Kalıcı olarak sil",
+      "cancel": "Vazgeç"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",

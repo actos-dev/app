@@ -11,7 +11,14 @@ import { useTransition } from "react";
 import { setTheme } from "@/i18n/actions";
 import { isTheme, themes, type ThemeName } from "@/i18n/config";
 
-export function ThemeSwitcher({ theme }: { theme: ThemeName }) {
+export function ThemeSwitcher({
+  theme,
+  onChange,
+}: {
+  theme: ThemeName;
+  /** Çerez yazımından sonra çalışır; hesaba senkron (B-15) için kullanılır. */
+  onChange?: (theme: ThemeName) => void;
+}) {
   const t = useTranslations("common");
   const themeNames = useTranslations("theme");
   const [isPending, startTransition] = useTransition();
@@ -31,6 +38,7 @@ export function ThemeSwitcher({ theme }: { theme: ThemeName }) {
           startTransition(() => {
             void setTheme(nextTheme);
           });
+          onChange?.(nextTheme);
         }}
       >
         {themes.map((value) => (

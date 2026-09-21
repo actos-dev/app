@@ -187,6 +187,9 @@ export const qk = {
   /** `GET /credits` — toplam kredi bakiyesi (U-03). */
   credits: () => [...qk.all, "credits"] as const,
 
+  /** `GET /profile` — oturum sahibi profil (Faz 5 / Birim 5B.2). */
+  profile: () => [...qk.all, "profile"] as const,
+
   /** `GET /maintenance` — bakımda olan özellik listesi (Faz 5A.2). */
   maintenance: () => [...qk.all, "maintenance"] as const,
 

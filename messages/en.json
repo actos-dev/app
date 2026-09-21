@@ -1119,6 +1119,76 @@
     "logout": "Sign out",
     "logoutError": "Could not sign out. Please try again."
   },
+  "profile": {
+    "title": "Profile",
+    "description": "Manage your account, appearance and security settings.",
+    "unavailableTitle": "Could not load profile",
+    "unavailableDescription": "Your profile is temporarily unavailable. Please try again.",
+    "retry": "Try again",
+    "tabs": {
+      "account": "Account",
+      "appearance": "Appearance",
+      "security": "Security"
+    },
+    "account": {
+      "summaryTitle": "Account details",
+      "username": "Username",
+      "email": "Email",
+      "verified": "Verified",
+      "unverified": "Unverified",
+      "credits": "Credit balance",
+      "memberSince": "Member since",
+      "changeUsername": "Change username",
+      "changeEmail": "Change email",
+      "newUsername": "New username",
+      "newEmail": "New email",
+      "currentValue": "Current value: {value}",
+      "currentPassword": "Current password",
+      "passwordRequired": "Enter your current password.",
+      "usernameRequired": "Username is required.",
+      "emailRequired": "Enter a valid email.",
+      "saveUsername": "Save username",
+      "saveEmail": "Save email",
+      "usernameSuccess": "Your username was updated.",
+      "emailSuccess": "Your email was updated.",
+      "emailHint": "The new address will be your sign-in address from now on."
+    },
+    "avatar": {
+      "label": "Avatar",
+      "description": "Pick an avatar; it appears on your profile.",
+      "empty": "No avatars are available right now.",
+      "option": "Avatar {index}",
+      "save": "Save avatar",
+      "success": "Avatar updated."
+    },
+    "appearance": {
+      "theme": "Theme",
+      "language": "Language",
+      "description": "Your theme and language are stored on this device and saved to your account when you sign in.",
+      "saved": "Preferences saved to your account."
+    },
+    "security": {
+      "passwordTitle": "Change password",
+      "passwordRequired": "Password is required.",
+      "passwordTooShort": "Password must be at least 10 characters.",
+      "passwordMismatch": "Passwords do not match.",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "New password (repeat)",
+      "passwordHint": "At least 10 characters.",
+      "submitPassword": "Update password",
+      "passwordSuccess": "Your password was updated. Your session was closed for security; please sign in again.",
+      "signInAgain": "Back to sign in",
+      "deleteTitle": "Delete account",
+      "deleteWarning": "Your account, portfolios, reports and all data will be permanently deleted. This action cannot be undone.",
+      "deleteAction": "Delete my account",
+      "deleteContinue": "I understand, continue",
+      "deleteConfirmLabel": "Type your username to confirm",
+      "deleteConfirmHint": "Type your username exactly to delete: {username}",
+      "deleteConfirmButton": "Delete permanently",
+      "cancel": "Cancel"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",

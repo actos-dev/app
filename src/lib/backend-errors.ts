@@ -17,6 +17,9 @@ const BACKEND_ERROR_KEYS: Readonly<Record<string, string>> = {
   error_email_not_verified: "apiErrors.emailNotVerified",
   error_username_taken: "apiErrors.usernameTaken",
   error_email_taken: "apiErrors.emailTaken",
+  // Şifre değişimi: backend bugün düz metin ("Current password is incorrect")
+  // döner; kodlaştırıldığında bu anahtar hazır (5B.2).
+  error_invalid_password: "apiErrors.currentPasswordIncorrect",
   error_invalid_or_expired_token: "apiErrors.invalidToken",
   error_bots_not_allowed: "apiErrors.botsNotAllowed",
   error_bot_limit_reached: "apiErrors.botLimitReached",

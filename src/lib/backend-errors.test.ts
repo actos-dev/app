@@ -14,6 +14,9 @@ describe("translateBackendError", () => {
     expect(translateBackendError("error_email_not_verified")).toBe("apiErrors.emailNotVerified");
     expect(translateBackendError("error_username_taken")).toBe("apiErrors.usernameTaken");
     expect(translateBackendError("error_email_taken")).toBe("apiErrors.emailTaken");
+    expect(translateBackendError("error_invalid_password")).toBe(
+      "apiErrors.currentPasswordIncorrect",
+    );
     expect(translateBackendError("error_invalid_or_expired_token")).toBe("apiErrors.invalidToken");
   });
 
