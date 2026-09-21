@@ -190,6 +190,34 @@ export const qk = {
   /** `GET /profile` — oturum sahibi profil (Faz 5 / Birim 5B.2). */
   profile: () => [...qk.all, "profile"] as const,
 
+  /** `GET /bots` — kullanıcının bot hesapları (Faz 5 / Birim 5B.3). */
+  bots: () => [...qk.all, "bots"] as const,
+
+  /**
+   * Veri merkezi anahtarları (Faz 5 / Birim 5B.3).
+   *
+   * Liste ve tek kayıt aynı kökün altındadır; yeni talep sonrası tek
+   * `invalidateQueries({ queryKey: qk.exports.all() })` ikisini de tazeler.
+   * Tek kayıt anahtarı poll sırasında sabit kalır (durum değişimi anahtarı
+   * değiştirmez).
+   */
+  exports: {
+    all: () => [...qk.all, "exports"] as const,
+    list: () => [...qk.exports.all(), "list"] as const,
+    detail: (id: number | string) => [...qk.exports.all(), "detail", String(id)] as const,
+  },
+
+  /**
+   * Duyuru anahtarları (Faz 5 / Birim 5B.3).
+   *
+   * Topbar zili ile yönetici sekmesi AYNI listeyi paylaşır; okundu işaretleme
+   * veya admin CRUD sonrası tek invalidation zili de tazeler.
+   */
+  announcements: {
+    all: () => [...qk.all, "announcements"] as const,
+    list: () => [...qk.announcements.all(), "list"] as const,
+  },
+
   /** `GET /maintenance` — bakımda olan özellik listesi (Faz 5A.2). */
   maintenance: () => [...qk.all, "maintenance"] as const,
 

@@ -1,15 +1,19 @@
 /**
- * `/data` iskeleti (Faz 1 / Birim 1.4).
+ * `/data` — Veri Merkezi (Faz 5 / Birim 5B.3, S-24 bağlamı).
  *
- * Auth koruması henüz yok; Faz 2'de middleware ile korunacak. Veri merkezi ve
- * dışa aktarma akışı Faz 5B'de gelecek.
+ * Sunucu bileşeni: `GET /data/export` (çerez forward edilir) ilk talep
+ * listesini RSC'de çeker; istemci çalışma alanı yeni talep oluşturma, durum
+ * takibi ve indirmeyi yönetir. `GET /data/daily/{year}` bilinçli olarak
+ * 410 Gone döndüğünden KULLANILMAZ; dışa aktarma Google Takeout tarzı akıştır.
  */
-import { Construction } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "@/components/shared/EmptyState";
+import { DataCenterWorkspace } from "@/components/data/DataCenterWorkspace";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { serverAuthApiFetch } from "@/lib/api/server-auth";
+import { DATA_EXPORT_SERVER_PATH } from "@/lib/data-center/api-paths";
+import type { ExportJob } from "@/lib/data-center/types";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -17,16 +21,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function DataPage() {
-  const t = await getTranslations();
+  const [exports, t] = await Promise.all([
+    serverAuthApiFetch<ExportJob[]>(DATA_EXPORT_SERVER_PATH),
+    getTranslations("dataCenter"),
+  ]);
 
   return (
-    <>
-      <PageHeader title={t("nav.data")} />
-      <EmptyState
-        icon={<Construction aria-hidden="true" className="size-5" />}
-        title={t("common.comingSoonTitle")}
-        description={t("common.comingSoonDescription")}
-      />
-    </>
+    <div className="flex flex-col gap-6">
+      <PageHeader title={t("title")} description={t("description")} />
+      <DataCenterWorkspace initialExports={exports ?? []} />
+    </div>
   );
 }

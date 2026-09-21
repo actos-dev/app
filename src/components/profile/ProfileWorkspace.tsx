@@ -17,7 +17,9 @@ import type { ThemeName } from "@/i18n/config";
 import type { AvatarOption, Profile } from "@/lib/profile/types";
 
 import { AccountTab } from "./AccountTab";
+import { AdminAnnouncementsTab } from "./AdminAnnouncementsTab";
 import { AppearanceTab } from "./AppearanceTab";
+import { BotsTab } from "./BotsTab";
 import { SecurityTab } from "./SecurityTab";
 
 type ProfileWorkspaceProps = {
@@ -41,6 +43,11 @@ export function ProfileWorkspace({ profile, avatars, theme }: ProfileWorkspacePr
       content: <AccountTab profile={current} avatars={avatars} />,
     },
     {
+      value: "bots",
+      label: t("tabs.bots"),
+      content: <BotsTab />,
+    },
+    {
       value: "appearance",
       label: t("tabs.appearance"),
       content: <AppearanceTab theme={theme} />,
@@ -51,6 +58,17 @@ export function ProfileWorkspace({ profile, avatars, theme }: ProfileWorkspacePr
       content: <SecurityTab username={current.username} />,
     },
   ];
+
+  // ÖNEMLİ: `user_type` istemci kapısı YALNIZ UX içindir; gerçek yetki
+  // backend'de (`announcements.py::_is_admin`, 403). Admin değilse sekme hiç
+  // render edilmez, böylece yetkisiz istek de üretilmez.
+  if (current.user_type === "admin") {
+    items.push({
+      value: "announcements",
+      label: t("tabs.announcements"),
+      content: <AdminAnnouncementsTab />,
+    });
+  }
 
   return <Tabs items={items} defaultValue="account" keepMounted={false} />;
 }

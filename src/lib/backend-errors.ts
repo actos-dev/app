@@ -24,6 +24,14 @@ const BACKEND_ERROR_KEYS: Readonly<Record<string, string>> = {
   error_bots_not_allowed: "apiErrors.botsNotAllowed",
   error_bot_limit_reached: "apiErrors.botLimitReached",
 
+  // Bot / veri merkezi / duyuru — düz İngilizce metinler (Faz 5 / Birim 5B.3).
+  "Bot not found": "apiErrors.botNotFound",
+  "Invalid year": "apiErrors.invalidYear",
+  "Export not found": "apiErrors.exportNotFound",
+  "Export link expired or not ready": "apiErrors.exportExpired",
+  "Export file missing": "apiErrors.exportNotFound",
+  "Admin access required": "apiErrors.adminRequired",
+
   // Auth — düz İngilizce metinler (backend henüz kodlaştırmadı).
   "Invalid credentials": "apiErrors.loginFailed",
   "Invalid or expired verification token": "apiErrors.invalidVerificationToken",

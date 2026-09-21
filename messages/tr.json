@@ -1127,8 +1127,10 @@
     "retry": "Tekrar dene",
     "tabs": {
       "account": "Hesap",
+      "bots": "Botlar",
       "appearance": "Görünüm",
-      "security": "Güvenlik"
+      "security": "Güvenlik",
+      "announcements": "Duyurular"
     },
     "account": {
       "summaryTitle": "Hesap bilgileri",
@@ -1189,6 +1191,139 @@
       "cancel": "Vazgeç"
     }
   },
+  "bots": {
+    "title": "Botlar",
+    "description": "Botlar senin kredinle çalışır ve e-posta doğrulaması gerektirmez; her biri kendi sanal portföyünü yönetir.",
+    "limit": "{current}/{count} bot kullanılıyor.",
+    "create": "Yeni bot",
+    "created": "Bot oluşturuldu.",
+    "passwordOnce": "Bu bilgiler yalnızca bir kez gösterilir.",
+    "emptyTitle": "Henüz botun yok",
+    "emptyDescription": "Bir bot oluşturup stratejini senin kredinle otomatik çalıştırabilirsin.",
+    "emptyCta": "Yeni bot oluştur",
+    "errorTitle": "Botlar yüklenemedi",
+    "errorDescription": "Sunucuya ulaşılamadı. Lütfen tekrar dene.",
+    "retry": "Tekrar dene",
+    "never": "Hiç",
+    "delete": "Sil",
+    "deleteTitle": "Botu sil",
+    "deleteDescription": "“{username}” botu kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+    "deleteConfirm": "Botu sil",
+    "cancel": "Vazgeç",
+    "deleted": "Bot silindi.",
+    "columns": {
+      "username": "Bot",
+      "createdAt": "Oluşturulma",
+      "lastLogin": "Son giriş"
+    },
+    "form": {
+      "dialogTitle": "Yeni bot",
+      "dialogDescription": "Bot için bir kullanıcı adı ve istersen şifre belirle.",
+      "username": "Kullanıcı adı",
+      "usernameHint": "3-255 karakter; botun e-postası bu addan türetilir.",
+      "usernameTooShort": "Kullanıcı adı en az 3 karakter olmalı.",
+      "usernameTooLong": "Kullanıcı adı en fazla 255 karakter olabilir.",
+      "password": "Şifre (opsiyonel)",
+      "passwordHint": "Boş bırakılırsa güçlü bir şifre otomatik üretilir; verirsen en az 10 karakter.",
+      "passwordTooShort": "Şifre en az 10 karakter olmalı.",
+      "emailLabel": "Bot e-postası",
+      "passwordLabel": "Tek seferlik şifre",
+      "passwordOnlyOnce": "Şifre bir daha gösterilmeyecek; şimdi kaydet.",
+      "submit": "Bot oluştur",
+      "close": "Kapat",
+      "cancel": "Vazgeç"
+    }
+  },
+  "dataCenter": {
+    "title": "Veri Merkezi",
+    "description": "Geçmiş günlük piyasa verilerini CSV veya JSON olarak dışa aktar.",
+    "request": {
+      "title": "Dışa aktarma talebi",
+      "year": "Yıl",
+      "format": "Biçim",
+      "submit": "Talep oluştur",
+      "queued": "Talebin alındı; hazırlanıyor.",
+      "limitHint": "Saatte en fazla 3 talep oluşturabilirsin.",
+      "emailHint": "Hazır olduğunda indirme bağlantısı e-postana da gönderilir.",
+      "formatValue": {
+        "csv": "CSV",
+        "json": "JSON"
+      }
+    },
+    "tracking": {
+      "title": "Süren talep"
+    },
+    "processing": "Verin hazırlanıyor; bu işlem birkaç dakika sürebilir.",
+    "download": "İndir",
+    "downloadFailed": "Dosya indirilemedi.",
+    "failedHint": "Talep başarısız oldu. Lütfen yeni bir talep oluştur.",
+    "expired": "Süresi doldu",
+    "sizeMb": "{value} MB",
+    "list": {
+      "title": "Talepler",
+      "emptyTitle": "Henüz talebin yok",
+      "emptyDescription": "Yukarıdan bir yıl seçip dışa aktarma talebi oluştur.",
+      "errorTitle": "Talepler yüklenemedi",
+      "errorDescription": "Sunucuya ulaşılamadı. Lütfen tekrar dene.",
+      "retry": "Tekrar dene",
+      "count": "{count} talep"
+    },
+    "columns": {
+      "year": "Yıl",
+      "format": "Biçim",
+      "status": "Durum",
+      "rows": "Satır",
+      "size": "Boyut",
+      "created": "Oluşturulma"
+    },
+    "status": {
+      "queued": "Kuyrukta",
+      "processing": "Hazırlanıyor",
+      "ready": "Hazır",
+      "sent": "Hazır",
+      "failed": "Başarısız"
+    }
+  },
+  "announcements": {
+    "title": "Duyurular",
+    "bellLabel": "Duyurular",
+    "bellUnread": "Duyurular, {count} okunmamış",
+    "newCount": "{count} yeni duyuru",
+    "emptyDescription": "Şu an bir duyuru bulunmuyor.",
+    "errorTitle": "Duyurular yüklenemedi",
+    "retry": "Tekrar dene",
+    "unread": "Yeni",
+    "markRead": "Okundu olarak işaretle",
+    "admin": {
+      "title": "Duyurular",
+      "description": "Kullanıcılara görünen duyuruları yönet. Yetki kontrolü sunucudadır; bu sekme yalnızca yöneticilere görünür.",
+      "create": "Yeni duyuru",
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "loading": "Duyurular yükleniyor…",
+      "unread": "Yeni",
+      "emptyTitle": "Henüz duyuru yok",
+      "emptyDescription": "İlk duyurunu oluştur.",
+      "errorTitle": "Duyurular yüklenemedi",
+      "errorDescription": "Sunucuya ulaşılamadı. Lütfen tekrar dene.",
+      "retry": "Tekrar dene",
+      "formTitleCreate": "Yeni duyuru",
+      "formTitleEdit": "Duyuruyu düzenle",
+      "formDescription": "Başlık ve içerik gir.",
+      "titleLabel": "Başlık",
+      "contentLabel": "İçerik",
+      "titleRequired": "Başlık gerekli.",
+      "contentRequired": "İçerik gerekli.",
+      "submit": "Kaydet",
+      "cancel": "Vazgeç",
+      "created": "Duyuru oluşturuldu.",
+      "updated": "Duyuru güncellendi.",
+      "deleted": "Duyuru silindi.",
+      "deleteTitle": "Duyuruyu sil",
+      "deleteDescription": "“{title}” duyurusu kalıcı olarak silinecek.",
+      "deleteConfirm": "Duyuruyu sil"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",
@@ -1228,6 +1363,11 @@
     "backendUnreachable": "Sunucuya ulaşılamadı. Lütfen tekrar dene.",
     "csrfRejected": "İstek reddedildi. Sayfayı yenileyip tekrar dene.",
     "validation": "Girdiğin bilgiler geçersiz.",
-    "generic": "Beklenmeyen bir hata oluştu. Lütfen tekrar dene."
+    "generic": "Beklenmeyen bir hata oluştu. Lütfen tekrar dene.",
+    "botNotFound": "Bot bulunamadı.",
+    "invalidYear": "Geçersiz yıl.",
+    "exportNotFound": "Dışa aktarma kaydı bulunamadı.",
+    "exportExpired": "İndirme bağlantısının süresi dolmuş veya dosya henüz hazır değil.",
+    "adminRequired": "Bu işlem için yönetici yetkisi gerekir."
   }
 }

@@ -16,20 +16,24 @@ import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
 import { AccountMenu } from "@/components/shared/AccountMenu";
+import { AnnouncementBell } from "@/components/shared/AnnouncementBell";
 import { CreditDisplay } from "@/components/shared/CreditDisplay";
 import { MobileNav } from "@/components/shared/MobileNav";
 import { Sidebar } from "@/components/shared/Sidebar";
 import { resolveTheme, THEME_COOKIE } from "@/i18n/config";
+import { ANNOUNCEMENTS_SERVER_PATH } from "@/lib/announcements/api-paths";
+import type { AnnouncementListResponse } from "@/lib/announcements/types";
 import { serverAuthApiFetch } from "@/lib/api/server-auth";
 import { creditsServerPath } from "@/lib/reports/api-paths";
 import type { CreditsResponse } from "@/lib/reports/types";
 
 export async function AppShell({ children }: { children: ReactNode }) {
-  const [t, app, cookieStore, credits] = await Promise.all([
+  const [t, app, cookieStore, credits, announcements] = await Promise.all([
     getTranslations("common"),
     getTranslations("app"),
     cookies(),
     serverAuthApiFetch<CreditsResponse>(creditsServerPath()),
+    serverAuthApiFetch<AnnouncementListResponse>(ANNOUNCEMENTS_SERVER_PATH),
   ]);
   const theme = resolveTheme(cookieStore.get(THEME_COOKIE)?.value);
 
@@ -49,6 +53,7 @@ export async function AppShell({ children }: { children: ReactNode }) {
             {app("name")}
           </span>
           <div className="ml-auto flex items-center gap-3">
+            <AnnouncementBell initialAnnouncements={announcements ?? undefined} />
             <CreditDisplay initialCredits={credits?.credits} />
             <AccountMenu theme={theme} initialCredits={credits?.credits} />
           </div>

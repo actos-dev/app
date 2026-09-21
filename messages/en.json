@@ -1127,8 +1127,10 @@
     "retry": "Try again",
     "tabs": {
       "account": "Account",
+      "bots": "Bots",
       "appearance": "Appearance",
-      "security": "Security"
+      "security": "Security",
+      "announcements": "Announcements"
     },
     "account": {
       "summaryTitle": "Account details",
@@ -1189,6 +1191,139 @@
       "cancel": "Cancel"
     }
   },
+  "bots": {
+    "title": "Bots",
+    "description": "Bots spend your credits and skip email verification; each one manages its own paper portfolio.",
+    "limit": "{current}/{count} bots used.",
+    "create": "New bot",
+    "created": "Bot created.",
+    "passwordOnce": "This information is shown only once.",
+    "emptyTitle": "No bots yet",
+    "emptyDescription": "Create a bot to run your strategy automatically with your credits.",
+    "emptyCta": "Create a bot",
+    "errorTitle": "Could not load bots",
+    "errorDescription": "The server is unreachable. Please try again.",
+    "retry": "Try again",
+    "never": "Never",
+    "delete": "Delete",
+    "deleteTitle": "Delete bot",
+    "deleteDescription": "\"{username}\" will be permanently deleted. This action cannot be undone.",
+    "deleteConfirm": "Delete bot",
+    "cancel": "Cancel",
+    "deleted": "Bot deleted.",
+    "columns": {
+      "username": "Bot",
+      "createdAt": "Created",
+      "lastLogin": "Last sign-in"
+    },
+    "form": {
+      "dialogTitle": "New bot",
+      "dialogDescription": "Set a username and, optionally, a password for the bot.",
+      "username": "Username",
+      "usernameHint": "3-255 characters; the bot's email is derived from this name.",
+      "usernameTooShort": "Username must be at least 3 characters.",
+      "usernameTooLong": "Username can be at most 255 characters.",
+      "password": "Password (optional)",
+      "passwordHint": "Leave blank to auto-generate a strong password; if provided, at least 10 characters.",
+      "passwordTooShort": "Password must be at least 10 characters.",
+      "emailLabel": "Bot email",
+      "passwordLabel": "One-time password",
+      "passwordOnlyOnce": "The password won't be shown again; save it now.",
+      "submit": "Create bot",
+      "close": "Close",
+      "cancel": "Cancel"
+    }
+  },
+  "dataCenter": {
+    "title": "Data Center",
+    "description": "Export historical daily market data as CSV or JSON.",
+    "request": {
+      "title": "Export request",
+      "year": "Year",
+      "format": "Format",
+      "submit": "Create request",
+      "queued": "Your request was received; it's being prepared.",
+      "limitHint": "You can create at most 3 requests per hour.",
+      "emailHint": "When it's ready, the download link is also emailed to you.",
+      "formatValue": {
+        "csv": "CSV",
+        "json": "JSON"
+      }
+    },
+    "tracking": {
+      "title": "In-progress request"
+    },
+    "processing": "Your data is being prepared; this may take a few minutes.",
+    "download": "Download",
+    "downloadFailed": "The file could not be downloaded.",
+    "failedHint": "The request failed. Please create a new request.",
+    "expired": "Expired",
+    "sizeMb": "{value} MB",
+    "list": {
+      "title": "Requests",
+      "emptyTitle": "No requests yet",
+      "emptyDescription": "Pick a year above and create an export request.",
+      "errorTitle": "Could not load requests",
+      "errorDescription": "The server is unreachable. Please try again.",
+      "retry": "Try again",
+      "count": "{count} requests"
+    },
+    "columns": {
+      "year": "Year",
+      "format": "Format",
+      "status": "Status",
+      "rows": "Rows",
+      "size": "Size",
+      "created": "Created"
+    },
+    "status": {
+      "queued": "Queued",
+      "processing": "Processing",
+      "ready": "Ready",
+      "sent": "Ready",
+      "failed": "Failed"
+    }
+  },
+  "announcements": {
+    "title": "Announcements",
+    "bellLabel": "Announcements",
+    "bellUnread": "Announcements, {count} unread",
+    "newCount": "{count} new announcements",
+    "emptyDescription": "There are no announcements right now.",
+    "errorTitle": "Could not load announcements",
+    "retry": "Try again",
+    "unread": "New",
+    "markRead": "Mark as read",
+    "admin": {
+      "title": "Announcements",
+      "description": "Manage the announcements users see. Authorization is enforced server-side; this tab is only shown to admins.",
+      "create": "New announcement",
+      "edit": "Edit",
+      "delete": "Delete",
+      "loading": "Loading announcements…",
+      "unread": "New",
+      "emptyTitle": "No announcements yet",
+      "emptyDescription": "Create your first announcement.",
+      "errorTitle": "Could not load announcements",
+      "errorDescription": "The server is unreachable. Please try again.",
+      "retry": "Try again",
+      "formTitleCreate": "New announcement",
+      "formTitleEdit": "Edit announcement",
+      "formDescription": "Enter a title and content.",
+      "titleLabel": "Title",
+      "contentLabel": "Content",
+      "titleRequired": "Title is required.",
+      "contentRequired": "Content is required.",
+      "submit": "Save",
+      "cancel": "Cancel",
+      "created": "Announcement created.",
+      "updated": "Announcement updated.",
+      "deleted": "Announcement deleted.",
+      "deleteTitle": "Delete announcement",
+      "deleteDescription": "\"{title}\" will be permanently deleted.",
+      "deleteConfirm": "Delete announcement"
+    }
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",
@@ -1228,6 +1363,11 @@
     "backendUnreachable": "The server is unreachable. Please try again.",
     "csrfRejected": "The request was rejected. Refresh the page and try again.",
     "validation": "The information you entered is invalid.",
-    "generic": "An unexpected error occurred. Please try again."
+    "generic": "An unexpected error occurred. Please try again.",
+    "botNotFound": "Bot not found.",
+    "invalidYear": "Invalid year.",
+    "exportNotFound": "Export record not found.",
+    "exportExpired": "The download link has expired or the file isn't ready yet.",
+    "adminRequired": "This action requires administrator privileges."
   }
 }
