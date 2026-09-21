@@ -323,6 +323,107 @@
       "statusDraft": "Taslak"
     }
   },
+  "symbol": {
+    "back": "Piyasalara dön",
+    "tabs": {
+      "overview": "Genel",
+      "chart": "Grafik",
+      "stats": "Finansallar",
+      "news": "Haberler"
+    },
+    "chart": {
+      "periodLabel": "Periyot",
+      "viewLabel": "Grafik görünümü",
+      "area": "Alan",
+      "candles": "Mum",
+      "ariaLabel": "{symbol} {period} fiyat grafiği",
+      "loading": "Grafik yükleniyor…",
+      "error": "Grafik verisi yüklenemedi.",
+      "retry": "Tekrar dene",
+      "empty": "Bu periyot için veri yok."
+    },
+    "period": {
+      "1mo": "1A",
+      "3mo": "3A",
+      "6mo": "6A",
+      "1y": "1Y",
+      "2y": "2Y",
+      "5y": "5Y"
+    },
+    "overview": {
+      "price": "Fiyat",
+      "previousClose": "Önceki kapanış",
+      "dayRange": "Gün aralığı",
+      "volume": "Hacim",
+      "marketCap": "Piyasa değeri",
+      "high52": "52 hafta yüksek",
+      "low52": "52 hafta düşük",
+      "buying": "Alış",
+      "selling": "Satış",
+      "change": "Değişim",
+      "unit": "Birim",
+      "currency": "Para birimi",
+      "source": "Kaynak"
+    },
+    "stats": {
+      "valuation": "Değerleme",
+      "pe": "F/K (son)",
+      "peForward": "F/K (ileri)",
+      "pb": "PD/DD",
+      "dividendYield": "Temettü verimi",
+      "targetPrice": "Hedef fiyat",
+      "analysts": "Analist sayısı",
+      "financials": "Finansallar",
+      "revenue": "Gelir",
+      "netIncome": "Net kâr",
+      "profitMargin": "Kâr marjı",
+      "grossMargin": "Brüt marj",
+      "ebitda": "FAVÖK",
+      "roe": "Öz sermaye kârlılığı",
+      "trading": "İşlem metrikleri",
+      "beta": "Beta",
+      "ma50": "50 günlük ortalama",
+      "ma200": "200 günlük ortalama",
+      "avgVolume": "Ortalama hacim",
+      "sharesOutstanding": "Dolaşımdaki pay",
+      "balanceSheet": "Bilanço",
+      "totalCash": "Nakit",
+      "totalDebt": "Toplam borç",
+      "debtToEquity": "Borç/Öz sermaye",
+      "currentRatio": "Cari oran",
+      "quickRatio": "Likidite oranı",
+      "quote": "Kotasyon",
+      "empty": "Bu enstrüman için finansal veri yok."
+    },
+    "news": {
+      "empty": "Bu hisse için haber bulunamadı.",
+      "error": "Haberler yüklenemedi.",
+      "errorDescription": "Haber kaynağına ulaşılamıyor olabilir. Lütfen tekrar dene.",
+      "retry": "Tekrar dene"
+    },
+    "freshness": {
+      "asOf": "Veri zamanı: {time}",
+      "unavailable": "Veri zamanı bilinmiyor",
+      "stale": "Gecikmeli",
+      "source": "Kaynak: {source}",
+      "updated": "Güncelleme"
+    },
+    "market": {
+      "economyBadge": "24/5",
+      "economyNote": "Döviz ve kıymetli madenler hafta içi gün boyu işlem görür."
+    },
+    "favorite": {
+      "add": "Favorilere ekle",
+      "remove": "Favorilerden çıkar",
+      "added": "Favorilere eklendi.",
+      "removed": "Favorilerden çıkarıldı.",
+      "error": "Favori güncellenemedi."
+    },
+    "tradeCta": {
+      "label": "Portföyde işlem yap",
+      "note": "Al/sat işlemleri portföy sayfasında yapılır; bu ekran yalnızca piyasa verisini gösterir."
+    }
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",

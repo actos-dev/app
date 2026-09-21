@@ -33,6 +33,14 @@ frontend'te hangi maddenin askıya alındığını gösterir.
 - **Öncelik:** P2 · **Efor:** S · **Faz:** 2 (backend onayı gelene kadar frontend geçici çözümle ilerler)
 - **Kabul kriteri:** `Set-Cookie` yanıtında `refresh_token; Path=/; HttpOnly; SameSite=Strict`; süresi dolmuş access token'lı soğuk `/dashboard` isteği login'e düşmeden yenilenip 200 döner.
 
+### B-16 — Ekonomi sembollerinin favorilere eklenebilmesi (Faz 3.3 bulgusu)
+
+- **Bulgu:** `favorites.py::validate_ticker` yalnız BIST ticker'larını kabul ediyor; `POST /favorites/USD` (kanonik FX/metal sembolü) reddediliyor. Bu yüzden `/symbol/[symbol]` sayfasında favori toggle şu an yalnız BIST'te gösteriliyor; FX/metal takibi mümkün değil.
+- **Önerilen değişiklik:** `validate_ticker` yerine `SYMBOL_REGISTRY` + BIST doğrulamasını kapsayan ortak bir doğrulayıcı; `favorites.ticker_code` kanonik sembolü saklar.
+- **Öncelik:** P2 · **Efor:** S · **Faz:** 3.4
+- **Bloke ettiği:** U-12 (tek takip listesi; FX/metal favorileri).
+- **Kabul kriteri:** `POST /favorites/USD` 200; `GET /favorites` BIST ve ekonomi sembollerini birlikte döner; geçersiz sembol 400/404.
+
 ### B-03 — Server-side oturum doğrulaması için `JWT_SECRET` paylaşımı
 
 - **Amaç:** Next middleware, korumalı sayfayı render etmeden önce access token'ı **yerel**

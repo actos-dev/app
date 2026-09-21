@@ -323,6 +323,107 @@
       "statusDraft": "Draft"
     }
   },
+  "symbol": {
+    "back": "Back to markets",
+    "tabs": {
+      "overview": "Overview",
+      "chart": "Chart",
+      "stats": "Financials",
+      "news": "News"
+    },
+    "chart": {
+      "periodLabel": "Period",
+      "viewLabel": "Chart view",
+      "area": "Area",
+      "candles": "Candles",
+      "ariaLabel": "{symbol} {period} price chart",
+      "loading": "Loading chart…",
+      "error": "Chart data could not be loaded.",
+      "retry": "Try again",
+      "empty": "No data for this period."
+    },
+    "period": {
+      "1mo": "1M",
+      "3mo": "3M",
+      "6mo": "6M",
+      "1y": "1Y",
+      "2y": "2Y",
+      "5y": "5Y"
+    },
+    "overview": {
+      "price": "Price",
+      "previousClose": "Previous close",
+      "dayRange": "Day range",
+      "volume": "Volume",
+      "marketCap": "Market cap",
+      "high52": "52-week high",
+      "low52": "52-week low",
+      "buying": "Bid",
+      "selling": "Ask",
+      "change": "Change",
+      "unit": "Unit",
+      "currency": "Currency",
+      "source": "Source"
+    },
+    "stats": {
+      "valuation": "Valuation",
+      "pe": "P/E (trailing)",
+      "peForward": "P/E (forward)",
+      "pb": "P/B",
+      "dividendYield": "Dividend yield",
+      "targetPrice": "Target price",
+      "analysts": "Analyst count",
+      "financials": "Financials",
+      "revenue": "Revenue",
+      "netIncome": "Net income",
+      "profitMargin": "Profit margin",
+      "grossMargin": "Gross margin",
+      "ebitda": "EBITDA",
+      "roe": "Return on equity",
+      "trading": "Trading metrics",
+      "beta": "Beta",
+      "ma50": "50-day average",
+      "ma200": "200-day average",
+      "avgVolume": "Average volume",
+      "sharesOutstanding": "Shares outstanding",
+      "balanceSheet": "Balance sheet",
+      "totalCash": "Cash",
+      "totalDebt": "Total debt",
+      "debtToEquity": "Debt/Equity",
+      "currentRatio": "Current ratio",
+      "quickRatio": "Quick ratio",
+      "quote": "Quote",
+      "empty": "No financial data for this instrument."
+    },
+    "news": {
+      "empty": "No news found for this stock.",
+      "error": "News could not be loaded.",
+      "errorDescription": "The news source may be unreachable. Please try again.",
+      "retry": "Try again"
+    },
+    "freshness": {
+      "asOf": "Data time: {time}",
+      "unavailable": "Data time unavailable",
+      "stale": "Delayed",
+      "source": "Source: {source}",
+      "updated": "Updated"
+    },
+    "market": {
+      "economyBadge": "24/5",
+      "economyNote": "FX and precious metals trade throughout weekdays."
+    },
+    "favorite": {
+      "add": "Add to favorites",
+      "remove": "Remove from favorites",
+      "added": "Added to favorites.",
+      "removed": "Removed from favorites.",
+      "error": "Favorite could not be updated."
+    },
+    "tradeCta": {
+      "label": "Trade in portfolio",
+      "note": "Buy/sell trades are placed on the portfolio page; this screen only shows market data."
+    }
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",
