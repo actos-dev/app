@@ -7,6 +7,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { AuthUnauthorizedListener } from "@/components/auth/AuthUnauthorizedListener";
 import { Toaster } from "@/components/ui/toaster";
+import { getSiteUrl } from "@/config/site";
 import { resolveTheme, THEME_COOKIE, themeColors } from "@/i18n/config";
 
 import "./globals.css";
@@ -24,6 +25,8 @@ async function readTheme() {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
   return {
+    // Kanonik/OG URL'leri için tek taban (plan M-07).
+    metadataBase: new URL(getSiteUrl()),
     // Alt sayfa başlıkları `%s · Florence` biçiminde birleşir (plan M-07).
     title: { default: t("app.name"), template: `%s · ${t("app.name")}` },
     description: t("app.description"),

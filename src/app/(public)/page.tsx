@@ -1,0 +1,162 @@
+/**
+ * Landing (plan Faz 2 / Birim 2.3a, §2.2, M-07).
+ *
+ * Public ana sayfa tam SSR'dır; tüm metinler `landing.*` altından gelir.
+ * Raster görsel yoktur: ürün anlatımı token'larla kurulmuş bir mini portföy
+ * mock'u (ProductMock) ve düz metin bölümleriyle yapılır.
+ */
+import { BarChart3, Briefcase, FileText, TrendingUp } from "lucide-react";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
+import type { LucideIcon } from "lucide-react";
+
+import { ProductMock } from "@/components/marketing/ProductMock";
+import { buttonVariants } from "@/components/ui/button";
+
+const FEATURES = [
+  { key: "market", icon: TrendingUp },
+  { key: "portfolio", icon: Briefcase },
+  { key: "reports", icon: FileText },
+  { key: "simulation", icon: BarChart3 },
+] as const satisfies readonly { key: string; icon: LucideIcon }[];
+
+const STEPS = ["register", "explore", "build"] as const;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const [t, app, locale] = await Promise.all([
+    getTranslations("landing"),
+    getTranslations("app"),
+    getLocale(),
+  ]);
+
+  const title = t("metaTitle");
+  const description = t("metaDescription");
+
+  return {
+    title,
+    description,
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      url: "/",
+      siteName: app("name"),
+      title,
+      description,
+      locale: locale === "tr" ? "tr_TR" : "en_US",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
+
+export default async function LandingPage() {
+  const t = await getTranslations("landing");
+
+  return (
+    <>
+      <section className="border-b border-border">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:gap-14 md:px-6 md:py-24">
+          <div className="flex flex-col items-start gap-5">
+            <span className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
+              {t("heroBadge")}
+            </span>
+            <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
+              {t("heroTitle")}
+            </h1>
+            <p className="max-w-prose text-base text-muted-foreground md:text-lg">
+              {t("heroDescription")}
+            </p>
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <Link href="/register" className={buttonVariants({ variant: "primary", size: "lg" })}>
+                {t("ctaPrimary")}
+              </Link>
+              <Link href="/markets" className={buttonVariants({ variant: "secondary", size: "lg" })}>
+                {t("ctaSecondary")}
+              </Link>
+            </div>
+          </div>
+          <ProductMock
+            portfolioLabel={t("mock.portfolioLabel")}
+            totalLabel={t("mock.totalLabel")}
+            dailyLabel={t("mock.dailyLabel")}
+            positionsLabel={t("mock.positionsLabel")}
+            disclaimer={t("mock.disclaimer")}
+          />
+        </div>
+      </section>
+
+      <section className="border-b border-border">
+        <div className="mx-auto w-full max-w-6xl px-4 py-16 md:px-6 md:py-20">
+          <div className="max-w-2xl">
+            <h2 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+              {t("featuresTitle")}
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground md:text-base">
+              {t("featuresDescription")}
+            </p>
+          </div>
+          <ul
+            data-testid="landing-features"
+            className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {FEATURES.map((feature) => (
+              <li
+                key={feature.key}
+                className="flex flex-col gap-3 rounded-lg border border-border bg-surface p-5"
+              >
+                <span className="flex size-10 items-center justify-center rounded-md bg-surface-raised text-primary">
+                  <feature.icon aria-hidden="true" className="size-5" />
+                </span>
+                <h3 className="text-base font-semibold text-foreground">
+                  {t(`features.${feature.key}.title`)}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  {t(`features.${feature.key}.description`)}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="border-b border-border">
+        <div className="mx-auto w-full max-w-6xl px-4 py-16 md:px-6 md:py-20">
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+            {t("stepsTitle")}
+          </h2>
+          <ol className="mt-8 grid gap-6 md:grid-cols-3">
+            {STEPS.map((step, index) => (
+              <li key={step} className="flex flex-col gap-3">
+                <span className="flex size-8 items-center justify-center rounded-full border border-border bg-surface font-mono text-sm tabular-nums text-primary">
+                  {index + 1}
+                </span>
+                <h3 className="text-base font-semibold text-foreground">
+                  {t(`steps.${step}.title`)}
+                </h3>
+                <p className="text-sm text-muted-foreground">{t(`steps.${step}.description`)}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-start gap-5 px-4 py-16 md:items-center md:px-6 md:py-24 md:text-center">
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+            {t("ctaTitle")}
+          </h2>
+          <p className="max-w-2xl text-sm text-muted-foreground md:text-base">
+            {t("ctaDescription")}
+          </p>
+          <Link href="/register" className={buttonVariants({ variant: "primary", size: "lg" })}>
+            {t("ctaButton")}
+          </Link>
+        </div>
+      </section>
+    </>
+  );
+}

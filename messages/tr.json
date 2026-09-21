@@ -43,8 +43,99 @@
     "light": "Açık",
     "sepia": "Sepya"
   },
-  "home": {
-    "placeholder": "Birim 1.2 doğrulaması için geçici metin."
+  "landing": {
+    "metaTitle": "BIST piyasa takibi ve sanal portföy",
+    "metaDescription": "BIST hisselerini, döviz kurlarını ve kıymetli madenleri canlı izle; komisyon dahil sanal portföy kur, AI raporları ve Monte-Carlo simülasyonları üret.",
+    "heroBadge": "Gerçek emir yok; tamamen sanal",
+    "heroTitle": "BIST'i canlı izle, portföyünü risksiz kur.",
+    "heroDescription": "Florence, Borsa İstanbul hisselerini, döviz kurlarını ve kıymetli madenleri tek ekranda toplar. Sanal portföyünü komisyon dahil gerçekçi fiyatlarla yönet; AI raporları ve Monte-Carlo simülasyonlarıyla kararlarını test et.",
+    "ctaPrimary": "Ücretsiz hesap oluştur",
+    "ctaSecondary": "Piyasaları gör",
+    "featuresTitle": "Florence neler sunuyor?",
+    "featuresDescription": "Piyasa takibinden portföy analizine kadar ihtiyacın olan her şey tek yerde.",
+    "features": {
+      "market": {
+        "title": "Canlı piyasa verisi",
+        "description": "BIST hisseleri, döviz ve kıymetli madenler; seans saatleri ve fiyat geçmişiyle birlikte."
+      },
+      "portfolio": {
+        "title": "Sanal portföy ve komisyon",
+        "description": "Alım satımları komisyon oranıyla simüle et; maliyet, getiri ve risk metriklerini gör."
+      },
+      "reports": {
+        "title": "AI destekli raporlar",
+        "description": "Seçtiğin hisse için kredi harcayarak güncel verilere dayanan bir analiz raporu üret."
+      },
+      "simulation": {
+        "title": "Monte-Carlo simülasyonu",
+        "description": "Hedef fiyat ve vade ver; olası sonuç dağılımını simülasyonla incele."
+      }
+    },
+    "mock": {
+      "portfolioLabel": "Sanal portföy",
+      "totalLabel": "Toplam değer",
+      "dailyLabel": "Bugün",
+      "positionsLabel": "Pozisyonlar",
+      "disclaimer": "Temsilî veriler"
+    },
+    "stepsTitle": "Nasıl çalışır?",
+    "steps": {
+      "register": {
+        "title": "Kayıt ol",
+        "description": "Birkaç saniyede hesabını aç ve e-postanı doğrula."
+      },
+      "explore": {
+        "title": "Piyasayı keşfet",
+        "description": "Hisseleri, dövizi ve metalleri izle; takip listene favori ekle."
+      },
+      "build": {
+        "title": "Portföyünü kur",
+        "description": "Sanal alım satımlarla portföyünü oluştur; rapor ve simülasyonlarla test et."
+      }
+    },
+    "ctaTitle": "Piyasayı takip etmeye hazır mısın?",
+    "ctaDescription": "Ücretsiz hesap oluştur. Kredi kartı istemiyoruz; gerçek para kullanılmaz.",
+    "ctaButton": "Hemen başla"
+  },
+  "public": {
+    "nav": {
+      "about": "Hakkında",
+      "contact": "İletişim",
+      "downloads": "İndir",
+      "login": "Giriş",
+      "register": "Kayıt"
+    },
+    "footer": {
+      "brand": "Florence",
+      "tagline": "BIST piyasa takibi ve sanal portföy platformu.",
+      "legalTitle": "Yasal",
+      "terms": "Kullanım Şartları",
+      "privacy": "Gizlilik Politikası",
+      "cookies": "Çerez Politikası",
+      "disclaimer": "Yasal Uyarı",
+      "rights": "Tüm hakları saklıdır.",
+      "version": "Sürüm {version}"
+    },
+    "about": {
+      "title": "Hakkında",
+      "description": "Florence'ı kimin geliştirdiği ve ürünün kapsamı yakında burada olacak."
+    },
+    "contact": {
+      "title": "İletişim",
+      "description": "Görüş, öneri ve destek kanalları yakında burada olacak."
+    },
+    "downloads": {
+      "title": "İndir",
+      "description": "Masaüstü ve mobil uygulama bağlantıları yakında burada olacak."
+    },
+    "legalDescription": "Bu yasal metnin tam içeriği yakında yayınlanacak.",
+    "policies": {
+      "terms": "Kullanım Şartları",
+      "privacyPolicy": "Gizlilik Politikası",
+      "cookiePolicy": "Çerez Politikası",
+      "disclaimer": "Yasal Uyarı",
+      "unknown": "Yasal metin"
+    }
   },
   "errors": {
     "notFoundTitle": "Sayfa bulunamadı",

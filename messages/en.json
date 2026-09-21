@@ -43,8 +43,99 @@
     "light": "Light",
     "sepia": "Sepia"
   },
-  "home": {
-    "placeholder": "Temporary text for unit 1.2 verification."
+  "landing": {
+    "metaTitle": "BIST market tracking and paper portfolio",
+    "metaDescription": "Follow BIST stocks, currencies and precious metals live; build a commission-aware paper portfolio and generate AI reports and Monte-Carlo simulations.",
+    "heroBadge": "No real orders; fully simulated",
+    "heroTitle": "Follow BIST live, build your portfolio risk-free.",
+    "heroDescription": "Florence brings Borsa İstanbul stocks, currencies and precious metals into one screen. Manage your paper portfolio with realistic, commission-inclusive prices and test decisions with AI reports and Monte-Carlo simulations.",
+    "ctaPrimary": "Create a free account",
+    "ctaSecondary": "Browse markets",
+    "featuresTitle": "What Florence offers",
+    "featuresDescription": "Everything from market tracking to portfolio analysis in one place.",
+    "features": {
+      "market": {
+        "title": "Live market data",
+        "description": "BIST stocks, currencies and precious metals, with session hours and price history."
+      },
+      "portfolio": {
+        "title": "Paper portfolio with commission",
+        "description": "Simulate trades with the commission rate and inspect cost, return and risk metrics."
+      },
+      "reports": {
+        "title": "AI-assisted reports",
+        "description": "Spend credits on a ticker to generate an analysis report grounded in current data."
+      },
+      "simulation": {
+        "title": "Monte-Carlo simulation",
+        "description": "Set a target price and horizon; explore the distribution of possible outcomes."
+      }
+    },
+    "mock": {
+      "portfolioLabel": "Paper portfolio",
+      "totalLabel": "Total value",
+      "dailyLabel": "Today",
+      "positionsLabel": "Positions",
+      "disclaimer": "Illustrative data"
+    },
+    "stepsTitle": "How it works",
+    "steps": {
+      "register": {
+        "title": "Sign up",
+        "description": "Open your account in seconds and verify your email."
+      },
+      "explore": {
+        "title": "Explore the market",
+        "description": "Follow stocks, currencies and metals; add favorites to your watchlist."
+      },
+      "build": {
+        "title": "Build your portfolio",
+        "description": "Create a portfolio with simulated trades and test it with reports and simulations."
+      }
+    },
+    "ctaTitle": "Ready to follow the market?",
+    "ctaDescription": "Create a free account. No credit card, no real money involved.",
+    "ctaButton": "Get started"
+  },
+  "public": {
+    "nav": {
+      "about": "About",
+      "contact": "Contact",
+      "downloads": "Download",
+      "login": "Sign in",
+      "register": "Sign up"
+    },
+    "footer": {
+      "brand": "Florence",
+      "tagline": "BIST market tracking and paper portfolio platform.",
+      "legalTitle": "Legal",
+      "terms": "Terms of Service",
+      "privacy": "Privacy Policy",
+      "cookies": "Cookie Policy",
+      "disclaimer": "Disclaimer",
+      "rights": "All rights reserved.",
+      "version": "Version {version}"
+    },
+    "about": {
+      "title": "About",
+      "description": "Who builds Florence and what the product covers will be here soon."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Feedback, suggestions and support channels will be here soon."
+    },
+    "downloads": {
+      "title": "Download",
+      "description": "Desktop and mobile app links will be here soon."
+    },
+    "legalDescription": "The full text of this legal document will be published soon.",
+    "policies": {
+      "terms": "Terms of Service",
+      "privacyPolicy": "Privacy Policy",
+      "cookiePolicy": "Cookie Policy",
+      "disclaimer": "Disclaimer",
+      "unknown": "Legal document"
+    }
   },
   "errors": {
     "notFoundTitle": "Page not found",
