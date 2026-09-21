@@ -1,56 +1,37 @@
 "use client";
 
 /**
- * Sembol arama (Faz 3 / Birim 3.2, A-02, U-10 temeli).
+ * Sembol arama (Faz 3 / Birim 3.2, A-02, U-10 temeli; P-03 temizliği).
  *
  * Base UI Autocomplete kullanılır: `role="combobox"`, `aria-expanded`,
  * `aria-controls`, `aria-activedescendant`, ok tuşları, Enter ile seçim,
  * Escape ile kapatma ve dışarı tıklama davranışı Base UI'dan gelir. Sorgu
  * sunucu tarafında (`/companies/search`) yapılır: en az 2 karakter, 250 ms
- * debounce ve kısa ömürlü istemci önbelleği (stale cache) ile.
+ * debounce.
  *
- * Sonuç durumu (`results` + `status`) React state'te tutulmaz; Base UI
- * `items`'ı doğrudan DOM listesinden okur. Bu yüzden yüklenme/hata/boş
- * bilgisi popup içindeki bir "durum" düğümüne yazılır (ref ile): effect
- * içinde senkron `setState` yok, gereksiz render turu yok.
- *
- * NOT: `qk` fabrikasında arama anahtarı yok; P-03'e uyum için anahtar
- * uydurmak yerine bu bileşen bilinçli olarak React Query kullanmaz ve
- * yanıtları modül düzeyi TTL önbelleğinde tutar (bkz. rapor).
+ * Sonuçlar React Query ile `qk.companySearch(query)` anahtarı üzerinden
+ * yönetilir; aynı terim 60 sn taze sayılır ve modül düzeyi özel önbellek
+ * yerine paylaşılan sorgu önbelleği kullanılır (P-03). Base UI `items`'ı
+ * doğrudan DOM listesinden okur; yüklenme/hata/boş bilgisi popup içindeki bir
+ * "durum" düğümüne yazılır.
  */
 import { Autocomplete } from "@base-ui/react/autocomplete";
+import { useQuery } from "@tanstack/react-query";
 import { Search, X } from "lucide-react";
 import type { Route } from "next";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { apiFetch } from "@/lib/api/client";
+import { qk } from "@/lib/query/keys";
 import { cn } from "@/lib/utils";
 import type { CompanySearchResult } from "@/types/market";
 
 const MIN_QUERY_LENGTH = 2;
 const DEBOUNCE_MS = 250;
-const CACHE_TTL_MS = 60_000;
-
-type CacheEntry = { at: number; results: CompanySearchResult[] };
-const searchCache = new Map<string, CacheEntry>();
-
-function readCache(key: string): CompanySearchResult[] | null {
-  const entry = searchCache.get(key);
-  if (!entry) {
-    return null;
-  }
-  if (Date.now() - entry.at > CACHE_TTL_MS) {
-    searchCache.delete(key);
-    return null;
-  }
-  return entry.results;
-}
-
-function writeCache(key: string, results: CompanySearchResult[]): void {
-  searchCache.set(key, { at: Date.now(), results });
-}
+/** Aynı terimin yeniden kullanılma süresi (P-03). */
+const SEARCH_STALE_MS = 60_000;
 
 type StatusKind = "idle" | "loading" | "error" | "empty" | "short";
 
@@ -62,90 +43,49 @@ export function SymbolSearch({ className }: SymbolSearchProps) {
   const t = useTranslations("markets.search");
   const router = useRouter();
 
-  const [items, setItems] = useState<CompanySearchResult[]>([]);
-  const [status, setStatus] = useState<StatusKind>("idle");
-  const queryRef = useRef("");
-  const abortRef = useRef<AbortController | null>(null);
+  const [term, setTerm] = useState("");
+  const [debouncedTerm, setDebouncedTerm] = useState("");
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const statusMessages: Record<StatusKind, string | null> = {
-    idle: null,
-    loading: t("searching"),
-    error: t("error"),
-    empty: t("noResults"),
-    short: t("hint"),
-  };
-  const statusText = statusMessages[status];
+  const trimmed = term.trim();
 
-  const publishStatus = useCallback((next: StatusKind) => {
-    setStatus(next);
+  const searchQuery = useQuery({
+    queryKey: qk.companySearch(debouncedTerm),
+    queryFn: ({ signal }) =>
+      apiFetch<CompanySearchResult[]>("/api/v1/companies/search", {
+        query: { query: debouncedTerm },
+        signal,
+      }),
+    enabled: debouncedTerm.length >= MIN_QUERY_LENGTH,
+    staleTime: SEARCH_STALE_MS,
+  });
+
+  const items = useMemo(() => searchQuery.data ?? [], [searchQuery.data]);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, []);
 
-  const handleChange = useCallback(
-    (value: string) => {
-      const term = value.trim();
-      if (term.length < MIN_QUERY_LENGTH) {
-        setItems([]);
-        publishStatus(term.length === 0 ? "idle" : "short");
-        return;
-      }
-
-      const cached = readCache(term);
-      if (cached) {
-        setItems(cached);
-        publishStatus(cached.length === 0 ? "empty" : "idle");
-        return;
-      }
-
-      publishStatus("loading");
-      setItems([]);
-    },
-    [publishStatus],
-  );
-
-  // Debounce: zamanlayıcı ve istek bir kez kurulur, unmount'ta iptal edilir.
-  // Ardışık yazımlarda `handleChange` her karakterde `loading` yazar; effect
-  // yalnız debounce süresi dolduğunda isteği atar.
-  useEffect(() => {
-    if (status !== "loading") {
+  // Debounce olay işleyicisinde kurulur (effect içinde senkron setState yok):
+  // her tuş vuruşunda zamanlayıcı sıfırlanır, yalnız duraklamadan sonra sorgu
+  // anahtarı güncellenir.
+  const scheduleSearch = useCallback((value: string) => {
+    const next = value.trim();
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    if (next.length < MIN_QUERY_LENGTH) {
+      setDebouncedTerm("");
       return;
     }
-    const timer = setTimeout(async () => {
-      const term = queryRef.current.trim();
-      if (term.length < MIN_QUERY_LENGTH) {
-        return;
-      }
-      const controller = new AbortController();
-      abortRef.current?.abort();
-      abortRef.current = controller;
-      try {
-        const data = await apiFetch<CompanySearchResult[]>("/api/v1/companies/search", {
-          query: { query: term },
-          signal: controller.signal,
-        });
-        if (controller.signal.aborted) {
-          return;
-        }
-        writeCache(term, data);
-        setItems(data);
-        publishStatus(data.length === 0 ? "empty" : "idle");
-      } catch {
-        if (controller.signal.aborted) {
-          return;
-        }
-        setItems([]);
-        publishStatus("error");
-      }
+    timerRef.current = setTimeout(() => {
+      setDebouncedTerm(next);
     }, DEBOUNCE_MS);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [status, publishStatus]);
-
-  useEffect(() => {
-    return () => {
-      abortRef.current?.abort();
-    };
   }, []);
 
   const handleValueChange = useCallback(
@@ -157,11 +97,33 @@ export function SymbolSearch({ className }: SymbolSearchProps) {
         }
         return;
       }
-      queryRef.current = value;
-      handleChange(value);
+      setTerm(value);
+      scheduleSearch(value);
     },
-    [items, router, handleChange],
+    [items, router, scheduleSearch],
   );
+
+  const status: StatusKind =
+    trimmed.length === 0
+      ? "idle"
+      : trimmed.length < MIN_QUERY_LENGTH
+        ? "short"
+        : debouncedTerm !== trimmed || searchQuery.isFetching
+          ? "loading"
+          : searchQuery.isError
+            ? "error"
+            : items.length === 0
+              ? "empty"
+              : "idle";
+
+  const statusMessages: Record<StatusKind, string | null> = {
+    idle: null,
+    loading: t("searching"),
+    error: t("error"),
+    empty: t("noResults"),
+    short: t("hint"),
+  };
+  const statusText = statusMessages[status];
 
   return (
     <Autocomplete.Root<CompanySearchResult>

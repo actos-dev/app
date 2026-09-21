@@ -1,5 +1,5 @@
 /**
- * Sunucu tarafı kimlikli fetch (Faz 3 / Birim 3.2).
+ * Sunucu tarafı kimlikli fetch (Faz 3 / Birim 3.2, 3.4).
  *
  * Korumalı sayfaların SSR verisi backend'e giden isteğin `cookie` başlığı
  * ile taşınmalıdır; aksi halde backend `/companies/summary`, `/economy/quotes`
@@ -9,7 +9,12 @@
  *
  * `serverApiFetch` (bkz. `./server`) bilinçli olarak çerezsizdir ve YALNIZ
  * public içerik (landing, hakkında, yasal) içindir; ikisi karıştırılmaz.
- * Hata/ağ kesintisinde `null` döner, böylece sayfa render'ı çökmez.
+ *
+ * İki varyant vardır:
+ *   - `serverAuthApiFetch` — başarısızlıkta `null` (sayfa çökmez).
+ *   - `serverAuthApiFetchWithStatus` — durum kodunu da döndürür; `404` ile
+ *     `5xx`/ağ kesintisi ayrımı gereken çağrılar (ör. bilinmeyen ticker
+ *     doğrulaması) bunu kullanır.
  */
 import { headers } from "next/headers";
 
@@ -32,6 +37,58 @@ function buildUrl(path: ServerApiPath, query: ServerApiOptions["query"]): string
   return suffix.length > 0 ? `${url}?${suffix}` : url;
 }
 
+/** Gelen isteğin çerez başlığı; istek bağlamı dışında `null`. */
+async function readRequestCookie(): Promise<string | null> {
+  try {
+    return (await headers()).get("cookie");
+  } catch {
+    // `headers()` istek bağlamı dışında (ör. izole test) çağrılırsa çerezsiz devam et.
+    return null;
+  }
+}
+
+function buildAuthInit(cookie: string | null): RequestInit {
+  return {
+    headers: { accept: "application/json", ...(cookie ? { cookie } : {}) },
+    cache: "no-store",
+  };
+}
+
+/** Durum kodlu sunucu fetch sonucu. */
+export type ServerAuthApiResult<T> = {
+  /** HTTP durum kodu; ağ hatasında `0`. */
+  status: number;
+  /** `2xx` gövdesi, aksi halde `null`. */
+  data: T | null;
+};
+
+/**
+ * Korumalı ucu sunucudan okur ve durum kodunu ayırt eder.
+ *
+ * `404` (kaynak yok) ile `5xx`/ağ kesintisi (`status: 0`) ayrılır; çağıran
+ * taraf ikisine farklı davranabilir (ör. `404` → `notFound()`).
+ */
+export async function serverAuthApiFetchWithStatus<T>(
+  path: ServerApiPath,
+  options: ServerApiOptions = {},
+): Promise<ServerAuthApiResult<T>> {
+  const cookie = await readRequestCookie();
+
+  try {
+    const response = await fetch(buildUrl(path, options.query), buildAuthInit(cookie));
+    if (!response.ok) {
+      return { status: response.status, data: null };
+    }
+    try {
+      return { status: response.status, data: (await response.json()) as T };
+    } catch {
+      return { status: response.status, data: null };
+    }
+  } catch {
+    return { status: 0, data: null };
+  }
+}
+
 /**
  * Korumalı ucu sunucudan okur; gelen isteğin çerezini iletir.
  *
@@ -42,26 +99,6 @@ export async function serverAuthApiFetch<T>(
   path: ServerApiPath,
   options: ServerApiOptions = {},
 ): Promise<T | null> {
-  let cookie: string | null = null;
-  try {
-    cookie = (await headers()).get("cookie");
-  } catch {
-    // `headers()` istek bağlamı dışında (ör. izole test) çağrılırsa çerezsiz devam et.
-    cookie = null;
-  }
-
-  const init: RequestInit = {
-    headers: { accept: "application/json", ...(cookie ? { cookie } : {}) },
-    cache: "no-store",
-  };
-
-  try {
-    const response = await fetch(buildUrl(path, options.query), init);
-    if (!response.ok) {
-      return null;
-    }
-    return (await response.json()) as T;
-  } catch {
-    return null;
-  }
+  const { data } = await serverAuthApiFetchWithStatus<T>(path, options);
+  return data;
 }

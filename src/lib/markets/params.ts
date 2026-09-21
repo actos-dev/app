@@ -32,6 +32,12 @@ export const DEFAULT_COMPANY_SORT: CompanySummarySort = "popular";
 /** Sunucu sayfalamasında sayfa başına satır sayısı. */
 export const MARKETS_PAGE_SIZE = 50;
 
+/**
+ * Takip listesi toplu fiyat isteğinde tek seferde istenen azami ticker sayısı
+ * (backend `/companies/summary` `limit` üst sınırı 500).
+ */
+export const WATCHLIST_TICKER_LIMIT = 500;
+
 function firstValue(value: string | string[] | undefined): string | undefined {
   if (Array.isArray(value)) {
     return value[0];

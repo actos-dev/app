@@ -10,7 +10,9 @@ const { headersMock } = vi.hoisted(() => ({ headersMock: vi.fn() }));
 
 vi.mock("next/headers", () => ({ headers: headersMock }));
 
-import { serverAuthApiFetch } from "@/lib/api/server-auth";
+import { companyInfoPath } from "@/lib/markets/api-paths";
+
+import { serverAuthApiFetch, serverAuthApiFetchWithStatus } from "@/lib/api/server-auth";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -93,5 +95,48 @@ describe("serverAuthApiFetch", () => {
     expect(query.get("sort")).toBe("gainers");
     expect(query.get("limit")).toBe("50");
     expect(query.get("offset")).toBe("0");
+  });
+});
+
+describe("serverAuthApiFetchWithStatus", () => {
+  it("2xx'te gövdeyi ve durum kodunu döndürür", async () => {
+    headersMock.mockResolvedValue(new Headers({ cookie: "access_token=abc" }));
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ ok: true }, 200)));
+
+    await expect(
+      serverAuthApiFetchWithStatus<{ ok: boolean }>(companyInfoPath("THYAO")),
+    ).resolves.toEqual({ status: 200, data: { ok: true } });
+  });
+
+  it("404'ü 5xx'ten ayırır (404 ayrı durum kodu)", async () => {
+    headersMock.mockResolvedValue(new Headers({ cookie: "access_token=abc" }));
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ detail: "not found" }, 404)));
+
+    await expect(
+      serverAuthApiFetchWithStatus(companyInfoPath("BILINMEYEN")),
+    ).resolves.toEqual({ status: 404, data: null });
+  });
+
+  it("502'de durumu korur ve data null döner", async () => {
+    headersMock.mockResolvedValue(new Headers({ cookie: "access_token=abc" }));
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ detail: "bad gateway" }, 502)));
+
+    await expect(
+      serverAuthApiFetchWithStatus("/api/v1/companies/summary"),
+    ).resolves.toEqual({ status: 502, data: null });
+  });
+
+  it("ağ hatasında status 0 döner", async () => {
+    headersMock.mockResolvedValue(new Headers());
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw new Error("ECONNREFUSED");
+      }),
+    );
+
+    await expect(
+      serverAuthApiFetchWithStatus(companyInfoPath("THYAO")),
+    ).resolves.toEqual({ status: 0, data: null });
   });
 });

@@ -54,6 +54,10 @@ export const qk = {
   companyInfo: (ticker: string) =>
     [...qk.all, "company-info", ticker.trim().toUpperCase()] as const,
 
+  /** Sembol arama sorgusu (P-03); aynı terim tüm bileşenlerde paylaşılır. */
+  companySearch: (query: string) =>
+    [...qk.all, "company-search", query.trim()] as const,
+
   priceHistory: (ticker: string, period = "1mo", interval = "1d") =>
     [
       ...qk.all,

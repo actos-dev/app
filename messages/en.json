@@ -323,6 +323,31 @@
       "statusDraft": "Draft"
     }
   },
+  "watchlist": {
+    "title": "Watchlist",
+    "description": "Track your favorite stocks on a single screen.",
+    "tableLabel": "Watchlist",
+    "columns": {
+      "symbol": "Symbol",
+      "name": "Name",
+      "price": "Price",
+      "change": "Change",
+      "volume": "Volume",
+      "actions": "Action"
+    },
+    "remove": "Remove {ticker}",
+    "empty": {
+      "title": "Your watchlist is empty",
+      "description": "Add stocks to favorites to build your watchlist.",
+      "cta": "Go to markets"
+    },
+    "emptyTable": "No items to show in your watchlist.",
+    "error": "Watchlist could not be loaded.",
+    "errorDescription": "The data provider may be unreachable. Please try again.",
+    "rateLimited": "Too many requests. Please wait a moment and try again.",
+    "retry": "Try again",
+    "unresolved": "Unresolved symbols: {symbols}"
+  },
   "symbol": {
     "back": "Back to markets",
     "tabs": {

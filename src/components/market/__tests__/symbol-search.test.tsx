@@ -5,12 +5,23 @@
  * nitelikleri, ok tuşları + Enter ile seçimin `/symbol/<ticker>`'a gitmesi,
  * Escape ile kapanma, dışarı tıklamayla kapanma, boş sonuç ve hata durumu.
  */
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SymbolSearch } from "@/components/market/SymbolSearch";
 import { renderWithIntl } from "@/test/test-utils";
+
+/** Arama artık `qk.companySearch` üzerinden React Query kullanır (P-03). */
+function renderSearch() {
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  return renderWithIntl(
+    <QueryClientProvider client={client}>
+      <SymbolSearch />
+    </QueryClientProvider>,
+  );
+}
 
 const { pushMock } = vi.hoisted(() => ({ pushMock: vi.fn() }));
 
@@ -53,7 +64,7 @@ const searchPaths = () =>
 describe("SymbolSearch", () => {
   it("2 karakterden sonra debounce ile sonuç getirir ve combobox ARIA taşır", async () => {
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
     const input = screen.getByRole("combobox", { name: "Hisse ara" });
     expect(input).toHaveAttribute("aria-expanded", "false");
@@ -72,7 +83,7 @@ describe("SymbolSearch", () => {
 
   it("tek karakterde istek atmaz, ipucu gösterir", async () => {
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
     await user.type(screen.getByRole("combobox", { name: "Hisse ara" }), "A");
 
@@ -83,7 +94,7 @@ describe("SymbolSearch", () => {
 
   it("ok tuşları + Enter ile seçimi `/symbol/<ticker>`'a yönlendirir", async () => {
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
     const input = screen.getByRole("combobox", { name: "Hisse ara" });
     await user.type(input, "AS");
@@ -100,7 +111,7 @@ describe("SymbolSearch", () => {
 
   it("Escape popup'ı kapatır", async () => {
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
     const input = screen.getByRole("combobox", { name: "Hisse ara" });
     await user.type(input, "AS");
@@ -115,7 +126,7 @@ describe("SymbolSearch", () => {
 
   it("dışarı tıklama popup'ı kapatır", async () => {
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
     const input = screen.getByRole("combobox", { name: "Hisse ara" });
     await user.type(input, "AS");
@@ -132,7 +143,7 @@ describe("SymbolSearch", () => {
   it("boş sonuçta mesaj gösterir", async () => {
     installFetch(() => jsonResponse([]));
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
     await user.type(screen.getByRole("combobox", { name: "Hisse ara" }), "ZZ");
 
@@ -144,9 +155,9 @@ describe("SymbolSearch", () => {
       throw new Error("network");
     });
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
-    // Modül düzeyi önbellek testler arası paylaşıldığından benzersiz sorgu.
+    // Her test taze bir QueryClient alır; hata durumu benzersiz terim gerektirmez.
     await user.type(screen.getByRole("combobox", { name: "Hisse ara" }), "ERRQ");
 
     expect(await screen.findByText("Arama başarısız oldu. Lütfen tekrar dene.")).toBeInTheDocument();
@@ -154,7 +165,7 @@ describe("SymbolSearch", () => {
 
   it("aynı sorgu ikinci kez yazılınca önbellekten gelir (ek istek yok)", async () => {
     const user = userEvent.setup();
-    renderWithIntl(<SymbolSearch />);
+    renderSearch();
 
     await user.type(screen.getByRole("combobox", { name: "Hisse ara" }), "CACHE");
     await screen.findByRole("option", { name: /ASELS/ });

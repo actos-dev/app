@@ -10,10 +10,12 @@
  *
  * Hook bilinçli olarak sembolden bağımsızdır; çağıran `toggle(ticker)` ve
  * `isFavorite(ticker)` ile çalışır (3.4'te watchlist yeniden kullanır).
+ * `initialFavorites` verilirse SSR verisiyle tohumlanır ve istemci ek bir
+ * `GET /favorites` atmaz.
  */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { apiFetch } from "@/lib/api/client";
@@ -38,14 +40,35 @@ export type UseFavoritesResult = {
   toggle: (ticker: string) => void;
 };
 
-export function useFavorites(): UseFavoritesResult {
+export type UseFavoritesOptions = {
+  /**
+   * SSR'dan gelen başlangıç listesi. Verilirse `GET /favorites` istemcide
+   * tekrar atılmaz (izole test/`serverAuthApiFetch` verisi ile tohumlanır).
+   */
+  initialFavorites?: readonly string[];
+};
+
+export function useFavorites(options: UseFavoritesOptions = {}): UseFavoritesResult {
   const queryClient = useQueryClient();
   const t = useTranslations("symbol.favorite");
   const inFlight = useRef<Set<string>>(new Set());
 
+  // Başlangıç verisi yalnız mount'ta bir kez kurulur; prop kimliği her render
+  // değişse bile sorgu yeniden tohumlanmaz.
+  const [initialData] = useState<FavoritesResponse | undefined>(() =>
+    options.initialFavorites
+      ? {
+          favorites: Array.from(
+            new Set(options.initialFavorites.map((ticker) => normalizeTicker(ticker))),
+          ),
+        }
+      : undefined,
+  );
+
   const query = useQuery({
     queryKey: qk.favorites(),
     queryFn: () => apiFetch<FavoritesResponse>("/api/v1/favorites"),
+    ...(initialData ? { initialData } : {}),
   });
 
   const mutation = useMutation({
