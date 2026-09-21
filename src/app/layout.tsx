@@ -23,7 +23,8 @@ async function readTheme() {
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
   return {
-    title: t("app.name"),
+    // Alt sayfa başlıkları `%s · Florence` biçiminde birleşir (plan M-07).
+    title: { default: t("app.name"), template: `%s · ${t("app.name")}` },
     description: t("app.description"),
   };
 }

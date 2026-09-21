@@ -5,7 +5,34 @@
   },
   "common": {
     "language": "Dil",
-    "theme": "Tema"
+    "theme": "Tema",
+    "skipToContent": "İçeriğe geç",
+    "mainNavigation": "Ana gezinme",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "back": "Geri",
+    "retry": "Tekrar dene",
+    "comingSoonTitle": "Yakında",
+    "comingSoonDescription": "Bu bölüm henüz hazır değil; içerik sonraki sürümlerde eklenecek."
+  },
+  "nav": {
+    "groups": {
+      "market": "Piyasa",
+      "portfolio": "Portföy",
+      "research": "Araştırma",
+      "account": "Hesap"
+    },
+    "dashboard": "Genel Bakış",
+    "markets": "Piyasalar",
+    "watchlist": "Takip Listesi",
+    "portfolio": "Portföyler",
+    "reports": "Raporlar",
+    "simulation": "Simülasyon",
+    "advisor": "Yatırım Danışmanı",
+    "digest": "Piyasa Bülteni",
+    "data": "Veri Merkezi",
+    "profile": "Profil",
+    "kitchenSink": "Bileşen Kataloğu"
   },
   "locale": {
     "tr": "Türkçe",
