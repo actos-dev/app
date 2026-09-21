@@ -1018,6 +1018,58 @@
       "retry": "Tekrar dene"
     }
   },
+  "digest": {
+    "title": "Piyasa Bülteni",
+    "description": "Gün içinde üretilen piyasa bültenlerini gün ve slot bazında incele.",
+    "untitled": "Başlıksız bülten",
+    "asOf": "Üretim: {time}",
+    "slot": {
+      "morning": "Sabah",
+      "noon": "Öğle",
+      "evening": "Akşam"
+    },
+    "current": {
+      "title": "Güncel bülten",
+      "fresh": "Güncel",
+      "stale": "Güncel değil",
+      "staleDetail": "Gösterilen bülten {date} {slot} diliminden; bu aralık için daha yeni bir bülten üretilmemiş olabilir.",
+      "emptyTitle": "Bülten yok",
+      "emptyDescription": "Henüz yayınlanmış bir piyasa bülteni bulunmuyor.",
+      "errorTitle": "Güncel bülten yüklenemedi",
+      "errorDescription": "Sunucuya ulaşılamadı. Lütfen daha sonra tekrar dene."
+    },
+    "archive": {
+      "title": "Arşiv",
+      "dateLabel": "Tarih",
+      "previousDay": "Önceki gün",
+      "nextDay": "Sonraki gün",
+      "slotsLabel": "Slot seçimi",
+      "available": "Bu gün için mevcut bültenler",
+      "open": "Aç",
+      "backToDay": "Günün tüm slotları",
+      "emptyTitle": "Bu gün için bülten yok",
+      "emptyDescription": "{date} tarihinde yayınlanmış bir bülten bulunamadı.",
+      "slotEmptyTitle": "Bu slotta bülten yok",
+      "slotEmptyDescription": "{date} {slot} dilimi için bülten bulunamadı.",
+      "errorTitle": "Arşiv yüklenemedi",
+      "errorDescription": "Sunucuya ulaşılamadı. Lütfen daha sonra tekrar dene."
+    }
+  },
+  "credits": {
+    "label": "Kredi",
+    "tooltip": "Kredi, AI raporu ve Monte-Carlo simülasyonu üretiminde harcanır.",
+    "lowHint": "Bakiye 1 kredinin altında; yeni bir rapor üretmek için yeterli olmayabilir.",
+    "error": "Kredi bakiyesi alınamadı."
+  },
+  "account": {
+    "menuLabel": "Hesap menüsü",
+    "profile": "Profil",
+    "theme": "Tema",
+    "language": "Dil",
+    "credits": "Kredi bakiyesi",
+    "logout": "Çıkış yap",
+    "logoutError": "Çıkış yapılamadı. Lütfen tekrar dene."
+  },
   "apiErrors": {
     "loginFailed": "Kullanıcı adı veya şifre hatalı.",
     "emailNotVerified": "E-posta adresin henüz doğrulanmamış. Gelen kutunu kontrol et.",

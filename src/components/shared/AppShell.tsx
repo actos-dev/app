@@ -1,26 +1,35 @@
 /**
- * Uygulama kabuğu (plan §3.1 ilke 4, §4, A-02, A-04).
+ * Uygulama kabuğu (plan §3.1 ilke 4, §4, A-02, A-04, U-03, U-11).
  *
- * Sunucu bileşeni: dil ve tema çerezden okunur (tema yalnızca `ThemeSwitcher`
- * başlangıç değeri için). Masaüstünde sabit sidebar + ince topbar; mobilde
- * `MobileNav` paneli. İlk odaklanabilir öğe "İçeriğe geç" bağlantısıdır ve
- * `main#main-content` hedefini işaret eder.
+ * Sunucu bileşeni: tema çerezden okunur, kredi bakiyesi ilk değer olarak
+ * çerez forward edilerek çekilir (istemci periyodik/görünürlükte tazeler).
+ * Masaüstünde sabit sidebar + ince topbar; mobilde `MobileNav` paneli. İlk
+ * odaklanabilir öğe "İçeriğe geç" bağlantısıdır ve `main#main-content`
+ * hedefini işaret eder.
+ *
+ * Topbar'da ayrı `LocaleSwitcher`/`ThemeSwitcher` YOK: tema/dil/çıkış artık
+ * hesap menüsünde toplanmıştır (U-11). Public header ve auth layout mevcut
+ * değiştiricileri kullanmaya devam eder.
  */
 import { cookies } from "next/headers";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 
-import { LocaleSwitcher } from "@/components/shared/LocaleSwitcher";
+import { AccountMenu } from "@/components/shared/AccountMenu";
+import { CreditDisplay } from "@/components/shared/CreditDisplay";
 import { MobileNav } from "@/components/shared/MobileNav";
 import { Sidebar } from "@/components/shared/Sidebar";
-import { ThemeSwitcher } from "@/components/shared/ThemeSwitcher";
 import { resolveTheme, THEME_COOKIE } from "@/i18n/config";
+import { serverAuthApiFetch } from "@/lib/api/server-auth";
+import { creditsServerPath } from "@/lib/reports/api-paths";
+import type { CreditsResponse } from "@/lib/reports/types";
 
 export async function AppShell({ children }: { children: ReactNode }) {
-  const [t, app, cookieStore] = await Promise.all([
+  const [t, app, cookieStore, credits] = await Promise.all([
     getTranslations("common"),
     getTranslations("app"),
     cookies(),
+    serverAuthApiFetch<CreditsResponse>(creditsServerPath()),
   ]);
   const theme = resolveTheme(cookieStore.get(THEME_COOKIE)?.value);
 
@@ -40,8 +49,8 @@ export async function AppShell({ children }: { children: ReactNode }) {
             {app("name")}
           </span>
           <div className="ml-auto flex items-center gap-3">
-            <LocaleSwitcher />
-            <ThemeSwitcher theme={theme} />
+            <CreditDisplay initialCredits={credits?.credits} />
+            <AccountMenu theme={theme} initialCredits={credits?.credits} />
           </div>
         </header>
         <main id="main-content" className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 md:px-6">

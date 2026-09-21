@@ -1018,6 +1018,58 @@
       "retry": "Try again"
     }
   },
+  "digest": {
+    "title": "Market Digest",
+    "description": "Browse the market digests produced during the day by date and slot.",
+    "untitled": "Untitled digest",
+    "asOf": "Generated: {time}",
+    "slot": {
+      "morning": "Morning",
+      "noon": "Noon",
+      "evening": "Evening"
+    },
+    "current": {
+      "title": "Current digest",
+      "fresh": "Up to date",
+      "stale": "Not current",
+      "staleDetail": "Showing the digest from {date} {slot}; a newer digest may not have been generated for this window.",
+      "emptyTitle": "No digest",
+      "emptyDescription": "No market digest has been published yet.",
+      "errorTitle": "Could not load the current digest",
+      "errorDescription": "The server is unreachable. Please try again later."
+    },
+    "archive": {
+      "title": "Archive",
+      "dateLabel": "Date",
+      "previousDay": "Previous day",
+      "nextDay": "Next day",
+      "slotsLabel": "Slot selection",
+      "available": "Digests available for this day",
+      "open": "Open",
+      "backToDay": "All slots for the day",
+      "emptyTitle": "No digest for this day",
+      "emptyDescription": "No digest was published on {date}.",
+      "slotEmptyTitle": "No digest in this slot",
+      "slotEmptyDescription": "No digest was found for {date} {slot}.",
+      "errorTitle": "Could not load the archive",
+      "errorDescription": "The server is unreachable. Please try again later."
+    }
+  },
+  "credits": {
+    "label": "Credits",
+    "tooltip": "Credits are spent when generating AI reports and Monte-Carlo simulations.",
+    "lowHint": "Your balance is below 1 credit; it may not be enough to generate a new report.",
+    "error": "Could not load the credit balance."
+  },
+  "account": {
+    "menuLabel": "Account menu",
+    "profile": "Profile",
+    "theme": "Theme",
+    "language": "Language",
+    "credits": "Credit balance",
+    "logout": "Sign out",
+    "logoutError": "Could not sign out. Please try again."
+  },
   "apiErrors": {
     "loginFailed": "Incorrect username or password.",
     "emailNotVerified": "Your email isn't verified yet. Check your inbox.",

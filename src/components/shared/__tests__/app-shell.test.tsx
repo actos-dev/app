@@ -5,21 +5,30 @@
  * istemci ağacı gerçek `tr` kataloğuyla render edilir. `usePathname` mock'lanır
  * (aktiflik rota başına değiştirilir), `next/headers` çerezsiz kabul edilir.
  */
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AppShell } from "@/components/shared/AppShell";
+import { mockResponse } from "@/test/http";
 import { renderWithIntl } from "@/test/test-utils";
 
-const mocks = vi.hoisted(() => ({ pathname: "/markets" }));
+const mocks = vi.hoisted(() => ({
+  pathname: "/markets",
+  replace: vi.fn(),
+  refresh: vi.fn(),
+  push: vi.fn(),
+}));
 
 vi.mock("next/navigation", () => ({
   usePathname: () => mocks.pathname,
+  useRouter: () => ({ replace: mocks.replace, refresh: mocks.refresh, push: mocks.push }),
 }));
 
 vi.mock("next/headers", () => ({
   cookies: () => Promise.resolve({ get: () => undefined }),
+  headers: () => Promise.resolve(new Headers()),
 }));
 
 vi.mock("next-intl/server", async () => {
@@ -43,10 +52,25 @@ vi.mock("next-intl/server", async () => {
 
 async function renderShell() {
   const ui = await AppShell({ children: <p>Sayfa içeriği</p> });
-  return renderWithIntl(ui);
+  const client = new QueryClient({
+    defaultOptions: { queries: { retry: false, staleTime: Number.POSITIVE_INFINITY } },
+  });
+  return renderWithIntl(<QueryClientProvider client={client}>{ui}</QueryClientProvider>);
 }
 
+afterEach(() => {
+  vi.unstubAllGlobals();
+  mocks.replace.mockReset();
+  mocks.refresh.mockReset();
+  mocks.push.mockReset();
+});
+
 describe("AppShell", () => {
+  beforeEach(() => {
+    // RSC kredi tohumu ve istemci tazelemesi ağa çıkmasın.
+    vi.stubGlobal("fetch", vi.fn(async () => mockResponse({ credits: 10 })));
+  });
+
   it("navigasyon gruplarını ve öğelerini render eder", async () => {
     await renderShell();
 
@@ -98,6 +122,14 @@ describe("AppShell", () => {
     const skipLink = screen.getByRole("link", { name: "İçeriğe geç" });
     expect(skipLink).toHaveAttribute("href", "#main-content");
     expect(document.getElementById("main-content")).toBeInTheDocument();
+  });
+
+  it("topbar'da kredi göstergesini ve hesap menüsünü render eder", async () => {
+    await renderShell();
+
+    expect(screen.getByRole("button", { name: "Hesap menüsü" })).toBeInTheDocument();
+    expect(screen.getByText("Kredi")).toBeInTheDocument();
+    expect(screen.getByText("10")).toBeInTheDocument();
   });
 
   it("mobil menü panelini açar ve Escape ile kapatır", async () => {

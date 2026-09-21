@@ -19,7 +19,6 @@ import { ApiError, apiFetch } from "@/lib/api/client";
 import { translateBackendError } from "@/lib/backend-errors";
 import { qk, type ReportHistoryParams, type ReportSearchParams } from "@/lib/query/keys";
 import {
-  CREDITS_PATH,
   REPORTS_GENERATE_PATH,
   REPORTS_HISTORY_PATH,
   REPORTS_INFO_PATH,
@@ -80,15 +79,6 @@ export function useReportSearch(query: string, params: ReportSearchParams = {}) 
         },
       }),
     enabled: trimmed.length > 0,
-  });
-}
-
-/** `GET /credits` — toplam kredi bakiyesi (U-03). */
-export function useCredits(initialData?: CreditsResponse) {
-  return useQuery({
-    queryKey: qk.credits(),
-    queryFn: () => apiFetch<CreditsResponse>(CREDITS_PATH),
-    ...(initialData ? { initialData } : {}),
   });
 }
 
