@@ -19,9 +19,16 @@ type PortfolioDeleteDialogProps = {
   name: string;
   /** Tetikleyici; verilmezse kart içi çöp kutusu butonu kullanılır. */
   trigger?: ReactElement;
+  /** Silme başarılı olduktan sonra çağrılır (ör. detaydan listeye dönüş). */
+  onDeleted?: () => void;
 };
 
-export function PortfolioDeleteDialog({ id, name, trigger }: PortfolioDeleteDialogProps) {
+export function PortfolioDeleteDialog({
+  id,
+  name,
+  trigger,
+  onDeleted,
+}: PortfolioDeleteDialogProps) {
   const t = useTranslations("portfolio");
   const [open, setOpen] = useState(false);
   const remove = useDeletePortfolio();
@@ -47,7 +54,14 @@ export function PortfolioDeleteDialog({ id, name, trigger }: PortfolioDeleteDial
           <Button
             variant="danger"
             loading={remove.isPending}
-            onClick={() => remove.mutate(id, { onSuccess: () => setOpen(false) })}
+            onClick={() =>
+              remove.mutate(id, {
+                onSuccess: () => {
+                  setOpen(false);
+                  onDeleted?.();
+                },
+              })
+            }
           >
             {t("delete.confirm")}
           </Button>

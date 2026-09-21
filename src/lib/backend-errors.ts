@@ -34,10 +34,20 @@ const BACKEND_ERROR_KEYS: Readonly<Record<string, string>> = {
   "Too many requests. Please slow down.": "apiErrors.tooManyRequests",
   "Database error": "apiErrors.database",
 
-  // Portföy.
+  // Portföy — kodlaştırılmış sabit `detail` değerleri (B-07).
+  error_market_closed: "apiErrors.marketClosed",
+  error_portfolio_not_found: "apiErrors.portfolioNotFound",
+  error_transaction_failed: "apiErrors.transactionFailed",
+  error_transaction_not_found: "apiErrors.transactionNotFound",
+  error_nothing_to_undo: "apiErrors.nothingToUndo",
+  error_invalid_ticker: "apiErrors.invalidTicker",
+  error_portfolio_create_failed: "apiErrors.generic",
+
+  // Portföy — düz İngilizce metinler (backend geçiş dönemi).
   "Market is closed": "apiErrors.marketClosed",
   "Portfolio not found": "apiErrors.portfolioNotFound",
   "Transaction not found": "apiErrors.transactionNotFound",
+  "Price not found": "apiErrors.priceNotFound",
   "No vector data available for given tickers": "apiErrors.noVectorData",
   "Could not add to favorites": "apiErrors.favoriteFailed",
 

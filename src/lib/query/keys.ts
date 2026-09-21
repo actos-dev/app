@@ -111,6 +111,16 @@ export const qk = {
   portfolioTransactions: (id: string) =>
     [...qk.portfolios(), "transactions", id.trim()] as const,
 
+  /**
+   * Al/sat diyaloğu birim fiyatı (Faz 4 / Birim 4.2).
+   *
+   * Sembol başına TEK anahtar; aynı sembol için diyalog yeniden açıldığında
+   * önbellekten gelir, satır/liste başına istek üretilmez. Portföy kökü
+   * dışındadır: portföy yazmaları fiyatı gereksiz tazelemez.
+   */
+  tradePrice: (symbol: string) =>
+    [...qk.all, "trade-price", symbol.trim().toUpperCase()] as const,
+
   /** Simülasyon anahtarları ileride genişler (Faz 5). */
   simulations: {
     all: () => [...qk.all, "simulations"] as const,

@@ -21,11 +21,19 @@ import {
   portfolioDuplicatePath,
   portfolioPath,
   portfolioSummariesPath,
+  portfolioTransactionPath,
+  portfolioTransactionsPath,
+  portfolioTransactionsUndoPath,
+  portfolioValuationPath,
 } from "@/lib/portfolio/api-paths";
 import type {
+  AddTransactionInput,
   Portfolio,
   PortfolioMetadata,
   PortfolioSummaryResponse,
+  PortfolioTransaction,
+  PortfolioValuation,
+  UpdateTransactionInput,
 } from "@/lib/portfolio/types";
 import { qk } from "@/lib/query/keys";
 import { translateBackendError } from "@/lib/backend-errors";
@@ -55,6 +63,33 @@ export function usePortfolioList(options: InitialOptions<PortfolioMetadata[]> = 
       (await apiFetch<Portfolio[]>(PORTFOLIOS_PATH)).map((portfolio) => portfolio.metadata),
     enabled: options.enabled ?? true,
     ...(options.initialData ? { initialData: options.initialData } : {}),
+  });
+}
+
+/** `GET /portfolios/{id}` — tek portföy detayı; RSC verisiyle tohumlanır. */
+export function usePortfolio(id: string, initialData?: Portfolio) {
+  return useQuery({
+    queryKey: qk.portfolio(id),
+    queryFn: () => apiFetch<Portfolio>(portfolioPath(id)),
+    ...(initialData ? { initialData } : {}),
+  });
+}
+
+/** `GET /portfolios/{id}/valuation` — güncel değerleme; RSC verisiyle tohumlanır. */
+export function usePortfolioValuation(id: string, initialData?: PortfolioValuation | null) {
+  return useQuery({
+    queryKey: qk.portfolioValuation(id),
+    queryFn: () => apiFetch<PortfolioValuation>(portfolioValuationPath(id)),
+    ...(initialData ? { initialData } : {}),
+  });
+}
+
+/** `GET /portfolios/{id}/transactions` — işlem geçmişi; RSC verisiyle tohumlanır. */
+export function usePortfolioTransactions(id: string, initialData?: PortfolioTransaction[]) {
+  return useQuery({
+    queryKey: qk.portfolioTransactions(id),
+    queryFn: () => apiFetch<PortfolioTransaction[]>(portfolioTransactionsPath(id)),
+    ...(initialData ? { initialData } : {}),
   });
 }
 
@@ -121,6 +156,90 @@ export function useDeletePortfolio() {
     mutationFn: (id: string) => apiFetch(portfolioPath(id), { method: "DELETE" }),
     onSuccess: () => {
       toast.success(t("delete.success"));
+      void queryClient.invalidateQueries({ queryKey: qk.portfolios() });
+    },
+    onError: showError,
+  });
+}
+
+/** `PUT /portfolios/{id}` — portföyü yeniden adlandır. */
+export function useRenamePortfolio() {
+  const queryClient = useQueryClient();
+  const t = useTranslations("portfolio");
+  const showError = usePortfolioErrorToast();
+
+  return useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      apiFetch(portfolioPath(id), { method: "PUT", body: { name } }),
+    onSuccess: () => {
+      toast.success(t("rename.success"));
+      void queryClient.invalidateQueries({ queryKey: qk.portfolios() });
+    },
+    onError: showError,
+  });
+}
+
+/**
+ * `POST /portfolios/{id}/transactions` — al/sat.
+ *
+ * Başarıda `qk.portfolios()` kökü tazelenir; bu tek çağrı detay, değerleme,
+ * işlem geçmişi ve özet listesini birlikte günceller (P-03). Backend kuralı
+ * gereği seans kapalıysa `error_market_closed` döner ve toast'a i18n metni yazılır.
+ */
+export function useAddTransaction(id: string) {
+  const queryClient = useQueryClient();
+  const t = useTranslations("portfolio");
+  const showError = usePortfolioErrorToast();
+
+  return useMutation({
+    mutationFn: (input: AddTransactionInput) =>
+      apiFetch(portfolioTransactionsPath(id), {
+        method: "POST",
+        body: { ticker: input.ticker, type: input.type, quantity: input.quantity },
+      }),
+    onSuccess: (_data, variables) => {
+      toast.success(
+        variables.type === "BUY" ? t("trade.successBuy") : t("trade.successSell"),
+      );
+      void queryClient.invalidateQueries({ queryKey: qk.portfolios() });
+    },
+    onError: showError,
+  });
+}
+
+/** `DELETE /portfolios/{id}/transactions/undo` — son işlemi geri al. */
+export function useUndoLastTransaction(id: string) {
+  const queryClient = useQueryClient();
+  const t = useTranslations("portfolio");
+  const showError = usePortfolioErrorToast();
+
+  return useMutation({
+    mutationFn: () => apiFetch(portfolioTransactionsUndoPath(id), { method: "DELETE" }),
+    onSuccess: () => {
+      toast.success(t("undo.success"));
+      void queryClient.invalidateQueries({ queryKey: qk.portfolios() });
+    },
+    onError: showError,
+  });
+}
+
+/** `PUT /portfolios/{id}/transactions/{tx_id}` — işlem fiyat/adet düzeltme. */
+export function useUpdateTransaction(id: string) {
+  const queryClient = useQueryClient();
+  const t = useTranslations("portfolio");
+  const showError = usePortfolioErrorToast();
+
+  return useMutation({
+    mutationFn: ({ txId, input }: { txId: string; input: UpdateTransactionInput }) =>
+      apiFetch(portfolioTransactionPath(id, txId), {
+        method: "PUT",
+        body: {
+          ...(input.price !== undefined ? { price: input.price } : {}),
+          ...(input.quantity !== undefined ? { quantity: input.quantity } : {}),
+        },
+      }),
+    onSuccess: () => {
+      toast.success(t("edit.success"));
       void queryClient.invalidateQueries({ queryKey: qk.portfolios() });
     },
     onError: showError,

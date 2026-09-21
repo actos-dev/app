@@ -403,6 +403,126 @@
       "title": "Portfolios could not be loaded",
       "description": "The data provider may be unreachable. Please try again.",
       "retry": "Try again"
+    },
+    "detail": {
+      "back": "Back to portfolios",
+      "stats": {
+        "cost": "Cost",
+        "cash": "Cash",
+        "positions": "Positions"
+      },
+      "actions": {
+        "trade": "Buy / Sell",
+        "rename": "Rename portfolio",
+        "duplicate": "Duplicate portfolio",
+        "export": "Download transactions as CSV",
+        "delete": "Delete portfolio"
+      },
+      "valuationUnavailable": "Valuation is unavailable right now; positions cannot be shown.",
+      "positions": {
+        "title": "Positions",
+        "symbol": "Symbol",
+        "amount": "Quantity",
+        "avgCost": "Average cost",
+        "currentPrice": "Current price",
+        "marketValue": "Market value",
+        "pnl": "P/L",
+        "weight": "Weight",
+        "actions": "Trade",
+        "tableLabel": "Portfolio positions",
+        "emptyTitle": "No positions yet",
+        "emptyDescription": "Make your first purchase to build the portfolio."
+      },
+      "transactions": {
+        "title": "Transaction history",
+        "date": "Date",
+        "type": "Type",
+        "symbol": "Symbol",
+        "quantity": "Quantity",
+        "unitPrice": "Unit price",
+        "commission": "Commission",
+        "total": "Total",
+        "actions": "Edit",
+        "tableLabel": "Portfolio transaction history",
+        "empty": "No transactions in this portfolio yet."
+      },
+      "error": {
+        "title": "Portfolio could not be loaded",
+        "description": "The data provider may be unreachable. Please try again."
+      }
+    },
+    "trade": {
+      "buyTitle": "Buy order",
+      "sellTitle": "Sell order",
+      "description": "Pick a symbol and enter a quantity; commission and total are calculated instantly.",
+      "typeLabel": "Trade side",
+      "buy": "Buy",
+      "sell": "Sell",
+      "symbol": "Symbol",
+      "symbolPlaceholder": "Search a stock (e.g. THYAO)",
+      "unitPrice": "Unit price",
+      "priceLoading": "Fetching price…",
+      "priceUnavailable": "No price available for this symbol; the order cannot be submitted.",
+      "stalePrice": "Delayed",
+      "quantity": "Quantity",
+      "ownedHint": "Owned: {quantity}",
+      "cashHint": "Available cash: {amount}",
+      "subtotal": "Trade amount",
+      "commission": "Commission ({rate}%)",
+    "totalBuy": "Total to pay",
+    "totalSell": "Net proceeds",
+    "submitBuy": "Submit buy order",
+    "submitSell": "Submit sell order",
+      "marketClosed": "The market is closed; trades are only allowed during session hours.",
+      "marketOpensAt": "The market is closed. Next open: {time}.",
+      "marketHoliday": "The market is closed (public holiday: {name}).",
+      "priceAsOf": "Price as of: {time}",
+      "cancel": "Cancel",
+      "successBuy": "Buy order added.",
+      "successSell": "Sell order added.",
+      "validation": {
+        "symbolRequired": "Select a symbol.",
+        "quantityRequired": "Enter a quantity.",
+        "quantityInvalid": "Enter a valid quantity greater than zero.",
+        "insufficientQuantity": "You hold at most {quantity}.",
+        "insufficientBalance": "Insufficient cash. Required: {amount}."
+      }
+    },
+    "undo": {
+      "action": "Undo last transaction",
+      "title": "Undo last transaction",
+      "description": "This transaction will be deleted and the portfolio recalculated. This cannot be undone.",
+      "summary": "{date} — {type} {ticker} · {quantity} shares",
+      "confirm": "Undo",
+      "cancel": "Cancel",
+      "success": "Last transaction undone."
+    },
+    "edit": {
+      "action": "Edit {ticker} transaction",
+      "title": "Edit transaction",
+      "description": "Adjust the unit price and quantity of the {ticker} transaction.",
+      "price": "Unit price",
+      "quantity": "Quantity",
+      "submit": "Save",
+      "cancel": "Cancel",
+      "success": "Transaction updated.",
+      "validation": {
+        "priceRequired": "Unit price is required.",
+        "priceInvalid": "Enter a valid price greater than zero.",
+        "quantityRequired": "Quantity is required.",
+        "quantityInvalid": "Enter a valid quantity greater than zero."
+      }
+    },
+    "rename": {
+      "title": "Rename portfolio",
+      "description": "Give your portfolio a new name.",
+      "name": "Portfolio name",
+      "submit": "Save",
+      "cancel": "Cancel",
+      "success": "Portfolio name updated.",
+      "validation": {
+        "nameRequired": "Portfolio name is required."
+      }
     }
   },
   "symbol": {
@@ -526,6 +646,10 @@
     "marketClosed": "The market is closed.",
     "portfolioNotFound": "Portfolio not found.",
     "transactionNotFound": "Transaction not found.",
+    "transactionFailed": "The transaction could not be completed. Check the amount and quantity.",
+    "nothingToUndo": "There is no transaction to undo.",
+    "invalidTicker": "Invalid symbol.",
+    "priceNotFound": "Price not found.",
     "noVectorData": "No data available for the selected tickers.",
     "favoriteFailed": "Could not add to favorites.",
     "insufficientCredit": "You don't have enough credits.",

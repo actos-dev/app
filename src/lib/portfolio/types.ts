@@ -72,3 +72,47 @@ export type PortfolioTransaction = {
   total: number;
   date: string;
 };
+
+/**
+ * `GET /portfolios/{id}/valuation` tek pozisyonu.
+ *
+ * `backend/src/services/portfolio.py::get_portfolio_valuation` şeklinden
+ * birebir çıkarıldı; fiyat alınamayan sembolde `current_price`/`total_value`/
+ * `unrealized_pnl*` alanları `null` döner (UI "—" gösterir).
+ */
+export type PortfolioValuationAsset = {
+  ticker: string;
+  amount: number;
+  current_price: number | null;
+  total_value: number | null;
+  total_cost: number | null;
+  weighted_avg_cost: number;
+  unrealized_pnl: number | null;
+  unrealized_pnl_pct: number | null;
+};
+
+/** `GET /portfolios/{id}/valuation` yanıtı. */
+export type PortfolioValuation = {
+  total_value: number;
+  cash_balance: number;
+  holdings_value: number;
+  total_pnl: number;
+  pnl_percentage: number | null;
+  assets: PortfolioValuationAsset[];
+};
+
+/** İşlem yönü (backend `AddTransactionBody.type` deseni). */
+export type TradeType = "BUY" | "SELL";
+
+/** `POST /portfolios/{id}/transactions` gövdesi (`AddTransactionBody`). */
+export type AddTransactionInput = {
+  ticker: string;
+  type: TradeType;
+  quantity: number;
+};
+
+/** `PUT /portfolios/{id}/transactions/{tx_id}` gövdesi (`UpdateTransactionBody`). */
+export type UpdateTransactionInput = {
+  price?: number;
+  quantity?: number;
+};

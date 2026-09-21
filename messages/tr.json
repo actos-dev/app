@@ -403,6 +403,126 @@
       "title": "Portföyler yüklenemedi",
       "description": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene.",
       "retry": "Tekrar dene"
+    },
+    "detail": {
+      "back": "Portföylere dön",
+      "stats": {
+        "cost": "Maliyet",
+        "cash": "Nakit",
+        "positions": "Pozisyon"
+      },
+      "actions": {
+        "trade": "Al / Sat",
+        "rename": "Portföyü yeniden adlandır",
+        "duplicate": "Portföyü çoğalt",
+        "export": "İşlemleri CSV indir",
+        "delete": "Portföyü sil"
+      },
+      "valuationUnavailable": "Değerleme şu an alınamıyor; pozisyonlar gösterilemiyor.",
+      "positions": {
+        "title": "Pozisyonlar",
+        "symbol": "Sembol",
+        "amount": "Adet",
+        "avgCost": "Ortalama maliyet",
+        "currentPrice": "Güncel fiyat",
+        "marketValue": "Piyasa değeri",
+        "pnl": "K/Z",
+        "weight": "Ağırlık",
+        "actions": "İşlem",
+        "tableLabel": "Portföy pozisyonları",
+        "emptyTitle": "Henüz pozisyon yok",
+        "emptyDescription": "İlk alımını yaparak portföyünü oluştur."
+      },
+      "transactions": {
+        "title": "İşlem geçmişi",
+        "date": "Tarih",
+        "type": "Tip",
+        "symbol": "Sembol",
+        "quantity": "Adet",
+        "unitPrice": "Birim fiyat",
+        "commission": "Komisyon",
+        "total": "Toplam",
+        "actions": "Düzelt",
+        "tableLabel": "Portföy işlem geçmişi",
+        "empty": "Bu portföyde henüz işlem yok."
+      },
+      "error": {
+        "title": "Portföy yüklenemedi",
+        "description": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene."
+      }
+    },
+    "trade": {
+      "buyTitle": "Alış emri",
+      "sellTitle": "Satış emri",
+      "description": "Sembol seç, adedi gir; komisyon ve toplam anında hesaplanır.",
+      "typeLabel": "İşlem yönü",
+      "buy": "Alış",
+      "sell": "Satış",
+      "symbol": "Sembol",
+      "symbolPlaceholder": "Hisse ara (ör. THYAO)",
+      "unitPrice": "Birim fiyat",
+      "priceLoading": "Fiyat alınıyor…",
+      "priceUnavailable": "Bu sembol için fiyat alınamadı; işlem gönderilemez.",
+      "stalePrice": "Gecikmeli",
+      "quantity": "Adet",
+      "ownedHint": "Elde: {quantity}",
+      "cashHint": "Kullanılabilir nakit: {amount}",
+      "subtotal": "İşlem tutarı",
+      "commission": "Komisyon (%{rate})",
+      "totalBuy": "Toplam ödenecek",
+      "totalSell": "Net alınacak",
+      "submitBuy": "Alış emrini gönder",
+      "submitSell": "Satış emrini gönder",
+      "marketClosed": "Piyasa kapalı; al/sat yalnız seans saatlerinde yapılabilir.",
+      "marketOpensAt": "Piyasa kapalı. Sonraki açılış: {time}.",
+      "marketHoliday": "Piyasa kapalı (resmî tatil: {name}).",
+      "priceAsOf": "Fiyat zamanı: {time}",
+      "cancel": "Vazgeç",
+      "successBuy": "Alış işlemi eklendi.",
+      "successSell": "Satış işlemi eklendi.",
+      "validation": {
+        "symbolRequired": "Sembol seç.",
+        "quantityRequired": "Adet gir.",
+        "quantityInvalid": "Sıfırdan büyük geçerli bir adet gir.",
+        "insufficientQuantity": "Elde en fazla {quantity} adet var.",
+        "insufficientBalance": "Yetersiz nakit. Gereken: {amount}."
+      }
+    },
+    "undo": {
+      "action": "Son işlemi geri al",
+      "title": "Son işlemi geri al",
+      "description": "Bu işlem silinecek ve portföy yeniden hesaplanacak. Geri alınamaz.",
+      "summary": "{date} — {type} {ticker} · {quantity} adet",
+      "confirm": "Geri al",
+      "cancel": "Vazgeç",
+      "success": "Son işlem geri alındı."
+    },
+    "edit": {
+      "action": "{ticker} işlemini düzelt",
+      "title": "İşlemi düzelt",
+      "description": "{ticker} işleminin birim fiyatını ve adedini düzelt.",
+      "price": "Birim fiyat",
+      "quantity": "Adet",
+      "submit": "Kaydet",
+      "cancel": "Vazgeç",
+      "success": "İşlem güncellendi.",
+      "validation": {
+        "priceRequired": "Birim fiyat gerekli.",
+        "priceInvalid": "Sıfırdan büyük geçerli bir fiyat gir.",
+        "quantityRequired": "Adet gerekli.",
+        "quantityInvalid": "Sıfırdan büyük geçerli bir adet gir."
+      }
+    },
+    "rename": {
+      "title": "Portföyü yeniden adlandır",
+      "description": "Portföyüne yeni bir ad ver.",
+      "name": "Portföy adı",
+      "submit": "Kaydet",
+      "cancel": "Vazgeç",
+      "success": "Portföy adı güncellendi.",
+      "validation": {
+        "nameRequired": "Portföy adı gerekli."
+      }
     }
   },
   "symbol": {
@@ -526,6 +646,10 @@
     "marketClosed": "Piyasa kapalı.",
     "portfolioNotFound": "Portföy bulunamadı.",
     "transactionNotFound": "İşlem bulunamadı.",
+    "transactionFailed": "İşlem gerçekleştirilemedi. Tutarı ve adedi kontrol et.",
+    "nothingToUndo": "Geri alınacak işlem yok.",
+    "invalidTicker": "Geçersiz sembol.",
+    "priceNotFound": "Fiyat bulunamadı.",
     "noVectorData": "Seçilen hisseler için veri bulunamadı.",
     "favoriteFailed": "Favorilere eklenemedi.",
     "insufficientCredit": "Yeterli kredin yok.",

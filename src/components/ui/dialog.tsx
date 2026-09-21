@@ -7,8 +7,11 @@ import type { ReactElement, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type DialogProps = {
-  /** Diyaloğu açan öğe; Base UI `render` ile tetikleyiciye dönüşür (ör. `<Button>`). */
-  trigger: ReactElement;
+  /**
+   * Diyaloğu açan öğe; Base UI `render` ile tetikleyiciye dönüşür (ör. `<Button>`).
+   * Kontrollü (`open`/`onOpenChange`) kullanımda opsiyoneldir.
+   */
+  trigger?: ReactElement;
   /** Zorunlu başlık; `Dialog.Title` olarak render edilir ve diyaloğu adlandırır. */
   title: ReactNode;
   /** Zorunlu açıklama; `Dialog.Description` olarak render edilir. */
@@ -43,7 +46,7 @@ export function Dialog({
 }: DialogProps) {
   return (
     <BaseDialog.Root open={open} onOpenChange={onOpenChange}>
-      <BaseDialog.Trigger render={trigger} />
+      {trigger ? <BaseDialog.Trigger render={trigger} /> : null}
       <BaseDialog.Portal>
         <BaseDialog.Backdrop className="fixed inset-0 z-50 bg-overlay transition-opacity duration-150 ease-out supports-[-webkit-touch-callout:none]:absolute data-starting-style:opacity-0 data-ending-style:opacity-0" />
         <BaseDialog.Popup

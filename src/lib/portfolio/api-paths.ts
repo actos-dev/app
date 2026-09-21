@@ -39,6 +39,11 @@ export function portfolioPath(id: string): ApiPath {
   return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}`);
 }
 
+/** Sunucu (RSC) için `GET /portfolios/{id}`. */
+export function portfolioServerPath(id: string): ServerApiPath {
+  return toServerPath(`/api/v1/portfolios/${encodeURIComponent(id)}`);
+}
+
 /** `POST /portfolios/{id}/duplicate` — portföyü çoğalt. */
 export function portfolioDuplicatePath(id: string): ApiPath {
   return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/duplicate`);
@@ -49,7 +54,34 @@ export function portfolioValuationPath(id: string): ApiPath {
   return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/valuation`);
 }
 
-/** `GET /portfolios/{id}/transactions` — işlem geçmişi. */
+/** Sunucu (RSC) için `GET /portfolios/{id}/valuation`. */
+export function portfolioValuationServerPath(id: string): ServerApiPath {
+  return toServerPath(`/api/v1/portfolios/${encodeURIComponent(id)}/valuation`);
+}
+
+/** `GET/POST /portfolios/{id}/transactions` — işlem geçmişi / yeni işlem. */
 export function portfolioTransactionsPath(id: string): ApiPath {
   return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/transactions`);
+}
+
+/** Sunucu (RSC) için `GET /portfolios/{id}/transactions`. */
+export function portfolioTransactionsServerPath(id: string): ServerApiPath {
+  return toServerPath(`/api/v1/portfolios/${encodeURIComponent(id)}/transactions`);
+}
+
+/** `PUT /portfolios/{id}/transactions/{tx_id}` — işlem düzeltme. */
+export function portfolioTransactionPath(id: string, txId: string): ApiPath {
+  return toApiPath(
+    `/api/v1/portfolios/${encodeURIComponent(id)}/transactions/${encodeURIComponent(txId)}`,
+  );
+}
+
+/** `DELETE /portfolios/{id}/transactions/undo` — son işlemi geri al. */
+export function portfolioTransactionsUndoPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/transactions/undo`);
+}
+
+/** `GET /portfolios/{id}/export/csv` — işlemleri CSV indir. */
+export function portfolioExportCsvPath(id: string): ApiPath {
+  return toApiPath(`/api/v1/portfolios/${encodeURIComponent(id)}/export/csv`);
 }

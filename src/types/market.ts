@@ -30,6 +30,27 @@ export type MarketStatus = {
   as_of: string;
 };
 
+/**
+ * `GET /api/v1/price/current` yanıtı (`services/quote.py::_build_quote`).
+ *
+ * Tek sembolün anlık fiyatı; portföy al/sat diyaloğunda TEK istek ile çekilir
+ * (satır başına istek yok). `price` alınamazsa backend 404 döner.
+ */
+export type CurrentPriceQuote = {
+  ticker: string;
+  price: number | null;
+  previous_close: number | null;
+  absolute_change: number | null;
+  change_pct: number | null;
+  as_of: string | null;
+  previous_close_as_of: string | null;
+  market_status: string;
+  is_stale: boolean;
+  change_window: string;
+  /** Yalnız `/price/current` yanıtında bulunur. */
+  interval?: string;
+};
+
 /** `GET /api/v1/companies/summary` içindeki tek hisse satırı. */
 export type CompanySummary = {
   ticker: string;

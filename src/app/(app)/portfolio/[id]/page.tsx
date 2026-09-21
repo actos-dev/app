@@ -1,15 +1,20 @@
 /**
- * `/portfolio/[id]` iskeleti (Faz 1 / Birim 1.4).
+ * `/portfolio/[id]` portföy çalışma alanı (Faz 4 / Birim 4.2, B-07, B-10, S-15).
  *
- * Auth koruması henüz yok; Faz 2'de middleware ile korunacak. Pozisyonlar,
- * işlemler, analiz ve getiri Faz 4'te gelecek.
+ * Sunucu bileşeni: detay + değerleme + işlemler + özet PARALEL çekilir ve
+ * piyasa durumuyla birlikte istemci adasına `initialData` olarak geçirilir.
+ * Portföy yoksa (404) gerçek `notFound()`; diğer hatalarda sayfa çökmez,
+ * `ErrorState` gösterilir.
  */
-import { Construction } from "lucide-react";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "@/components/shared/EmptyState";
-import { PageHeader } from "@/components/shared/PageHeader";
+import { PortfolioDetail } from "@/components/portfolio/PortfolioDetail";
+import { ErrorState } from "@/components/shared/ErrorState";
+import { serverAuthApiFetch } from "@/lib/api/server-auth";
+import { loadPortfolioDetail } from "@/lib/portfolio/detail";
+import type { MarketStatus } from "@/types/market";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -18,21 +23,30 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PortfolioDetailPage({ params }: PageProps<"/portfolio/[id]">) {
   const { id } = await params;
-  const t = await getTranslations();
+  const [detail, status, t] = await Promise.all([
+    loadPortfolioDetail(id),
+    serverAuthApiFetch<MarketStatus>("/api/v1/market/status"),
+    getTranslations("portfolio"),
+  ]);
+
+  if (detail.status === "not-found") {
+    notFound();
+  }
+
+  if (detail.status === "error") {
+    return (
+      <ErrorState title={t("detail.error.title")} description={t("detail.error.description")} />
+    );
+  }
 
   return (
-    <>
-      <PageHeader
-        title={t("nav.portfolio")}
-        description={<span className="font-mono">{id}</span>}
-        backHref="/portfolio"
-        backLabel={t("common.back")}
-      />
-      <EmptyState
-        icon={<Construction aria-hidden="true" className="size-5" />}
-        title={t("common.comingSoonTitle")}
-        description={t("common.comingSoonDescription")}
-      />
-    </>
+    <PortfolioDetail
+      portfolio={detail.portfolio}
+      valuation={detail.valuation}
+      transactions={detail.transactions}
+      summary={detail.summary}
+      summaries={detail.summaries}
+      {...(status ? { marketStatus: status } : {})}
+    />
   );
 }

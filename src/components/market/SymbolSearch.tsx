@@ -37,9 +37,29 @@ type StatusKind = "idle" | "loading" | "error" | "empty" | "short";
 
 type SymbolSearchProps = {
   className?: string;
+  /**
+   * Seçim yapıldığında çağrılır; verilirse sembol sayfasına YÖNLENDİRME
+   * yapılmaz (al/sat diyaloğu gibi gömülü kullanımlar için). Verilmezse
+   * varsayılan davranış `/symbol/{ticker}`'a gitmektir.
+   */
+  onSelect?: (ticker: string, name: string) => void;
+  /** Gömülü kullanım için etiket bağlantısı (`FormField` kontrol nitelikleri). */
+  id?: string;
+  "aria-describedby"?: string;
+  "aria-invalid"?: boolean;
+  "aria-label"?: string;
+  placeholder?: string;
 };
 
-export function SymbolSearch({ className }: SymbolSearchProps) {
+export function SymbolSearch({
+  className,
+  onSelect,
+  id,
+  "aria-describedby": ariaDescribedBy,
+  "aria-invalid": ariaInvalid,
+  "aria-label": ariaLabel,
+  placeholder,
+}: SymbolSearchProps) {
   const t = useTranslations("markets.search");
   const router = useRouter();
 
@@ -93,14 +113,18 @@ export function SymbolSearch({ className }: SymbolSearchProps) {
       if (details.reason === "item-press") {
         const picked = items.find((item) => item.ticker === value);
         if (picked) {
-          router.push(`/symbol/${picked.ticker}` as Route);
+          if (onSelect) {
+            onSelect(picked.ticker, picked.name);
+          } else {
+            router.push(`/symbol/${picked.ticker}` as Route);
+          }
         }
         return;
       }
       setTerm(value);
       scheduleSearch(value);
     },
-    [items, router, scheduleSearch],
+    [items, onSelect, router, scheduleSearch],
   );
 
   const status: StatusKind =
@@ -143,8 +167,11 @@ export function SymbolSearch({ className }: SymbolSearchProps) {
           className="pointer-events-none absolute left-3 size-4 text-muted-foreground"
         />
         <Autocomplete.Input
-          aria-label={t("label")}
-          placeholder={t("placeholder")}
+          id={id}
+          aria-label={ariaLabel ?? t("label")}
+          aria-describedby={ariaDescribedBy}
+          aria-invalid={ariaInvalid || undefined}
+          placeholder={placeholder ?? t("placeholder")}
           className="h-full w-full min-w-0 rounded-md bg-transparent pr-9 pl-9 text-sm text-surface-foreground placeholder:text-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-focus-ring"
         />
         <Autocomplete.Clear
