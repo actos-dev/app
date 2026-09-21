@@ -12,7 +12,29 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Üretilmiş OpenAPI tipleri lint kapsamı dışında.
+    "src/types/generated.ts",
   ]),
+  {
+    // Güvenlik: AI üretimi rapor içeriği gibi HTML yüzeyleri sanitize edilene kadar
+    // (S-03, Faz 5) dangerouslySetInnerHTML tamamen yasak.
+    files: ["**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "JSXAttribute[name.name='dangerouslySetInnerHTML']",
+          message:
+            "dangerouslySetInnerHTML yasak: sanitizasyon kararı (S-03) alınana kadar kullanılamaz.",
+        },
+        {
+          selector: "Property[key.name='dangerouslySetInnerHTML']",
+          message:
+            "dangerouslySetInnerHTML özelliği yasak: sanitizasyon kararı (S-03) alınana kadar kullanılamaz.",
+        },
+      ],
+    },
+  },
 ]);
 
 export default eslintConfig;

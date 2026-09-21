@@ -1,34 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Florence App
 
-## Getting Started
+Florence'ın yeni web uygulaması: BIST (Borsa İstanbul) odaklı piyasa takibi ve **sanal portföy**
+platformunun Next.js istemcisi. Gerçek para/emir yoktur; portföyler kâğıt üstünde, canlı fiyat ve
+komisyon hesabıyla simüle edilir.
 
-First, run the development server:
+Bu repo, `web/` (Vite SPA) uygulamasının yerini alacak sıfırdan yazımdır. Referans sözleşme:
+[`../WEB_REFACTOR_PLAN.md`](../WEB_REFACTOR_PLAN.md).
+
+- **Durum:** Faz 0 — karar ve hazırlık. Uygulama sayfaları henüz yok; CI, tip üretimi ve kalite
+  kapıları kurulu.
+- **Yığın:** Next.js 16 (App Router, `src/` dizini, Turbopack) · React 19 · TypeScript strict ·
+  Tailwind CSS v4 (`@tailwindcss/postcss`) · Vitest + Testing Library.
+- **`web/` donduruldu:** Eski SPA yalnız referans olarak durur; bu repodan ona dokunulmaz.
+  `desktop/` ve Tauri yolu bu uygulamanın kapsamında değildir.
+- **`backend/` ayrı repo:** bu repodan değiştirilmez; API sözleşmesi OpenAPI'dan tüketilir.
+
+## Komutlar
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm ci                     # kilit dosyasından kurulum (CI ile aynı)
+npm run dev                # geliştirme sunucusu (localhost:3000)
+npm run gen:api            # backend'den openapi.json + src/types/generated.ts üret
+npm run typecheck          # next typegen + tsc --noEmit (temiz klonda route tipleri için şart)
+npm run lint               # eslint .
+npm run check:tokens       # keyfi renk/font ve ! prefix kapısı
+npm test                   # vitest run (tek seferlik)
+npm run test:watch         # vitest (izleme modu)
+npm run check              # typecheck + lint + tokens + test (PR öncesi tam kapı)
+npm run build              # üretim derlemesi
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### `gen:api` nasıl çalışır?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. `OPENAPI_URL` tanımlıysa şema oradan indirilir.
+2. Tanımlı değilse `../backend/.venv/bin/python` ile `app.openapi()` çağrılır (cwd: `../backend`).
+3. Şema `openapi.json` olarak yazılır, ardından `src/types/generated.ts` üretilir.
 
-## Learn More
+Her iki çıktı da **commit edilir**. API tipleri elle yazılmaz; tüm tipler `generated.ts`'ten
+türetilir (bkz. `docs/adr/0005-openapi-codegen.md`).
 
-To learn more about Next.js, take a look at the following resources:
+## Kalite kapıları
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`npm run check` şunları sırayla koşar ve hepsi yeşil olmadan PR merge edilmez:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Kapı | Ne yapar |
+|---|---|
+| `next typegen && tsc --noEmit` | strict tip kontrolü (route tipleri dahil) |
+| `eslint .` | Next + react-hooks kuralları; `dangerouslySetInnerHTML` yasak |
+| `check:tokens` | 12px altı keyfi font, keyfi renk utility'si, `!` prefix ihlali |
+| `vitest run` | birim testleri |
+| `next build` | üretim derlemesi (CI'da ayrıca koşar) |
 
-## Deploy on Vercel
+CI (`.github/workflows/ci.yml`) her push ve PR'da Node 24 ile bu adımları çalıştırır.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Sürüm, tag ve deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Sürüm `package.json` içindeki `version` alanıdır; Conventional Commits kullanılır
+  (`feat(scope):`, `fix:`, `chore: bump version to X.Y.Z`).
+- **Tag = deploy tetikleyicisi.** `main`'e push sonrası sürümden `vX.Y.Z` tag'i atılır ve deploy
+  akışı başlar. Bu repoda deploy'dan **önce CI'daki tüm testler koşar** (eski `web/` reposunda
+  CI'da test adımı yoktu).
+- Kırıcı değişiklik serbesttir; eski URL'ler için yönlendirme dışında geriye uyumluluk
+  hedeflenmez.
+
+## Dokümanlar
+
+- [`docs/adr/`](docs/adr/README.md) — mimari karar kayıtları.
+- [`docs/backend-requests.md`](docs/backend-requests.md) — backend'den beklenen işler (Faz 0
+  sözleşmeleri).
+- [`AGENTS.md`](AGENTS.md) — repo çalışma kuralları (ajanlar ve geliştiriciler için).
+- [`../WEB_REFACTOR_PLAN.md`](../WEB_REFACTOR_PLAN.md) — tüm refactor maddeleri, faz planı,
+  kabul kriterleri.

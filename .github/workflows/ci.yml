@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  checks:
+    name: typecheck · lint · tokens · test · build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Bağımlılıkları kur
+        run: npm ci
+
+      # next typegen şart: next-env.d.ts ve route tipleri (.next/types) taze klonda yok.
+      - name: Tip kontrolü
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tasarım token kapısı
+        run: npm run check:tokens
+
+      - name: Unit testler
+        run: npm test
+
+      - name: Build
+        run: npm run build
