@@ -348,6 +348,63 @@
     "retry": "Tekrar dene",
     "unresolved": "Çözülemeyen semboller: {symbols}"
   },
+  "portfolio": {
+    "title": "Portföyler",
+    "description": "Sanal portföylerini tek ekranda izle; değer, getiri ve pozisyonları karşılaştır.",
+    "new": "Yeni portföy",
+    "fallbackNotice": "Portföy özetleri şu an alınamıyor; liste temel bilgilerle gösteriliyor.",
+    "card": {
+      "currentValue": "Güncel değer",
+      "dailyChange": "Günlük değişim",
+      "totalReturn": "Toplam getiri",
+      "positions": "{count} pozisyon",
+      "asOf": "Veri zamanı: {time}",
+      "asOfUnavailable": "Veri zamanı bilinmiyor",
+      "unavailable": "—"
+    },
+    "actions": {
+      "open": "{name} portföyünü aç",
+      "duplicate": "{name} portföyünü çoğalt",
+      "delete": "{name} portföyünü sil"
+    },
+    "create": {
+      "title": "Yeni portföy",
+      "description": "Portföyüne bir ad ve başlangıç bakiyesi ver.",
+      "name": "Portföy adı",
+      "namePlaceholder": "Örn. Uzun vadeli",
+      "initialBalance": "Başlangıç bakiyesi",
+      "initialBalanceHint": "Sanal nakit; gerçek para kullanılmaz.",
+      "submit": "Oluştur",
+      "cancel": "Vazgeç",
+      "success": "Portföy oluşturuldu.",
+      "validation": {
+        "nameRequired": "Portföy adı gerekli.",
+        "balanceRequired": "Başlangıç bakiyesi gerekli.",
+        "balanceInvalid": "Sıfırdan büyük geçerli bir tutar gir."
+      }
+    },
+    "duplicate": {
+      "nameSuffix": "{name} (kopya)",
+      "success": "Portföy çoğaltıldı."
+    },
+    "delete": {
+      "title": "Portföyü sil",
+      "description": "\"{name}\" portföyünü silmek istediğine emin misin? Bu işlem geri alınamaz.",
+      "confirm": "Sil",
+      "cancel": "Vazgeç",
+      "success": "Portföy silindi."
+    },
+    "empty": {
+      "title": "Henüz portföyün yok",
+      "description": "Sanal alım satımlarla bir portföy oluştur; komisyon dahil maliyet ve getirini izle.",
+      "cta": "Yeni portföy oluştur"
+    },
+    "error": {
+      "title": "Portföyler yüklenemedi",
+      "description": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene.",
+      "retry": "Tekrar dene"
+    }
+  },
   "symbol": {
     "back": "Piyasalara dön",
     "tabs": {

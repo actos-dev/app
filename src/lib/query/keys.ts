@@ -84,6 +84,33 @@ export const qk = {
 
   favorites: () => [...qk.all, "favorites"] as const,
 
+  /**
+   * Portföy anahtarları (Faz 4 / Birim 4.1, P-03).
+   *
+   * Liste, özet ve detay aynı kökün (`qk.portfolios()`) altındadır; böylece
+   * oluştur/sil/çoğalt sonrası TEK `invalidateQueries({ queryKey: qk.portfolios() })`
+   * çağrısı tüm portföy sorgularını tazeler. Portföy kimlikleri kanonikleştirilir
+   * (trim) ki aynı kimlik her zaman aynı anahtara düşsün.
+   */
+  portfolios: () => [...qk.all, "portfolios"] as const,
+
+  /** `GET /portfolios/summaries` — değerlemeli liste (B-10). */
+  portfolioSummaries: () => [...qk.portfolios(), "summaries"] as const,
+
+  /** `GET /portfolios` — ham liste; summaries yoksa fallback (B-10). */
+  portfolioList: () => [...qk.portfolios(), "list"] as const,
+
+  /** `GET /portfolios/{id}` — tek portföy detayı. */
+  portfolio: (id: string) => [...qk.portfolios(), "detail", id.trim()] as const,
+
+  /** `GET /portfolios/{id}/valuation` — güncel değerleme. */
+  portfolioValuation: (id: string) =>
+    [...qk.portfolios(), "valuation", id.trim()] as const,
+
+  /** `GET /portfolios/{id}/transactions` — işlem geçmişi. */
+  portfolioTransactions: (id: string) =>
+    [...qk.portfolios(), "transactions", id.trim()] as const,
+
   /** Simülasyon anahtarları ileride genişler (Faz 5). */
   simulations: {
     all: () => [...qk.all, "simulations"] as const,

@@ -348,6 +348,63 @@
     "retry": "Try again",
     "unresolved": "Unresolved symbols: {symbols}"
   },
+  "portfolio": {
+    "title": "Portfolios",
+    "description": "Track your paper portfolios on one screen; compare value, return and positions.",
+    "new": "New portfolio",
+    "fallbackNotice": "Portfolio summaries are unavailable right now; showing the list with basic details.",
+    "card": {
+      "currentValue": "Current value",
+      "dailyChange": "Daily change",
+      "totalReturn": "Total return",
+      "positions": "{count} positions",
+      "asOf": "Data as of: {time}",
+      "asOfUnavailable": "Data time unknown",
+      "unavailable": "—"
+    },
+    "actions": {
+      "open": "Open portfolio {name}",
+      "duplicate": "Duplicate portfolio {name}",
+      "delete": "Delete portfolio {name}"
+    },
+    "create": {
+      "title": "New portfolio",
+      "description": "Give your portfolio a name and an initial balance.",
+      "name": "Portfolio name",
+      "namePlaceholder": "e.g. Long term",
+      "initialBalance": "Initial balance",
+      "initialBalanceHint": "Paper cash; no real money is used.",
+      "submit": "Create",
+      "cancel": "Cancel",
+      "success": "Portfolio created.",
+      "validation": {
+        "nameRequired": "Portfolio name is required.",
+        "balanceRequired": "Initial balance is required.",
+        "balanceInvalid": "Enter a valid amount greater than zero."
+      }
+    },
+    "duplicate": {
+      "nameSuffix": "{name} (copy)",
+      "success": "Portfolio duplicated."
+    },
+    "delete": {
+      "title": "Delete portfolio",
+      "description": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel",
+      "success": "Portfolio deleted."
+    },
+    "empty": {
+      "title": "You have no portfolios yet",
+      "description": "Create a portfolio with paper trades; track cost and return including commission.",
+      "cta": "Create a portfolio"
+    },
+    "error": {
+      "title": "Portfolios could not be loaded",
+      "description": "The data provider may be unreachable. Please try again.",
+      "retry": "Try again"
+    }
+  },
   "symbol": {
     "back": "Back to markets",
     "tabs": {

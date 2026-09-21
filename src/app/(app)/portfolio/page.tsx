@@ -1,15 +1,21 @@
 /**
- * `/portfolio` iskeleti (Faz 1 / Birim 1.4).
+ * `/portfolio` liste sayfası (Faz 4 / Birim 4.1, B-10, P-02).
  *
- * Auth koruması henüz yok; Faz 2'de middleware ile korunacak. Portföy listesi
- * ve seçili portföy çalışma alanı Faz 4'te gelecek.
+ * Sunucu bileşeni: portföy listesi (özet → fallback) ve `market/status`
+ * PARALEL çekilir; veri istemci bileşenine `initialData` olarak geçirilir,
+ * böylece ilk boyamada ek istek olmaz. Portföy detayı ve al/sat akışı
+ * 4.2/4.3 birimlerindedir.
  */
-import { Construction } from "lucide-react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { EmptyState } from "@/components/shared/EmptyState";
+import { MarketStatusPill } from "@/components/market/MarketStatusPill";
+import { PortfolioCreateDialog } from "@/components/portfolio/PortfolioCreateDialog";
+import { PortfolioList } from "@/components/portfolio/PortfolioList";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { serverAuthApiFetch } from "@/lib/api/server-auth";
+import { loadPortfolioList } from "@/lib/portfolio/list";
+import type { MarketStatus } from "@/types/market";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -17,16 +23,26 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function PortfolioPage() {
-  const t = await getTranslations();
+  const [listData, status, t] = await Promise.all([
+    loadPortfolioList(),
+    serverAuthApiFetch<MarketStatus>("/api/v1/market/status"),
+    getTranslations("portfolio"),
+  ]);
 
   return (
-    <>
-      <PageHeader title={t("nav.portfolio")} />
-      <EmptyState
-        icon={<Construction aria-hidden="true" className="size-5" />}
-        title={t("common.comingSoonTitle")}
-        description={t("common.comingSoonDescription")}
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title={t("title")}
+        description={t("description")}
+        actions={
+          <div className="flex items-center gap-2">
+            <MarketStatusPill initialData={status ?? undefined} />
+            <PortfolioCreateDialog />
+          </div>
+        }
       />
-    </>
+
+      <PortfolioList data={listData} />
+    </div>
   );
 }
