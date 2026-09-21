@@ -61,4 +61,18 @@ describe("landing", () => {
     expect(within(grid).getByText("Canlı piyasa verisi")).toBeInTheDocument();
     expect(within(grid).getByText("Monte-Carlo simülasyonu")).toBeInTheDocument();
   });
+
+  it("WebSite + SearchAction JSON-LD yerleştirir (X-06)", async () => {
+    const { container } = await renderLanding();
+
+    const script = container.querySelector('script[type="application/ld+json"]');
+    expect(script).not.toBeNull();
+
+    const data = JSON.parse(script?.textContent ?? "{}") as {
+      "@graph": Array<Record<string, unknown>>;
+    };
+    const website = data["@graph"].find((node) => node["@type"] === "WebSite");
+    expect(website).toBeDefined();
+    expect(website?.potentialAction).toMatchObject({ "@type": "SearchAction" });
+  });
 });

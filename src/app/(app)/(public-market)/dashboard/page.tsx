@@ -1,27 +1,28 @@
 /**
- * `/dashboard` — genel bakış (Faz 5B / Birim 5B.1, P-05, U-07, U-13; 5C / X-02).
+ * `/dashboard` — genel bakış (Faz 5B / Birim 5B.1, P-05, U-07, U-13; 5C / X-02, X-09).
  *
- * Faz 5C ile rota anonime açıldı. Oturum YOKSA kişisel widget'lar çalıştırılmaz
- * (portföy/favori/kredi uçlarına istek atılmaz); bunun yerine güvenli bir
- * "guest" yer tutucu gösterilir. Gerçek guest dashboard 5C.2b birimindedir.
+ * Faz 5C ile rota anonime açıldı ve oturum durumuna göre DALLANIR:
+ *   - Oturum VARSA: tüm veri TEK pakette (`fetchDashboardData`) paralel
+ *     yüklenir ve istemci widget'larına `initialData` geçirilir; kişisel
+ *     uçlar yalnız buraya, `serverAuthApiFetch` ile çağrılır.
+ *   - Oturum YOKSA: kişisel veri İSTEMEYEN gerçek misafir paneli
+ *     (`fetchGuestDashboardData`) gösterilir; `/favorites`, `/portfolios/*`
+ *     veya `/credits` uçlarına İSTEK ATILMAZ. Gerçek public veri + kayıt/giriş
+ *     CTA'ları sunulur (X-09).
  *
- * Oturum VARSA: tüm veri TEK pakette (`fetchDashboardData`) paralel yüklenir ve
- * istemci widget'larına `initialData` geçirilir; ilk boyamada ek istek olmaz.
- * Backend kapalı/hata durumunda yükleyiciler `null` döner; sayfa çökmez.
+ * Backend kapalı/hata durumunda yükleyiciler boş döner; sayfa çökmez.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
+import { GuestDashboard } from "@/components/dashboard/GuestDashboard";
 import { MarketStatusPill } from "@/components/market/MarketStatusPill";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { Panel } from "@/components/shared/Panel";
-import { buttonVariants } from "@/components/ui/button";
 import { getSession } from "@/lib/auth/session";
-import { cn } from "@/lib/utils";
 
 import { fetchDashboardData } from "./dashboard-data";
+import { fetchGuestDashboardData } from "./guest-dashboard-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("nav");
@@ -32,37 +33,10 @@ export default async function DashboardPage() {
   const session = await getSession();
 
   if (!session) {
-    const t = await getTranslations("dashboard");
-    return (
-      <div className="flex flex-col gap-6">
-        <PageHeader title={t("title")} description={t("description")} />
-        <Panel title={t("guest.noticeTitle")}>
-          <div className="flex flex-col gap-4">
-            <p className="text-sm text-muted-foreground">{t("guest.noticeDescription")}</p>
-            <div className="flex flex-wrap items-center gap-2">
-              <Link
-                href="/login"
-                className={cn(buttonVariants({ variant: "primary", size: "sm" }))}
-              >
-                {t("guest.login")}
-              </Link>
-              <Link
-                href="/register"
-                className={cn(buttonVariants({ variant: "ghost", size: "sm" }))}
-              >
-                {t("guest.register")}
-              </Link>
-              <Link
-                href="/markets"
-                className={cn(buttonVariants({ variant: "secondary", size: "sm" }))}
-              >
-                {t("guest.markets")}
-              </Link>
-            </div>
-          </div>
-        </Panel>
-      </div>
-    );
+    const data = await fetchGuestDashboardData();
+    // Async sunucu bileşeni sayfa içinde ÇÖZÜLÜR: böylece dönen ağaç tamamen
+    // SSR edilir (testte de RTL ile doğrudan render edilebilir).
+    return await GuestDashboard({ data });
   }
 
   const [data, t] = await Promise.all([fetchDashboardData(), getTranslations("dashboard")]);

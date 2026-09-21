@@ -49,6 +49,11 @@ type SymbolSearchProps = {
   "aria-invalid"?: boolean;
   "aria-label"?: string;
   placeholder?: string;
+  /**
+   * URL'den gelen başlangıç terimi (`/markets?q=`). Doldurulduğunda hem input
+   * hem ilk sorgu bu terimle başlar; SEO `SearchAction` hedefi böyle çalışır.
+   */
+  initialQuery?: string;
 };
 
 export function SymbolSearch({
@@ -59,12 +64,16 @@ export function SymbolSearch({
   "aria-invalid": ariaInvalid,
   "aria-label": ariaLabel,
   placeholder,
+  initialQuery,
 }: SymbolSearchProps) {
   const t = useTranslations("markets.search");
   const router = useRouter();
 
-  const [term, setTerm] = useState("");
-  const [debouncedTerm, setDebouncedTerm] = useState("");
+  const initial = initialQuery?.trim() ?? "";
+  const [term, setTerm] = useState(initial);
+  const [debouncedTerm, setDebouncedTerm] = useState(
+    initial.length >= MIN_QUERY_LENGTH ? initial : "",
+  );
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const trimmed = term.trim();
@@ -155,6 +164,7 @@ export function SymbolSearch({
       onValueChange={handleValueChange}
       itemToStringValue={(item) => item.ticker}
       filter={null}
+      defaultValue={initial.length > 0 ? initial : undefined}
     >
       <Autocomplete.InputGroup
         className={cn(

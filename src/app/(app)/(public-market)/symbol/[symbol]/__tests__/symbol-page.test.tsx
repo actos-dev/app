@@ -13,7 +13,9 @@ import userEvent from "@testing-library/user-event";
 import type { ReactElement } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import SymbolPage from "@/app/(app)/(public-market)/symbol/[symbol]/page";
+import SymbolPage, {
+  generateMetadata,
+} from "@/app/(app)/(public-market)/symbol/[symbol]/page";
 import { SessionProvider } from "@/components/auth/SessionProvider";
 import { mockResponse } from "@/test/http";
 import { renderWithIntl } from "@/test/test-utils";
@@ -24,6 +26,43 @@ vi.mock("next/navigation", () => ({
   }),
   useRouter: () => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn() }),
 }));
+
+vi.mock("next-intl/server", async () => {
+  const messages = (await import("../../../../../../../messages/tr.json")).default as Record<
+    string,
+    unknown
+  >;
+  const resolve = (
+    namespace: string | undefined,
+    key: string,
+    values?: Record<string, unknown>,
+  ): string => {
+    const path = namespace ? `${namespace}.${key}` : key;
+    let current: unknown = messages;
+    for (const part of path.split(".")) {
+      current =
+        current !== null && typeof current === "object"
+          ? (current as Record<string, unknown>)[part]
+          : undefined;
+    }
+    if (typeof current !== "string") {
+      return path;
+    }
+    if (!values) {
+      return current;
+    }
+    return current.replace(/\{(\w+)\}/g, (match, name: string) =>
+      name in values ? String(values[name]) : match,
+    );
+  };
+  return {
+    getTranslations:
+      (namespace?: string) =>
+      (key: string, values?: Record<string, unknown>) =>
+        resolve(namespace, key, values),
+    getLocale: () => Promise.resolve("tr"),
+  };
+});
 
 const profilePayload = {
   symbol: "THYAO",
@@ -257,5 +296,46 @@ describe("/symbol/[symbol] — economy", () => {
     expect(calls.some((call) => call.path.startsWith("/api/v1/news/"))).toBe(false);
 
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("USD");
+  });
+});
+
+describe("/symbol/[symbol] — SEO (5C / X-06)", () => {
+  it("metadata isim/kod içerir; canlı fiyat İÇERMEZ; canonical sembole bağlanır", async () => {
+    installFetch(bistHandler);
+
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ symbol: "thyao" }),
+      searchParams: Promise.resolve({}),
+    });
+
+    expect(metadata.title).toBe("Türk Hava Yolları");
+    expect(metadata.alternates?.canonical).toBe("/symbol/THYAO");
+
+    const description = String(metadata.description ?? "");
+    expect(description).toContain("THYAO");
+    // Canlı alan (fiyat) metadata'ya KONMAZ; crawl edilen içerik stabil kalır.
+    expect(description).not.toContain("312,5");
+    expect(description).not.toContain("312.5");
+  });
+
+  it("BreadcrumbList JSON-LD yerleştirir (dangerouslySetInnerHTML yok)", async () => {
+    installFetch(bistHandler);
+
+    const { container } = renderPage(
+      await SymbolPage({
+        params: Promise.resolve({ symbol: "THYAO" }),
+        searchParams: Promise.resolve({}),
+      }),
+    );
+
+    const script = container.querySelector('script[type="application/ld+json"]');
+    expect(script).not.toBeNull();
+    const data = JSON.parse(script?.textContent ?? "{}") as {
+      "@type": string;
+      itemListElement: Array<{ item: string }>;
+    };
+    expect(data["@type"]).toBe("BreadcrumbList");
+    expect(data.itemListElement).toHaveLength(2);
+    expect(data.itemListElement[1]?.item).toContain("/symbol/THYAO");
   });
 });

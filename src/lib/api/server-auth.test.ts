@@ -105,7 +105,7 @@ describe("serverAuthApiFetchWithStatus", () => {
 
     await expect(
       serverAuthApiFetchWithStatus<{ ok: boolean }>(companyInfoPath("THYAO")),
-    ).resolves.toEqual({ status: 200, data: { ok: true } });
+    ).resolves.toEqual({ status: 200, data: { ok: true }, retryAfter: null });
   });
 
   it("404'ü 5xx'ten ayırır (404 ayrı durum kodu)", async () => {
@@ -114,7 +114,7 @@ describe("serverAuthApiFetchWithStatus", () => {
 
     await expect(
       serverAuthApiFetchWithStatus(companyInfoPath("BILINMEYEN")),
-    ).resolves.toEqual({ status: 404, data: null });
+    ).resolves.toEqual({ status: 404, data: null, retryAfter: null });
   });
 
   it("502'de durumu korur ve data null döner", async () => {
@@ -123,7 +123,7 @@ describe("serverAuthApiFetchWithStatus", () => {
 
     await expect(
       serverAuthApiFetchWithStatus("/api/v1/companies/summary"),
-    ).resolves.toEqual({ status: 502, data: null });
+    ).resolves.toEqual({ status: 502, data: null, retryAfter: null });
   });
 
   it("ağ hatasında status 0 döner", async () => {
@@ -137,6 +137,26 @@ describe("serverAuthApiFetchWithStatus", () => {
 
     await expect(
       serverAuthApiFetchWithStatus(companyInfoPath("THYAO")),
-    ).resolves.toEqual({ status: 0, data: null });
+    ).resolves.toEqual({ status: 0, data: null, retryAfter: null });
+  });
+
+  it("429'da Retry-After saniyesini taşır (X-07)", async () => {
+    headersMock.mockResolvedValue(new Headers());
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ detail: "too many" }), {
+            status: 429,
+            headers: { "content-type": "application/json", "retry-after": "20" },
+          }),
+      ),
+    );
+
+    await expect(serverAuthApiFetchWithStatus("/api/v1/market/status")).resolves.toEqual({
+      status: 429,
+      data: null,
+      retryAfter: 20,
+    });
   });
 });

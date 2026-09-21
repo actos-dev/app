@@ -102,6 +102,10 @@ function digest(overrides: Partial<Digest> = {}): Digest {
 
 type Handlers = Record<string, (url: URL) => Response>;
 
+type RecordedCall = { path: string; params: URLSearchParams };
+
+let fetchCalls: RecordedCall[] = [];
+
 function summaryRow(id: string, name: string, value: number, changePct: number) {
   return {
     id,
@@ -118,12 +122,14 @@ function summaryRow(id: string, name: string, value: number, changePct: number) 
 }
 
 function installFetch(handlers: Handlers): void {
+  fetchCalls = [];
   vi.stubGlobal(
     "fetch",
     vi.fn(async (input: RequestInfo | URL) => {
       const raw =
         typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
       const url = new URL(raw, "http://localhost:7055");
+      fetchCalls.push({ path: url.pathname, params: url.searchParams });
       const handler = handlers[url.pathname];
       if (!handler) {
         return mockResponse({ detail: "not found" }, 404);
@@ -279,22 +285,116 @@ describe("/dashboard — backend kapalı", () => {
   });
 });
 
-describe("/dashboard — anonim guest yer tutucu (5C / X-02)", () => {
-  it("kişisel uçlara istek atmaz; giriş/kayıt CTA'ları gösterir", async () => {
+describe("/dashboard — anonim guest paneli (5C / X-09)", () => {
+  function guestHandlers(rateLimited = false): Handlers {
+    return {
+      "/api/v1/market/status": () =>
+        rateLimited
+          ? mockResponse({ detail: "Too many requests" }, 429, { "retry-after": "30" })
+          : mockResponse(STATUS),
+      "/api/v1/economy/quotes": () =>
+        mockResponse({
+          ts: STATUS.as_of,
+          source: "test",
+          quotes: {
+            USD: {
+              symbol: "USD",
+              buying: 34.5,
+              selling: 34.6,
+              price: null,
+              change_pct: 0.5,
+              change_text: null,
+              currency: "TRY",
+              unit: "1 unit",
+              source: "test",
+              ts: STATUS.as_of,
+              stale: false,
+              extra: {},
+            },
+          },
+          remaining: null,
+        }),
+      "/api/v1/companies/summary": (url: URL) => {
+        const sort = url.searchParams.get("sort");
+        const ticker = sort === "losers" ? "ASELS" : "THYAO";
+        return mockResponse({
+          data: [
+            {
+              ticker,
+              name: `${ticker} A.Ş.`,
+              sector: null,
+              last_price: 100,
+              change_pct: sort === "losers" ? -1.2 : 1.2,
+              previous_close: 99,
+              absolute_change: 1,
+              change_window: "last_session_change",
+              market_status: "open",
+              is_stale: false,
+              as_of: STATUS.as_of,
+              previous_close_as_of: null,
+              day_high: null,
+              day_low: null,
+              volume: 1_000_000,
+              market_cap: 1_000_000_000,
+              currency: "TRY",
+              price_updated_at: null,
+            },
+          ],
+          total: 1,
+        });
+      },
+      "/api/v1/digest": () => mockResponse(digest()),
+    };
+  }
+
+  it("public uçlara istek atar; kişisel uçlara 0 istek; CTA'lar görünür", async () => {
     sessionMock.value = null;
-    const fetchMock = vi.fn(async () => mockResponse({ detail: "unexpected" }, 500));
-    vi.stubGlobal("fetch", fetchMock);
+    installFetch(guestHandlers());
 
     await renderDashboard();
 
-    expect(screen.getByText("Kişisel panel girişten sonra açılır")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Giriş yap" })).toHaveAttribute("href", "/login");
+    // Değer önerisi + CTA'lar.
+    expect(screen.getByRole("heading", { level: 1, name: "Piyasa panosu" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Kayıt ol" })).toHaveAttribute("href", "/register");
+    expect(screen.getByRole("link", { name: "Giriş yap" })).toHaveAttribute("href", "/login");
     expect(screen.getByRole("link", { name: "Piyasalara göz at" })).toHaveAttribute(
       "href",
       "/markets",
     );
-    // Guest placeholder hiçbir kimlikli veri çekmez.
-    expect(fetchMock).not.toHaveBeenCalled();
+
+    // Gerçek public veri: nabız + yükselen/düşen + bülten.
+    expect(screen.getByText("Dolar")).toBeInTheDocument();
+    expect(screen.getByText("Yükselenler")).toBeInTheDocument();
+    expect(screen.getByText("Düşenler")).toBeInTheDocument();
+    expect(screen.getByText("THYAO")).toBeInTheDocument();
+    expect(screen.getByText("Sabah bülteni")).toBeInTheDocument();
+
+    const paths = fetchCalls.map((call) => call.path);
+    expect(paths).toContain("/api/v1/market/status");
+    expect(paths).toContain("/api/v1/economy/quotes");
+    expect(paths).toContain("/api/v1/digest");
+    // Yükselen + düşen için tam iki ayrı istek.
+    expect(paths.filter((path) => path === "/api/v1/companies/summary")).toHaveLength(2);
+
+    // Kişisel uçlara HİÇ istek yok.
+    for (const personal of [
+      "/api/v1/favorites",
+      "/api/v1/portfolios/summaries",
+      "/api/v1/credits",
+      "/api/v1/profile",
+    ]) {
+      expect(paths).not.toContain(personal);
+    }
+  });
+
+  it("429'da uyarı gösterir; çökmez", async () => {
+    sessionMock.value = null;
+    installFetch(guestHandlers(true));
+
+    await renderDashboard();
+
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.getByText("Çok fazla istek gönderildi")).toBeInTheDocument();
+    expect(screen.getByText("30 saniye sonra tekrar dene.")).toBeInTheDocument();
   });
 });

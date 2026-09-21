@@ -174,6 +174,15 @@
     "goHome": "Back to home",
     "errorId": "Error ID"
   },
+  "rateLimit": {
+    "title": "Too many requests",
+    "description": "You have hit the request limit right now. Please try again shortly.",
+    "retryAfter": "Try again in {seconds} seconds."
+  },
+  "seo": {
+    "symbolDescription": "Market data, price chart, key financials and news for {name} ({symbol}).",
+    "economyDescription": "Market data, history and current information for {symbol}."
+  },
   "auth": {
     "loginTitle": "Sign in",
     "loginDescription": "Continue with your Florence account.",
@@ -1106,11 +1115,16 @@
       "markets": "Markets"
     },
     "guest": {
-      "noticeTitle": "Your personal panel opens after sign-in",
-      "noticeDescription": "Your portfolios, watchlist and credit balance are only shown when you are signed in. You can explore market data without signing in.",
+      "title": "Market board",
+      "description": "Explore BIST stocks, currencies, precious metals and the latest market digest without signing in.",
+      "valueTitle": "Build your portfolio, generate reports",
+      "valueDescription": "Create a free account; manage a commission-aware paper portfolio and test decisions with AI reports and Monte-Carlo simulations.",
       "login": "Sign in",
       "register": "Register",
-      "markets": "Browse markets"
+      "markets": "Browse markets",
+      "gainers": "Gainers",
+      "losers": "Losers",
+      "moversEmpty": "No stocks to show."
     }
   },
   "credits": {

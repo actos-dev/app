@@ -13,7 +13,7 @@
  */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { DigestArchiveNav } from "@/components/digest/DigestArchiveNav";
 import { DigestViewer } from "@/components/digest/DigestViewer";
@@ -33,8 +33,28 @@ import { loadCurrentDigest, loadDigestArchive, loadDigestBySlot } from "@/lib/di
 import { DIGEST_SLOTS, type Digest, type DigestSlot } from "@/lib/digest/types";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("nav");
-  return { title: t("digest") };
+  const [t, app, locale] = await Promise.all([
+    getTranslations("digest"),
+    getTranslations("app"),
+    getLocale(),
+  ]);
+  const title = t("title");
+  const description = t("description");
+
+  return {
+    title,
+    description,
+    alternates: { canonical: "/digest" },
+    openGraph: {
+      type: "website",
+      url: "/digest",
+      siteName: app("name"),
+      title,
+      description,
+      locale: locale === "tr" ? "tr_TR" : "en_US",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 /** O gün için gerçekten üretilmiş slotları kanonik sırayla döner. */

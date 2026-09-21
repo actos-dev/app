@@ -12,7 +12,9 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { LucideIcon } from "lucide-react";
 
 import { ProductMock } from "@/components/marketing/ProductMock";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { buttonVariants } from "@/components/ui/button";
+import { getSiteUrl } from "@/config/site";
 
 const FEATURES = [
   { key: "market", icon: TrendingUp },
@@ -54,10 +56,42 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LandingPage() {
-  const t = await getTranslations("landing");
+  const [t, app] = await Promise.all([getTranslations("landing"), getTranslations("app")]);
+
+  // JSON-LD: WebSite (+ SearchAction → /markets?q=) ve Organization. Arama
+  // hedefi gerçekten çalışır: `/markets` `q` parametresini SymbolSearch'e
+  // başlangıç terimi olarak geçirir.
+  const siteUrl = getSiteUrl();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        name: app("name"),
+        url: siteUrl,
+        description: app("description"),
+      },
+      {
+        "@type": "WebSite",
+        name: app("name"),
+        url: siteUrl,
+        description: app("description"),
+        inLanguage: "tr",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${siteUrl}/markets?asset=stocks&q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
+      },
+    ],
+  };
 
   return (
     <>
+      <JsonLd data={jsonLd} />
       <section className="border-b border-border">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:gap-14 md:px-6 md:py-24">
           <div className="flex flex-col items-start gap-5">

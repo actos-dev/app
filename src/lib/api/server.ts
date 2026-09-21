@@ -15,6 +15,8 @@ import type { paths } from "@/types/generated";
 
 import { getApiBaseUrl } from "@/lib/auth/constants";
 
+import { parseRetryAfter } from "./rate-limit";
+
 /** Sunucudan çağrılabilen yollar (`/api/v1/*`). */
 export type ServerApiPath = Extract<keyof paths, `/api/v1/${string}`>;
 
@@ -46,6 +48,8 @@ function buildUrl(path: ServerApiPath, query: ServerApiOptions["query"]): string
 export type ServerApiResult<T> = {
   status: number;
   data: T | null;
+  /** `429` yanıtında `Retry-After` (saniye); yoksa `null` (X-07). */
+  retryAfter: number | null;
 };
 
 /**
@@ -69,15 +73,19 @@ export async function serverApiFetchWithStatus<T>(
   try {
     const response = await fetch(buildUrl(path, options.query), init);
     if (!response.ok) {
-      return { status: response.status, data: null };
+      return {
+        status: response.status,
+        data: null,
+        retryAfter: parseRetryAfter(response.headers.get("retry-after")),
+      };
     }
     try {
-      return { status: response.status, data: (await response.json()) as T };
+      return { status: response.status, data: (await response.json()) as T, retryAfter: null };
     } catch {
-      return { status: response.status, data: null };
+      return { status: response.status, data: null, retryAfter: null };
     }
   } catch {
-    return { status: 0, data: null };
+    return { status: 0, data: null, retryAfter: null };
   }
 }
 

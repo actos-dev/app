@@ -342,4 +342,25 @@ describe("/markets — dayanıklılık", () => {
       expect(call.cookie, call.path).toBeNull();
     }
   });
+
+  it("429 + Retry-After'da uyarı gösterir (5C / X-07)", async () => {
+    installFetch((path) => {
+      if (path === "/api/v1/market/status") {
+        return new Response(JSON.stringify({ detail: "too many" }), {
+          status: 429,
+          headers: { "content-type": "application/json", "retry-after": "15" },
+        });
+      }
+      if (path === "/api/v1/companies/summary") return jsonResponse(companiesPayload);
+      return null;
+    });
+
+    renderPage(await MarketsPage({ params: Promise.resolve({}), searchParams: Promise.resolve({}) }));
+
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+    expect(screen.getByText("Çok fazla istek gönderildi")).toBeInTheDocument();
+    expect(screen.getByText("15 saniye sonra tekrar dene.")).toBeInTheDocument();
+    // Veri yine de gösterilir; uyarı sayfayı boşaltmaz.
+    expect(screen.getByRole("table", { name: "Hisseler" })).toBeInTheDocument();
+  });
 });
