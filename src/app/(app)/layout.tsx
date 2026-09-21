@@ -1,11 +1,13 @@
 import type { Route } from "next";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { SessionKeeper } from "@/components/auth/SessionKeeper";
 import { AppShell } from "@/components/shared/AppShell";
+import { ACCESS_TOKEN_COOKIE } from "@/lib/auth/constants";
 import { buildLoginRedirect } from "@/lib/auth/next-path";
-import { getSession } from "@/lib/auth/session";
+import { getAccessTokenExpiry, getSession } from "@/lib/auth/session";
 
 /**
  * `(app)` route group layout'u (plan §2.3, M-03): URL'e yansımayan grup; tüm
@@ -15,9 +17,12 @@ import { getSession } from "@/lib/auth/session";
  * katmanıdır: access token geçerli görünse bile backend `/profile` 401/404
  * dönerse (parola değişimi, donma, silinmiş hesap) kullanıcı login'e gider.
  * Proxy `x-pathname`/`x-search` başlıklarını bırakır; olmazsa `/dashboard`.
+ *
+ * Access token `exp` değeri istemci `SessionKeeper`'a prop olarak geçer; token
+ * JS'e sızmaz, yalnız sunucuda çerezden okunur.
  */
 export default async function AppLayout({ children }: { children: ReactNode }) {
-  const session = await getSession();
+  const [session, cookieStore] = await Promise.all([getSession(), cookies()]);
 
   if (!session) {
     const headerList = await headers();
@@ -28,5 +33,13 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     redirect(buildLoginRedirect(pathname, search) as Route);
   }
 
-  return <AppShell>{children}</AppShell>;
+  const accessToken = cookieStore.get(ACCESS_TOKEN_COOKIE)?.value;
+  const expiresAt = accessToken ? getAccessTokenExpiry(accessToken) : null;
+
+  return (
+    <AppShell>
+      <SessionKeeper expiresAt={expiresAt} />
+      {children}
+    </AppShell>
+  );
 }

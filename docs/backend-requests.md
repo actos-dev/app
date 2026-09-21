@@ -25,6 +25,14 @@ frontend'te hangi maddenin askıya alındığını gösterir.
 
 ## 2. Eksik işler
 
+### B-02 — `refresh_token` çerez path'i (Faz 2.1 bulgusu, öneri)
+
+- **Bulgu:** `refresh_token` çerezi `path=/api/v1/auth` ile yazılıyor. Tarayıcı bu çerezi **sayfa isteklerinde** (`/dashboard`, `/markets` …) göndermiyor; yalnız `/api/v1/auth/*` isteklerinde gönderiyor. Sonuç: access token (1 saat) süresi dolduğunda sunucu tarafı (Next `proxy.ts`) refresh çerezi göremediği için yenileme yapamıyor ve soğuk sayfa yüklemesi kullanıcıyı login'e düşürüyor.
+- **Önerilen değişiklik:** `refresh_token` çerezi için `path=/`. `httpOnly` + `Secure` + `SameSite=Strict` korunduğu için XSS/CSRF yüzeyi değişmez; `path` bir güvenlik sınırı değil, yalnız gönderim kapsamıdır.
+- **Frontend geçici çözümü (Faz 2.2'de):** `/login` üzerinde sessiz oturum geri yükleme (BFF `/api/v1/auth/refresh` path'i çerezle eşleştiği için istemci tarafından çalışır) + sekme açıkken proaktif yenileme (BroadcastChannel kilidi, S-12).
+- **Öncelik:** P2 · **Efor:** S · **Faz:** 2 (backend onayı gelene kadar frontend geçici çözümle ilerler)
+- **Kabul kriteri:** `Set-Cookie` yanıtında `refresh_token; Path=/; HttpOnly; SameSite=Strict`; süresi dolmuş access token'lı soğuk `/dashboard` isteği login'e düşmeden yenilenip 200 döner.
+
 ### B-03 — Server-side oturum doğrulaması için `JWT_SECRET` paylaşımı
 
 - **Amaç:** Next middleware, korumalı sayfayı render etmeden önce access token'ı **yerel**
