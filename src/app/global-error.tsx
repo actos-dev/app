@@ -10,8 +10,10 @@
  */
 import { TriangleAlert } from "lucide-react";
 import { NextIntlClientProvider, useTranslations } from "next-intl";
+import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import { captureError } from "@/lib/observability";
 
 import messages from "../../messages/tr.json";
 import "./globals.css";
@@ -51,6 +53,12 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // Kök layout çöktüğünde de raporla; digest kullanıcıya gösterilmeye devam
+  // eder (S-08).
+  useEffect(() => {
+    captureError(error, { digest: error.digest, source: "global-error" });
+  }, [error]);
+
   return (
     <html lang="tr" data-theme="dark">
       <body>

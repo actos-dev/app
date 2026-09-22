@@ -31,6 +31,8 @@ import type {
   ReportInfo,
   ReportType,
 } from "@/lib/reports/types";
+import { track } from "@/lib/telemetry";
+import { TelemetryEvents } from "@/lib/telemetry-events";
 
 /** `GET /reports/info` — rapor tipleri ve tahmini maliyetler. */
 export function useReportInfo(initialData?: ReportInfo) {
@@ -119,7 +121,12 @@ export function useGenerateReport() {
           ...(input.purpose ? { purpose: input.purpose } : {}),
         },
       }),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
+      // S-10: rapor üretimi (rıza yoksa no-op); `purpose` gönderilmez.
+      track(TelemetryEvents.reportGenerated, {
+        ticker: variables.ticker,
+        report_type: variables.type,
+      });
       toast.success(t("wizard.success.title"));
       queryClient.setQueryData<CreditsResponse>(qk.credits(), { credits: data.remaining_credits });
       void queryClient.invalidateQueries({ queryKey: qk.reports.list() });

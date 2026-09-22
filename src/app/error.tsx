@@ -1,17 +1,19 @@
 "use client";
 
 /**
- * Route hata sınırı (plan K-06, S-08 iskeleti).
+ * Route hata sınırı (plan K-06, S-08).
  *
  * Client bileşen olmak zorundadır (Next sözleşmesi). `error.digest` sunucu
- * loglarıyla eşleşen kimliktir ve kullanıcıya gösterilir; gerçek panele
- * raporlama S-08'de eklenecek.
+ * loglarıyla eşleşen kimliktir ve kullanıcıya gösterilir; aynı kimlik
+ * `captureError` ile telemetry'ye (ileride Sentry'ye) taşınır.
  */
 import { TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
+import { captureError } from "@/lib/observability";
 
 export default function RouteError({
   error,
@@ -21,6 +23,12 @@ export default function RouteError({
   reset: () => void;
 }) {
   const t = useTranslations("errors");
+
+  // Hata sınırı görünür olduğunda bir kez raporla; `digest` kullanıcıya
+  // gösterilen kimliktir ve aynen iletilir (S-08).
+  useEffect(() => {
+    captureError(error, { digest: error.digest, source: "route-error" });
+  }, [error]);
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-3 bg-background p-6 text-center text-foreground">

@@ -9,8 +9,11 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
+vi.mock("@/lib/observability", () => ({ captureError: vi.fn() }));
+
 import RouteError from "@/app/error";
 import NotFound from "@/app/not-found";
+import { captureError } from "@/lib/observability";
 import { renderWithIntl } from "@/test/test-utils";
 
 vi.mock("next-intl/server", () => ({
@@ -48,5 +51,20 @@ describe("error.tsx", () => {
     await user.click(screen.getByRole("button", { name: "Tekrar dene" }));
 
     expect(reset).toHaveBeenCalledOnce();
+  });
+
+  it("hatayı digest ile raporlar (S-08)", () => {
+    vi.clearAllMocks();
+    renderWithIntl(
+      <RouteError
+        error={Object.assign(new Error("boom"), { digest: "digest-42" })}
+        reset={vi.fn()}
+      />,
+    );
+
+    expect(captureError).toHaveBeenCalledWith(
+      expect.any(Error),
+      expect.objectContaining({ digest: "digest-42", source: "route-error" }),
+    );
   });
 });

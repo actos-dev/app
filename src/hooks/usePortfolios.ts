@@ -51,6 +51,8 @@ import type {
 } from "@/lib/portfolio/types";
 import type { AnalyticsPeriod } from "@/lib/portfolio/periods";
 import { qk } from "@/lib/query/keys";
+import { track } from "@/lib/telemetry";
+import { TelemetryEvents } from "@/lib/telemetry-events";
 import { translateBackendError } from "@/lib/backend-errors";
 
 type InitialOptions<T> = {
@@ -303,6 +305,11 @@ export function useAddTransaction(id: string) {
         body: { ticker: input.ticker, type: input.type, quantity: input.quantity },
       }),
     onSuccess: (_data, variables) => {
+      // S-10: al/sat (rıza yoksa no-op); PII gönderilmez.
+      track(TelemetryEvents.tradeExecuted, {
+        ticker: variables.ticker,
+        action: variables.type,
+      });
       toast.success(
         variables.type === "BUY" ? t("trade.successBuy") : t("trade.successSell"),
       );

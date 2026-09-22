@@ -7,6 +7,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { AuthUnauthorizedListener } from "@/components/auth/AuthUnauthorizedListener";
 import { QueryProvider } from "@/components/providers/QueryProvider";
+import { WebVitals } from "@/components/providers/WebVitals";
 import { Toaster } from "@/components/ui/toaster";
 import { getSiteUrl } from "@/config/site";
 import { resolveTheme, THEME_COOKIE, themeColors } from "@/i18n/config";
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body>
         <AuthUnauthorizedListener />
+        <WebVitals />
         <NextIntlClientProvider>
           <QueryProvider>{children}</QueryProvider>
         </NextIntlClientProvider>

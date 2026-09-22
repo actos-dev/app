@@ -21,6 +21,8 @@ import { toast } from "sonner";
 import { apiFetch } from "@/lib/api/client";
 import { favoritesTickerPath } from "@/lib/markets/api-paths";
 import { qk } from "@/lib/query/keys";
+import { track } from "@/lib/telemetry";
+import { TelemetryEvents } from "@/lib/telemetry-events";
 import type { FavoritesResponse } from "@/types/favorites";
 
 function normalizeTicker(ticker: string): string {
@@ -94,6 +96,11 @@ export function useFavorites(options: UseFavoritesOptions = {}): UseFavoritesRes
     },
 
     onSuccess: (_data, variables) => {
+      // S-10: favori ekle/çıkar (rıza yoksa no-op).
+      track(TelemetryEvents.favoriteToggle, {
+        ticker: variables.ticker,
+        action: variables.next ? "added" : "removed",
+      });
       toast.success(variables.next ? t("added") : t("removed"));
     },
 

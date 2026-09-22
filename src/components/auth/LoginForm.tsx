@@ -25,6 +25,8 @@ import { Input } from "@/components/ui/input";
 import { ApiError, apiFetch } from "@/lib/api/client";
 import { refreshSessionClient } from "@/lib/api/refresh-lock";
 import { translateBackendError } from "@/lib/backend-errors";
+import { track } from "@/lib/telemetry";
+import { TelemetryEvents } from "@/lib/telemetry-events";
 
 type LoginFormProps = {
   /** Sunucuda `sanitizeNextPath` ile doğrulanmış hedef. */
@@ -87,6 +89,8 @@ export function LoginForm({ nextPath }: LoginFormProps) {
           grant_type: "password",
         }),
       });
+      // S-10: giriş başarısı (rıza yoksa no-op). Kullanıcı adı gönderilmez.
+      track(TelemetryEvents.loginSuccess);
       router.replace(nextPath as Route);
       router.refresh();
     } catch (error) {
