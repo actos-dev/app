@@ -81,3 +81,21 @@ green). D6 (top navigation) and D8 (symbol chart hero) shipped in **1.0.3**.
 - **D11 — avatars removed**: the profile avatar picker, its fetch/save hooks and
   routes, the 12 placeholder SVGs and the `profile.avatar.*` messages are gone.
   The backend `avatar_id` field/endpoints remain (separate repo) as a follow-up.
+
+## Post-1.0.4 (shipped in 1.0.5)
+
+- **Landing**: removed the hero badge and the fake portfolio mock; the hero now
+  shows a real "Piyasada öne çıkanlar" panel fed by
+  `/companies/summary?sort=popular` (SSR, resilient). Rebalanced the copy so the
+  landing leads with market data + analysis and treats the paper portfolio as
+  one feature among several.
+- **Copy**: de-hedged the reports/advisor/bot descriptions, fixed the digest
+  empty-state grammar, removed the unused `symbol.tabs.chart` key.
+
+## Incident (2026-09-22) — see `../.reports/INCIDENT-2026-09-22.md`
+
+Not a code issue: the VM's host reclaimed ~5.2 GB via **VMware memory
+ballooning**, so the 8 GB guest ran on ~2.7 GB and thrashed. Mitigations applied
+on the host: swap 2 → 6 GB, `vm.swappiness=10`, and a 5-minute memory watcher
+(`/var/log/memwatch.log`). The real fix is provider-side (guaranteed RAM /
+disable ballooning) via the support ticket.
