@@ -1,9 +1,9 @@
 name: deploy
 
-# v* tag = deploy tetikleyicisi. Tag'i `tag-from-version.yml` üretir.
-# Tag'e bağlı bir commit zaten `ci.yml`'den geçmiştir; burada kalite kapıları
-# BİR KEZ DAHA koşar ve deploy adımı ancak kapılar yeşilse çalışır (aynı job,
-# sıralı adımlar → check başarısızsa SSH adımı atlanır).
+# v* tag = deploy tetikleyicisi (veya elle `workflow_dispatch`).
+# İmaj GitHub Actions'ta derlenir ve GHCR'a itilir; sunucu yalnız `docker pull`
+# yapar. Böylece sunucuda derleme yükü/RAM baskısı olmaz ve runner'da test
+# edilen byte'ların aynısı çalışır.
 
 on:
   push:
@@ -11,20 +11,28 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Deploy edilecek tag (boşsa seçili ref adı kullanılır)"
-        required: false
+        description: "Deploy edilecek tag (ör. v1.0.0)"
+        required: true
         type: string
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: deploy-app
   cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/actos-dev/app
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
 
       - name: Node 24
         uses: actions/setup-node@v4
@@ -35,119 +43,103 @@ jobs:
       - name: Bağımlılıkları kur
         run: npm ci
 
-      # Kalite kapıları: typecheck + lint + tokens + test (npm run build ayrıca
-      # ci.yml'de koşar; burada sunucudaki docker build zaten derlemeyi doğrular).
+      # Kalite kapıları: typecheck + lint + tokens + test. Başarısızsa imaj
+      # itilmez, deploy adımı çalışmaz.
       - name: Kalite kapıları
         run: npm run check
 
-      # İmaj SUNUCUDA derlenir (`git pull && docker build`), runner'da değil.
-      # Gerekçe:
-      #   1) NEXT_PUBLIC_* değerleri Next tarafından derleme anında bundle'a
-      #      gömülür; prod değerleri sunucudaki /etc/florence/app.env'de durur.
-      #      Böylece değerler GitHub sırlarına kopyalanmaz ve tek kaynaktan gelir.
-      #   2) İmaj registry'si ve büyük `docker save | ssh docker load` transferi
-      #      gerekmez; backend/web repolarındaki "sunucuda derle" deseniyle aynıdır.
-      # Bedeli: imaj tam olarak runner'da test edilen byte'lar olmaz; bu yüzden
-      # sunucuda sağlık kontrolü + otomatik rollback uygulanır.
-      - name: Sunucuda derle · çalıştır · sağlık · rollback
+      - name: GHCR girişi
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # NEXT_PUBLIC_* derleme anında gömülür; prod değerleri burada verilir.
+      - name: İmajı derle ve GHCR'a it
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:${{ inputs.tag || github.ref_name }}
+            ${{ env.IMAGE }}:latest
+          build-args: |
+            NEXT_PUBLIC_SITE_URL=https://florencex.com.tr
+            NEXT_PUBLIC_PORTFOLIO_COMMISSION_RATE=0.001
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Sunucuda çalıştır · sağlık · rollback
         uses: appleboy/ssh-action@v1
         env:
           DEPLOY_TAG: ${{ inputs.tag || github.ref_name }}
+          IMAGE: ${{ env.IMAGE }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || 22 }}
-          envs: DEPLOY_TAG
+          envs: DEPLOY_TAG,IMAGE
           script_stop: true
-          # Not: script `set -x` KULLANMAZ ve env dosyasını cat etmez; sırlar loga düşmez.
+          # Not: `set -x` yok, env dosyası cat edilmez; sırlar loga düşmez.
           script: |
             set -euo pipefail
 
-            APP_DIR=/opt/florence-app
             ENV_FILE=/etc/florence/app.env
-            IMAGE=florence-app
+            NAME=florence_app
+            NETWORK=florence_default
+            PORT_HOST=3300
+            HEALTH_URL=http://127.0.0.1:${PORT_HOST}/api/health
             TAG="${DEPLOY_TAG:?deploy tag gerekli}"
-            HEALTH_URL=http://127.0.0.1:3000/api/health
-            # Backend'in docker ağına katıl (API_BASE_URL=http://api:7055 için).
-            NETWORK="${APP_DOCKER_NETWORK:-backend_default}"
 
             if [ ! -f "$ENV_FILE" ]; then
               echo "HATA: $ENV_FILE yok; deploy durduruldu." >&2
               exit 1
             fi
 
-            # Runtime ve build-time değişkenleri env dosyasından yükle.
-            set -a
-            # shellcheck disable=SC1090
-            . "$ENV_FILE"
-            set +a
+            docker pull "${IMAGE}:${TAG}"
 
-            # Ağ yoksa container'ı yine de ayağa kaldır (backend erişimi uyarısıyla).
-            if [ -n "$NETWORK" ] && ! docker network inspect "$NETWORK" >/dev/null 2>&1; then
-              echo "UYARI: '$NETWORK' ağı yok; --network olmadan başlatılacak (API_BASE_URL erişilemeyebilir)." >&2
-              NETWORK=""
-            fi
-
-            cd "$APP_DIR"
-            git fetch --tags --force origin
-            git checkout --force "$TAG"
-
-            # Rollback için ÖNCEKİ imajı değişmez kimliğiyle sakla (tag `latest`
-            # derlemede yeni imaja kayacağı için tag'e güvenilmez).
-            PREV_ID="$(docker inspect --format '{{.Image}}' "$IMAGE" 2>/dev/null || true)"
+            # Rollback için önceki imajı değişmez kimliğiyle sakla.
+            PREV_ID="$(docker inspect --format '{{.Image}}' "$NAME" 2>/dev/null || true)"
             if [ -n "$PREV_ID" ]; then
-              docker tag "$PREV_ID" "${IMAGE}:previous"
-              echo "Önceki imaj kaydedildi: ${IMAGE}:previous"
+              docker tag "$PREV_ID" "florence-app:previous"
+              echo "Önceki imaj kaydedildi (florence-app:previous)"
             else
               echo "Önceki imaj yok (ilk deploy)."
             fi
 
-            docker build \
-              --build-arg "NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}" \
-              --build-arg "NEXT_PUBLIC_PORTFOLIO_COMMISSION_RATE=${NEXT_PUBLIC_PORTFOLIO_COMMISSION_RATE:-0.001}" \
-              -t "${IMAGE}:${TAG}" \
-              -t "${IMAGE}:latest" \
-              .
-
             run_container() {
-              # $1 = çalıştırılacak imaj (tag veya kimlik)
-              if [ -n "$NETWORK" ]; then
-                docker run -d --name "$IMAGE" \
-                  --restart unless-stopped \
-                  --env-file "$ENV_FILE" \
-                  --network "$NETWORK" \
-                  -p 127.0.0.1:3000:3000 \
-                  "$1" >/dev/null
-              else
-                docker run -d --name "$IMAGE" \
-                  --restart unless-stopped \
-                  --env-file "$ENV_FILE" \
-                  -p 127.0.0.1:3000:3000 \
-                  "$1" >/dev/null
-              fi
+              docker run -d --name "$NAME" \
+                --restart unless-stopped \
+                --env-file "$ENV_FILE" \
+                --network "$NETWORK" \
+                -p "127.0.0.1:${PORT_HOST}:3000" \
+                "$1" >/dev/null
             }
 
-            docker stop "$IMAGE" >/dev/null 2>&1 || true
-            docker rm "$IMAGE" >/dev/null 2>&1 || true
+            docker stop "$NAME" >/dev/null 2>&1 || true
+            docker rm "$NAME" >/dev/null 2>&1 || true
             run_container "${IMAGE}:${TAG}"
 
-            # Sağlık: en fazla 30 x 2 sn = 60 sn bekle.
             ok=""
-            for _ in $(seq 1 30); do
+            for _ in $(seq 1 45); do
               if curl -fsS "$HEALTH_URL" >/dev/null 2>&1; then ok="1"; break; fi
               sleep 2
             done
 
             if [ -z "$ok" ]; then
               echo "HATA: /api/health 200 dönmedi; önceki imaja rollback yapılıyor." >&2
-              docker logs --tail 50 "$IMAGE" >&2 || true
-              docker rm -f "$IMAGE" >/dev/null 2>&1 || true
+              docker logs --tail 50 "$NAME" >&2 || true
+              docker rm -f "$NAME" >/dev/null 2>&1 || true
               if [ -n "$PREV_ID" ]; then
                 run_container "$PREV_ID"
-                echo "Rollback tamamlandı: ${IMAGE}:previous" >&2
+                echo "Rollback tamamlandı." >&2
               else
-                echo "Rollback yapılamadı (önceki imaj yok); manuel müdahale gerekli." >&2
+                echo "Rollback yapılamadı (önceki imaj yok)." >&2
               fi
               exit 1
             fi
