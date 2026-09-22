@@ -1,15 +1,20 @@
 /**
- * Proxy — korumalı rotalar için ön yönlendirme (plan M-03, B-03 fallback, S-12).
+ * Proxy — korumalı rotalar için ön yönlendirme + istek başına CSP nonce
+ * (plan M-03, B-03 fallback, S-01/S-05/S-12, Faz 6).
  *
  * Next 16'da `middleware.ts` `proxy.ts` olarak yeniden adlandırıldı ve varsayılan
  * runtime Node.js oldu (bkz. `node_modules/next/dist/docs/.../file-conventions/proxy.md`).
  * Bu yüzden dosya `src/proxy.ts`, dışa aktarılan fonksiyon `proxy`.
  *
- * Yetkilendirme backend'de kalır: burada yalnızca hızlı yönlendirme kararı
- * verilir. `JWT_SECRET` paylaşılmadığı için imza DOĞRULANMAZ; access token'ın
- * `exp` değeri imzasız okunur. Süresi dolmuş/eksikse ve refresh çerezi varsa
- * backend üzerinden yenilenir, başarısızsa çerezler temizlenip
- * `/login?next=...`'e gidilir.
+ * İki sorumluluk:
+ *   1) **Güvenlik (S-05):** Her istek için yeni bir nonce üretilir; CSP hem
+ *      istek başlığına (Next render sırasında nonce'ı buradan çıkarır) hem de
+ *      yanıt başlığına yazılır.
+ *   2) **Oturum kapısı:** Yalnız kişisel rotalar (`isProtectedPath`) için hızlı
+ *      yönlendirme kararı verilir. Yetkilendirme backend'de kalır; `JWT_SECRET`
+ *      paylaşılmadığı için imza DOĞRULANMAZ, access token'ın `exp` değeri
+ *      imzasız okunur. Süresi dolmuş/eksikse ve refresh çerezi varsa backend
+ *      üzerinden yenilenir, başarısızsa çerezler temizlenip `/login?next=...`.
  *
  * Not: refresh çerezini tarayıcı yalnız `path=/api/v1/auth` altına gönderir;
  * bu yüzden sayfa isteklerinde (`/dashboard` vb.) genellikle GÖRÜNMEZ ve
@@ -18,6 +23,7 @@
  */
 import { NextResponse, type NextRequest } from "next/server";
 
+import { createCspContext, CSP_HEADER, NONCE_HEADER } from "@/config/csp";
 import {
   ACCESS_TOKEN_COOKIE,
   REFRESH_TOKEN_COOKIE,
@@ -28,32 +34,79 @@ import { buildLoginRedirect } from "@/lib/auth/next-path";
 import { refreshSession, type NormalizedCookie } from "@/lib/auth/refresh";
 
 /**
- * Korumalı YALNIZ kişisel rotalar; `/api/v1` (BFF) bilinçli olarak hariç.
+ * Proxy yalnız belge (HTML) isteklerinde çalışır: `/api` (BFF), `_next`
+ * varlıkları ve noktalı dosyalar (robots.txt, sitemap.xml, ikonlar) hariç.
+ * Next dokümanının önerdiği gibi prefetch istekleri de atlanır.
  *
- * Faz 5C / X-02: piyasa okuma rotaları (`/markets`, `/symbol`, `/digest`) ve
- * guest dashboard'a hazırlık için `/dashboard` listeden ÇIKARILDI; bunlar
- * anonime açıktır ve `serverApiFetch` (çerezsiz) ile veri çeker.
+ * Not: `source` Next tarafından derleme anında statik olarak ayrıştırıldığı
+ * için düz string literal olmak zorundadır. Olumsuz ileri-bakış bir gruba
+ * alınmıştır; böylece `!` bir harfin başında gelmez ve tasarım token kapısı
+ * yanlış pozitif üretmez.
  */
 export const config = {
   matcher: [
-    "/watchlist/:path*",
-    "/portfolio/:path*",
-    "/research/:path*",
-    "/data/:path*",
-    "/profile/:path*",
-    "/kitchen-sink/:path*",
+    {
+      source: "/((?!(?:api|_next|.*\\..*)).*)",
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
   ],
 };
 
 /**
- * Sunucu bileşenlerinin (özellikle savunma amaçlı `(app)/layout.tsx`) login
- * hedefini kurabilmesi için pathname + search'ü istek başlığına yazar.
+ * Korunan YALNIZ kişisel rota önekleri; `/api/v1` (BFF) ve piyasa okuma
+ * rotaları hariç.
+ *
+ * Faz 5C / X-02: piyasa okuma rotaları (`/markets`, `/symbol`, `/digest`) ve
+ * guest dashboard'a hazırlık için `/dashboard` bu listeden ÇIKARILDI; bunlar
+ * anonime açıktır ve `serverApiFetch` (çerezsiz) ile veri çeker.
  */
-function withForwardedLocation(request: NextRequest): Headers {
+export const PROTECTED_PATH_PREFIXES = [
+  "/watchlist",
+  "/portfolio",
+  "/research",
+  "/data",
+  "/profile",
+  "/kitchen-sink",
+] as const;
+
+/** Verilen pathname kişisel (korumalı) bir rota mı? (saf; test edilebilir). */
+export function isProtectedPath(pathname: string): boolean {
+  return PROTECTED_PATH_PREFIXES.some(
+    (base) => pathname === base || pathname.startsWith(`${base}/`),
+  );
+}
+
+/**
+ * Sunucu bileşenlerinin (özellikle savunma amaçlı `(app)/(private)/layout.tsx`)
+ * login hedefini kurabilmesi ve nonce'u okuyabilmesi için istek başlıklarını
+ * hazırlar.
+ */
+function buildRequestHeaders(request: NextRequest, nonce: string, csp: string): Headers {
   const headers = new Headers(request.headers);
   headers.set("x-pathname", request.nextUrl.pathname);
   headers.set("x-search", request.nextUrl.search);
+  headers.set(NONCE_HEADER, nonce);
+  headers.set(CSP_HEADER, csp);
   return headers;
+}
+
+/** Nonce/CSP'li geçiş yanıtı üretir; CSP yanıt başlığına da yazılır. */
+function nextWithSecurity(
+  request: NextRequest,
+  nonce: string,
+  csp: string,
+  cookieHeader?: string,
+): NextResponse {
+  const headers = buildRequestHeaders(request, nonce, csp);
+  if (cookieHeader !== undefined) {
+    headers.set("cookie", cookieHeader);
+  }
+  const response = NextResponse.next({ request: { headers } });
+  response.headers.set(CSP_HEADER, csp);
+  return response;
 }
 
 /** Yenilenen çerez değerlerini mevcut `Cookie` istek başlığına işler. */
@@ -88,21 +141,30 @@ function clearAuthCookies(response: NextResponse): void {
 }
 
 export async function proxy(request: NextRequest): Promise<NextResponse> {
+  const { nonce, csp } = createCspContext();
   const { pathname, search } = request.nextUrl;
+
+  // Piyasa/public sayfaları: yalnız güvenlik başlıkları + nonce; oturum işi yok.
+  if (!isProtectedPath(pathname)) {
+    return nextWithSecurity(request, nonce, csp);
+  }
+
   const accessToken = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value;
 
   // Hızlı yol: süresi dolmamış access token (imza backend'de doğrulanır).
   if (accessToken && !isAccessTokenExpired(accessToken)) {
-    return NextResponse.next({ request: { headers: withForwardedLocation(request) } });
+    return nextWithSecurity(request, nonce, csp);
   }
 
   if (refreshToken) {
     const refreshed = await refreshSession(refreshToken);
     if (refreshed.ok) {
-      const headers = withForwardedLocation(request);
-      headers.set("cookie", applyRefreshedCookies(request.headers.get("cookie"), refreshed.cookies));
-      const response = NextResponse.next({ request: { headers } });
+      const cookieHeader = applyRefreshedCookies(
+        request.headers.get("cookie"),
+        refreshed.cookies,
+      );
+      const response = nextWithSecurity(request, nonce, csp, cookieHeader);
       for (const cookie of refreshed.cookies) {
         response.cookies.set({
           name: cookie.name,
@@ -121,6 +183,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
   const response = NextResponse.redirect(
     new URL(buildLoginRedirect(pathname, search), request.url),
   );
+  response.headers.set(CSP_HEADER, csp);
   clearAuthCookies(response);
   return response;
 }

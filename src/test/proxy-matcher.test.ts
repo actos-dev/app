@@ -1,26 +1,17 @@
 /**
- * Proxy koruma kapsamı testleri (Faz 5C / Birim 5C.2a, X-02).
+ * Proxy koruma kapsamı testleri (Faz 5C / Birim 5C.2a, X-02; Faz 6 / S-05).
  *
  * Faz 5C ile koruma yalnız KİŞİSEL rotalara indi. Piyasa okuma rotaları
  * (`/markets`, `/symbol`, `/digest`) ve guest dashboard'a hazırlık için
- * `/dashboard` matcher'dan çıkarıldı; anonime açıktır (veri `serverApiFetch`
- * ile çerezsiz çekilir).
+ * `/dashboard` korunmaz; anonime açıktır (veri `serverApiFetch` ile çerezsiz
+ * çekilir). Faz 6'da proxy tüm belge rotalarında koşar (CSP nonce), bu yüzden
+ * koruma kararı matcher'dan çıkarılıp `isProtectedPath` ile test edilir.
  */
 import { describe, expect, it } from "vitest";
 
-import { config } from "@/proxy";
+import { config, isProtectedPath } from "@/proxy";
 
-function matches(pathname: string): boolean {
-  return config.matcher.some((pattern) => {
-    if (pattern.endsWith(":path*")) {
-      const base = pattern.slice(0, -":path*".length);
-      return pathname === base.replace(/\/$/, "") || pathname.startsWith(base);
-    }
-    return pathname === pattern;
-  });
-}
-
-describe("proxy matcher — koruma kapsamı (X-02)", () => {
+describe("isProtectedPath — koruma kapsamı (X-02)", () => {
   it("kişisel rotaları korur", () => {
     for (const path of [
       "/watchlist",
@@ -34,19 +25,39 @@ describe("proxy matcher — koruma kapsamı (X-02)", () => {
       "/profile",
       "/kitchen-sink",
     ]) {
-      expect(matches(path), path).toBe(true);
+      expect(isProtectedPath(path), path).toBe(true);
     }
   });
 
   it("piyasa okuma ve guest dashboard rotalarını KORUMAZ", () => {
     for (const path of [
+      "/",
       "/markets",
       "/markets/anything",
       "/symbol/THYAO",
       "/digest",
       "/dashboard",
+      "/legal/cookie_policy",
     ]) {
-      expect(matches(path), path).toBe(false);
+      expect(isProtectedPath(path), path).toBe(false);
+    }
+  });
+
+  it("benzer önekleri yanlışlıkla korumaz", () => {
+    expect(isProtectedPath("/profiles")).toBe(false);
+    expect(isProtectedPath("/data-center")).toBe(false);
+  });
+});
+
+describe("proxy matcher — tüm belge rotalarında koşar (S-05)", () => {
+  it("matcher kaynağı API ve statik varlıkları dışlar", () => {
+    expect(config.matcher).toHaveLength(1);
+    const rule = config.matcher[0];
+    expect(typeof rule).toBe("object");
+    // Nesne biçimindeki matcher tipini daralt (string matcher yok).
+    if (typeof rule === "object" && "source" in rule) {
+      expect(rule.source).toContain("api");
+      expect(rule.source).toContain("_next");
     }
   });
 });

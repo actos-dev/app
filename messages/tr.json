@@ -47,6 +47,13 @@
     "light": "Açık",
     "sepia": "Sepya"
   },
+  "consent": {
+    "ariaLabel": "Çerez izni",
+    "title": "Çerez izni",
+    "description": "Deneyimi iyileştirmek için analitik çerezler kullanıyoruz. Yalnızca gerekli seçeneğiyle de platformun tamamını kullanabilirsin. Ayrıntılar: <cookiePolicy>Çerez Politikası</cookiePolicy> ve <privacyPolicy>Gizlilik Politikası</privacyPolicy>.",
+    "accept": "Kabul et",
+    "reject": "Yalnızca gerekli"
+  },
   "landing": {
     "metaTitle": "BIST piyasa takibi ve sanal portföy",
     "metaDescription": "BIST hisselerini, döviz kurlarını ve kıymetli madenleri canlı izle; komisyon dahil sanal portföy kur, AI raporları ve Monte-Carlo simülasyonları üret.",

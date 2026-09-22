@@ -26,6 +26,16 @@ const STUB_PORT = 7055;
 const BASE_URL = `http://${NEXT_HOST}:${NEXT_PORT}`;
 const STUB_URL = `http://${STUB_HOST}:${STUB_PORT}`;
 
+/**
+ * Varsayılan bağlamda çerez izni verilmiş kabul edilir: banner tüm E2E
+ * akışlarında ve görsel baseline'larda görünmez (S-04). Banner'a özel test
+ * `storageState`'i boşaltarak bu durumu geçersiz kılar (`e2e/consent.spec.ts`).
+ * Değer `src/lib/consent.ts` ile aynı şemadadır (sürümlü JSON, URL-encoded).
+ */
+const CONSENT_COOKIE_VALUE = encodeURIComponent(
+  JSON.stringify({ v: 1, analytics: false }),
+);
+
 /** `webServer.env` tam bir ortam bekler; `undefined` değerler ayıklanır. */
 const serverEnv: Record<string, string> = {};
 for (const [key, value] of Object.entries(process.env)) {
@@ -56,6 +66,21 @@ export default defineConfig({
     locale: "tr-TR",
     timezoneId: "Europe/Istanbul",
     trace: "on-first-retry",
+    storageState: {
+      cookies: [
+        {
+          name: "florence_consent",
+          value: CONSENT_COOKIE_VALUE,
+          domain: NEXT_HOST,
+          path: "/",
+          expires: -1,
+          httpOnly: false,
+          secure: false,
+          sameSite: "Lax",
+        },
+      ],
+      origins: [],
+    },
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: [

@@ -47,6 +47,13 @@
     "light": "Light",
     "sepia": "Sepia"
   },
+  "consent": {
+    "ariaLabel": "Cookie consent",
+    "title": "Cookie consent",
+    "description": "We use analytics cookies to improve your experience. You can use the full platform with \u201conly necessary\u201d too. Details: <cookiePolicy>Cookie Policy</cookiePolicy> and <privacyPolicy>Privacy Policy</privacyPolicy>.",
+    "accept": "Accept",
+    "reject": "Only necessary"
+  },
   "landing": {
     "metaTitle": "BIST market tracking and paper portfolio",
     "metaDescription": "Follow BIST stocks, currencies and precious metals live; build a commission-aware paper portfolio and generate AI reports and Monte-Carlo simulations.",

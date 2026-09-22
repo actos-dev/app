@@ -22,6 +22,18 @@ ssh -i ~/.ssh/florence_deploy_ed25519 root@37.140.242.25
 - `npm ci && npm run build` (Next standalone hedefiyle Docker imajı).
 - Uygulama `next start` (Node) ile 3000 portunda; nginx `/`'i buraya proxy'ler.
 
+## Güvenlik başlıkları ve CSP (S-05)
+
+- HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy` ve
+  `X-Frame-Options` Next tarafından (`next.config.ts::headers()`) eklenir; nginx bunları
+  **ezmemeli/silmemeli**.
+- CSP (`Content-Security-Policy`) istek başına `src/proxy.ts`'te nonce'la üretilir ve yanıt
+  başlığına yazılır. Nonce yalnız **dinamik render** edilen sayfalarda script'lere uygulanır;
+  kök layout `cookies()` okuduğu için tüm sayfalar dinamiktir. nginx başka bir CSP
+  yazmamalıdır (aksi halde nonce'suz politika script'leri engeller).
+- `Strict-Transport-Security` yalnız HTTPS'te etkilidir; TLS sonlandırma nginx/proxy
+  katmanında yapılmalıdır.
+
 ## nginx / BFF kararı (kritik)
 
 - `/api/` **Next'e** proxy'lenmeli (backend'e değil). Neden: `refresh_token` çerezi
