@@ -3,18 +3,17 @@
 /**
  * Profil sekmeleri (Faz 5 / Birim 5B.2, U-11, S-07, B-15).
  *
- * Sunucu bileşeni profili ve avatar listesini RSC'de çeker; bu istemci
- * sarmalayıcı yalnız Base UI `Tabs` ile Hesap / Görünüm / Güvenlik
- * panellerini sunar. `keepMounted={false}` sayesinde yalnız aktif sekme
- * DOM'da kalır; hesap formuyla güvenlik formu aynı anda erişilebilirlik
- * ağacına girmez (testlerde etiket çakışması olmaz).
+ * Sunucu bileşeni profili RSC'de çeker; bu istemci sarmalayıcı yalnız Base UI
+ * `Tabs` ile Hesap / Görünüm / Güvenlik panellerini sunar. `keepMounted={false}`
+ * sayesinde yalnız aktif sekme DOM'da kalır; hesap formuyla güvenlik formu aynı
+ * anda erişilebilirlik ağacına girmez (testlerde etiket çakışması olmaz).
  */
 import { useTranslations } from "next-intl";
 
 import { Tabs, type TabItem } from "@/components/ui/tabs";
 import { useProfile } from "@/hooks/useProfile";
 import type { ThemeName } from "@/i18n/config";
-import type { AvatarOption, Profile } from "@/lib/profile/types";
+import type { Profile } from "@/lib/profile/types";
 
 import { AccountTab } from "./AccountTab";
 import { AdminAnnouncementsTab } from "./AdminAnnouncementsTab";
@@ -24,12 +23,11 @@ import { SecurityTab } from "./SecurityTab";
 
 type ProfileWorkspaceProps = {
   profile: Profile;
-  avatars: readonly AvatarOption[];
   /** SSR'da çerezden çözülen aktif tema. */
   theme: ThemeName;
 };
 
-export function ProfileWorkspace({ profile, avatars, theme }: ProfileWorkspaceProps) {
+export function ProfileWorkspace({ profile, theme }: ProfileWorkspaceProps) {
   const t = useTranslations("profile");
   // Tek canlı kaynak: mutasyonlar query önbelleğini günceller, sekmeler bu
   // güncel profili alır (ör. kullanıcı adı değişince güvenlik onayı da tazelenir).
@@ -40,7 +38,7 @@ export function ProfileWorkspace({ profile, avatars, theme }: ProfileWorkspacePr
     {
       value: "account",
       label: t("tabs.account"),
-      content: <AccountTab profile={current} avatars={avatars} />,
+      content: <AccountTab profile={current} />,
     },
     {
       value: "bots",

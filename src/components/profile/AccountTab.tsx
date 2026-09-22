@@ -4,7 +4,7 @@
  * Hesap sekmesi (Faz 5 / Birim 5B.2, U-11).
  *
  * Üstte salt-okunur özet (kullanıcı adı, e-posta + doğrulama rozeti, kredi,
- * üyelik tarihi), altında kullanıcı adı / e-posta formları ve avatar seçici.
+ * üyelik tarihi), altında kullanıcı adı / e-posta formları.
  * Özet verisi `useProfile` query'sinden (RSC ile tohumlanır) gelir; mutasyonlar
  * query önbelleğini güncellediğinden görüntü anında değişir.
  */
@@ -13,21 +13,19 @@ import { useTranslations } from "next-intl";
 import { Panel } from "@/components/shared/Panel";
 import { Badge } from "@/components/ui/badge";
 import { useFormatters } from "@/lib/format";
-import type { AvatarOption, Profile } from "@/lib/profile/types";
+import type { Profile } from "@/lib/profile/types";
 
-import { AvatarPicker } from "./AvatarPicker";
 import { EmailForm } from "./EmailForm";
 import { UsernameForm } from "./UsernameForm";
 
 type AccountTabProps = {
   profile: Profile;
-  avatars: readonly AvatarOption[];
 };
 
 const termClassName = "text-xs text-muted-foreground";
 const detailClassName = "flex flex-wrap items-center gap-2 text-sm text-foreground";
 
-export function AccountTab({ profile, avatars }: AccountTabProps) {
+export function AccountTab({ profile }: AccountTabProps) {
   const t = useTranslations("profile");
   const { formatDateTime, formatPrice } = useFormatters();
   const current = profile;
@@ -68,10 +66,6 @@ export function AccountTab({ profile, avatars }: AccountTabProps) {
 
       <Panel title={t("account.changeEmail")}>
         <EmailForm currentEmail={current.email} />
-      </Panel>
-
-      <Panel title={t("avatar.label")}>
-        <AvatarPicker avatars={avatars} currentAvatarId={current.avatar_id} />
       </Panel>
     </div>
   );

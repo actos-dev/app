@@ -1256,14 +1256,6 @@
       "emailSuccess": "Your email was updated.",
       "emailHint": "The new address will be your sign-in address from now on."
     },
-    "avatar": {
-      "label": "Avatar",
-      "description": "Pick an avatar; it appears on your profile.",
-      "empty": "No avatars are available right now.",
-      "option": "Avatar {index}",
-      "save": "Save avatar",
-      "success": "Avatar updated."
-    },
     "appearance": {
       "theme": "Theme",
       "language": "Language",

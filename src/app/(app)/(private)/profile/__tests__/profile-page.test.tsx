@@ -2,7 +2,7 @@
  * `/profile` sayfası testleri (Faz 5 / Birim 5B.2).
  *
  * Sayfa sunucu bileşenidir; `global.fetch`, `next/headers` ve `next-intl/server`
- * mock'lanır. Doğrulananlar: profil + avatar istekleri, sekmelerin render'ı ve
+ * mock'lanır. Doğrulananlar: profil isteği, sekmelerin render'ı ve
  * `GET /profile` başarısızken çökmeden geri dönüş durumu gösterilmesi.
  */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -70,11 +70,6 @@ const profile = {
   credits: 20,
 };
 
-const avatars = [
-  { id: "avatar-1", url: "/avatars/avatar-1.svg" },
-  { id: "avatar-2", url: "/avatars/avatar-2.svg" },
-];
-
 type FetchCall = { path: string; method: string };
 
 let calls: FetchCall[] = [];
@@ -119,10 +114,9 @@ afterEach(() => {
 });
 
 describe("/profile", () => {
-  it("profil ve avatarları çeker, sekmeleri render eder", async () => {
+  it("profili çeker ve sekmeleri render eder", async () => {
     installFetch((path) => {
       if (path === "/api/v1/profile") return jsonResponse(profile);
-      if (path === "/api/v1/meta/avatars") return jsonResponse(avatars);
       return null;
     });
 
@@ -135,16 +129,12 @@ describe("/profile", () => {
     // Hesap sekmesi varsayılan açık: kullanıcı adı görünür.
     expect(screen.getByText("efe")).toBeInTheDocument();
 
-    expect(calls.map((call) => call.path).sort()).toEqual([
-      "/api/v1/meta/avatars",
-      "/api/v1/profile",
-    ]);
+    expect(calls.map((call) => call.path).sort()).toEqual(["/api/v1/profile"]);
   });
 
   it("profil alınamazsa çökmeden geri dönüş durumu gösterir", async () => {
     installFetch((path) => {
       if (path === "/api/v1/profile") return jsonResponse({ detail: "Database error" }, 500);
-      if (path === "/api/v1/meta/avatars") return jsonResponse(avatars);
       return null;
     });
 

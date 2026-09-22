@@ -1,8 +1,8 @@
 /**
  * Hesap sekmesi testleri (Faz 5 / Birim 5B.2, U-11, A-01, A-03).
  *
- * Kullanıcı adı/e-posta güncelleme, backend hata kodu eşlemesi, avatar seçimi
- * ve autocomplete nitelikleri doğrulanır. `fetch` mock'lanır; RSC verisi
+ * Kullanıcı adı/e-posta güncelleme, backend hata kodu eşlemesi ve
+ * autocomplete nitelikleri doğrulanır. `fetch` mock'lanır; RSC verisi
  * `initialData` ile tohumlandığı için mount'ta ek GET olmaz.
  */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -23,11 +23,6 @@ const profile = {
   avatar_id: "avatar-1",
   credits: 20,
 };
-
-const avatars = [
-  { id: "avatar-1", url: "/avatars/avatar-1.svg" },
-  { id: "avatar-2", url: "/avatars/avatar-2.svg" },
-];
 
 type FetchCall = { path: string; method: string; body: unknown };
 
@@ -52,7 +47,7 @@ function renderTab() {
   });
   return renderWithIntl(
     <QueryClientProvider client={client}>
-      <AccountTab profile={profile} avatars={avatars} />
+      <AccountTab profile={profile} />
     </QueryClientProvider>,
   );
 }
@@ -144,25 +139,6 @@ describe("AccountTab — e-posta", () => {
     await user.click(form.getByRole("button", { name: "E-postayı kaydet" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Bu e-posta zaten kullanımda.");
-  });
-});
-
-describe("AccountTab — avatar", () => {
-  it("avatar seçip kaydeder ve radio erişilebilir adları vardır", async () => {
-    installFetch(() => mockResponse({ message: "ok", avatar_id: "avatar-2" }));
-    const user = userEvent.setup();
-    renderTab();
-
-    expect(screen.getByRole("radio", { name: "Avatar 1" })).toBeChecked();
-    await user.click(screen.getByRole("radio", { name: "Avatar 2" }));
-    await user.click(screen.getByRole("button", { name: "Avatarı kaydet" }));
-
-    await waitFor(() => {
-      const call = calls.find((item) => item.path === "/api/v1/profile/avatar");
-      expect(call?.method).toBe("PUT");
-      expect(call?.body).toEqual({ avatar_id: "avatar-2" });
-    });
-    expect(await screen.findByText("Avatar güncellendi.")).toBeInTheDocument();
   });
 });
 

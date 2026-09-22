@@ -10,12 +10,6 @@
 /** `GET /profile` — oturum sahibi kullanıcının profili. */
 export const PROFILE_PATH = "/api/v1/profile" as const;
 
-/** `GET /meta/avatars` — seçilebilir avatar listesi (public). */
-export const META_AVATARS_PATH = "/api/v1/meta/avatars" as const;
-
-/** `PUT /profile/avatar` — avatar seçimi. */
-export const AVATAR_PATH = "/api/v1/profile/avatar" as const;
-
 /** `PUT /auth/change-username` — kullanıcı adı değişimi (mevcut şifre ister). */
 export const CHANGE_USERNAME_PATH = "/api/v1/auth/change-username" as const;
 

@@ -87,7 +87,6 @@ function renderWorkspace(userType: string) {
           avatar_id: null,
           credits: 20,
         }}
-        avatars={[]}
         theme="dark"
       />
     </QueryClientProvider>,

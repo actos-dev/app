@@ -1256,14 +1256,6 @@
       "emailSuccess": "E-posta adresin güncellendi.",
       "emailHint": "Yeni adres bundan sonra giriş adresin olacak."
     },
-    "avatar": {
-      "label": "Avatar",
-      "description": "Bir avatar seç; profilinde görünür.",
-      "empty": "Şu an seçilebilir avatar yok.",
-      "option": "Avatar {index}",
-      "save": "Avatarı kaydet",
-      "success": "Avatar güncellendi."
-    },
     "appearance": {
       "theme": "Tema",
       "language": "Dil",

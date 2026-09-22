@@ -16,7 +16,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { apiFetch } from "@/lib/api/client";
 import {
-  AVATAR_PATH,
   CHANGE_EMAIL_PATH,
   CHANGE_PASSWORD_PATH,
   CHANGE_USERNAME_PATH,
@@ -33,7 +32,6 @@ const PROFILE_STALE_TIME_MS = 5 * 60_000;
 
 type ChangeUsernameResponse = { message: string; new_username: string };
 type ChangeEmailResponse = { message: string; new_email: string };
-type AvatarResponse = { message: string; avatar_id: string };
 
 /** `GET /profile` — RSC verisiyle tohumlanır. */
 export function useProfile(initialData?: Profile) {
@@ -73,22 +71,7 @@ export function useUpdateEmail() {
   });
 }
 
-/** `PUT /profile/avatar` — seçilen avatarı kaydeder. */
-export function useUpdateAvatar() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (input: components["schemas"]["AvatarUpdate"]) =>
-      apiFetch<AvatarResponse>(AVATAR_PATH, { method: "PUT", body: input }),
-    onSuccess: (data) => {
-      queryClient.setQueryData<Profile>(qk.profile(), (previous) =>
-        previous ? { ...previous, avatar_id: data.avatar_id } : previous,
-      );
-    },
-  });
-}
-
-/**
- * `PUT /auth/change-password` — başarıda backend tüm refresh token'ları iptal
+/** `PUT /auth/change-password` — başarıda backend tüm refresh token'ları iptal
  * eder ve `password_changed_at` güncellenir; mevcut oturum da geçersizleşir.
  * Yönlendirme/çıkış kararı çağıran bileşendedir.
  */
