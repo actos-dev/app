@@ -27,9 +27,24 @@ npm run check:tokens       # keyfi renk/font ve ! prefix kapısı
 npm test                   # vitest run (tek seferlik)
 npm run test:watch         # vitest (izleme modu)
 npm run check              # typecheck + lint + tokens + test (PR öncesi tam kapı)
-npm run build              # üretim derlemesi
+npm run build              # üretim derlemesi (output: standalone → .next/standalone)
+npm run start:standalone   # standalone çıktısını çalıştır (node .next/standalone/server.js)
 bash scripts/generate-icons.sh  # PWA ikonlarını icon.svg'ten üret (rsvg-convert + magick)
 ```
+
+### Docker (üretim)
+
+`Dockerfile` çok aşamalıdır (`deps → build → runner`), non-root çalışır ve
+`/api/health` üzerinden `HEALTHCHECK` yapar:
+
+```bash
+docker build -t florence-app:test .
+docker run --rm -p 127.0.0.1:13000:3000 florence-app:test
+curl -fsS http://127.0.0.1:13000/api/health   # {"status":"ok","version":"0.1.0"}
+```
+
+Deploy, nginx ve rollback adımları: [`docs/deployment-notes.md`](docs/deployment-notes.md)
+ve örnek vhost [`docs/nginx-florence.conf`](docs/nginx-florence.conf).
 
 ### PWA ikonları
 

@@ -1,0 +1,41 @@
+# Docker derleme bağlamı dışında bırakılır (Faz 6 / Birim 6.5).
+# Amaç: küçük bağlam + katman önbelleğinin kırılmaması + sırların imaja
+# sızmaması.
+
+# Bağımlılıklar ve derleme çıktıları (imaj içinde yeniden üretilir)
+node_modules
+.next
+out
+build
+*.tsbuildinfo
+
+# Test / kalite araçları (üretim imajına gerekmez)
+e2e
+test-results
+playwright-report
+blob-report
+playwright
+.lighthouseci
+coverage
+
+# Sürüm kontrolü ve CI
+.git
+.github
+
+# Dokümanlar
+docs
+README.md
+AGENTS.md
+CLAUDE.md
+
+# Ortam dosyaları (sırlar imaja gömülmez; .env.example örnek olarak kalır)
+.env*
+!.env.example
+
+# Editör / işletim sistemi artıkları
+.DS_Store
+.idea
+.vscode
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

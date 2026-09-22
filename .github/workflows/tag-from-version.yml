@@ -1,0 +1,57 @@
+name: tag-from-version
+
+# Sürüm tek kaynak: package.json'daki `version`. `main`'e push'ta sürüm
+# değişmişse (ve tag yoksa) `vX.Y.Z` annotated tag'i atılır ve `deploy`
+# workflow'u dispatch edilir.
+#
+# Kullanım: package.json'da version 0.2.0 yap -> push -> tag + deploy otomatik.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tag from version text
+        env:
+          # PAT gerekir: GITHUB_TOKEN ile push edilen tag'ler başka workflow'ları
+          # TETİKLEMEZ; ayrıca `gh workflow run` için repo kapsamı gerekir.
+          # DEPLOY_TOKEN yoksa adım başarısız olur (bkz. docs/deployment-notes.md).
+          DEPLOY_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
+        run: |
+          set -e
+          VER=$(node -p "require('./package.json').version")
+          TAG="v${VER}"
+          echo "version text: ${VER} -> tag: ${TAG}"
+
+          if [ -z "${DEPLOY_TOKEN}" ]; then
+            echo "HATA: DEPLOY_TOKEN tanımlı değil; tag/deploy atlanıyor." >&2
+            exit 1
+          fi
+
+          git remote set-url origin "https://x-access-token:${DEPLOY_TOKEN}@github.com/project-florence/app.git"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --tags origin "refs/tags/${TAG}" | grep -q "${TAG}"; then
+            echo "Tag ${TAG} zaten var, atlanıyor (deploy gerekmez)."
+            exit 0
+          fi
+
+          git tag -a "${TAG}" -m "release ${TAG} (otomatik, version text'inden)"
+          git push origin "${TAG}"
+          echo "Tag ${TAG} atıldı."
+
+          # Tag push'u PAT scope'una göre workflow tetiklemeyebilir; dispatch
+          # her zaman tetikler. DEPLOY_TOKEN aynı repoya eriştiği için kullanılır.
+          GH_TOKEN="${DEPLOY_TOKEN}" gh workflow run deploy --repo project-florence/app --ref "${TAG}" \
+            && echo "deploy workflow dispatch edildi (ref=${TAG})" \
+            || echo "UYARI: deploy dispatch başarısız (manuel: gh workflow run deploy --ref ${TAG})"
