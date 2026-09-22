@@ -69,3 +69,15 @@ green). D6 (top navigation) and D8 (symbol chart hero) shipped in **1.0.3**.
   code changes.
 - Whether `/about` and `/downloads` gain content (currently sparse) — out of
   scope here; noted in the QA report.
+
+## Post-1.0.3 cleanup (shipped in 1.0.4)
+
+- **D9 — localization**: added a date-only `formatDate` helper; localized the
+  legal-page header date and the digest archive dates (no more raw ISO), and
+  localized the symbol sector via `symbol.sectors` + `src/lib/markets/sectors.ts`
+  (dropped the untranslated `industry`).
+- **D10 — copy**: removed the appearance tab's "stored on this device / saved to
+  your account" note.
+- **D11 — avatars removed**: the profile avatar picker, its fetch/save hooks and
+  routes, the 12 placeholder SVGs and the `profile.avatar.*` messages are gone.
+  The backend `avatar_id` field/endpoints remain (separate repo) as a follow-up.
