@@ -255,12 +255,12 @@ export function PriceChart({ symbol, kind, period, onPeriodChange, className }: 
       </div>
 
       <div className="relative h-80 overflow-hidden rounded-lg border border-border bg-surface md:h-96">
-        <div
-          ref={containerRef}
-          role="img"
-          aria-label={t("ariaLabel", { symbol, period: tPeriod(period) })}
-          className="h-full w-full"
-        />
+        {/* Grafik konteynerine `role="img"` VERİLMEZ: içinde TradingView
+            attribution bağlantısı (odaklanabilir) barındırır ve bu
+            `nested-interactive` ihlali yaratır. Açıklama ayrı bir sr-only
+            metinle verilir. */}
+        <span className="sr-only">{t("ariaLabel", { symbol, period: tPeriod(period) })}</span>
+        <div ref={containerRef} className="h-full w-full" />
         {query.isLoading ? (
           <div className="absolute inset-0 flex flex-col gap-2 bg-surface p-4">
             <Skeleton className="h-full w-full" />

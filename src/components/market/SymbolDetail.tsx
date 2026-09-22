@@ -1,12 +1,13 @@
 "use client";
 
 /**
- * Enstrüman detay gövdesi (Faz 3 / Birim 3.3).
+ * Enstrüman detay gövdesi (Faz 3 / Birim 3.3, D8).
  *
  * Sunucu bileşeni çözümleme + doğrulama + SSR verisini yapar; bu istemci
  * adası başlığı, veri tazeliğini (S-15), favori toggle'ını (U-12) ve
- * sekmeleri render eder. Grafik `next/dynamic({ ssr: false })` ile ayrı
- * chunk'tan ve yalnız "Grafik" sekmesi açıldığında yüklenir (D-06, P-12).
+ * sekmeleri render eder. Varsayılan "Genel" sekmesi istatistik ızgarasının
+ * altında grafiği gösterir; grafik `next/dynamic({ ssr: false })` ile ayrı
+ * chunk'tan gelir ve `LazyMount` görünüme girince mount eder (D-06, P-12).
  *
  * Al/sat diyaloğu Faz 4'e aittir; burada sahte işlem UI'ı yoktur, yalnız
  * portföye götüren bir CTA vardır.
@@ -21,6 +22,7 @@ import { useCallback, useState, type ReactNode } from "react";
 
 import { useRequireAuth, useSession } from "@/components/auth/SessionProvider";
 import { Delta } from "@/components/market/Delta";
+import { LazyMount } from "@/components/market/LazyMount";
 import { MarketStatusPill } from "@/components/market/MarketStatusPill";
 import { PriceText } from "@/components/market/PriceText";
 import { EmptyState } from "@/components/shared/EmptyState";
@@ -376,22 +378,24 @@ export function SymbolDetail({
       </ul>
     );
 
-  const tabItems = [
-    { value: "overview", label: t("tabs.overview"), content: <Panel>{overviewStats}</Panel> },
-    {
-      value: "chart",
-      label: t("tabs.chart"),
-      content: (
-        <Panel>
+  const overviewContent: ReactNode = (
+    <div className="flex flex-col gap-4">
+      <Panel>{overviewStats}</Panel>
+      <Panel>
+        <LazyMount fallback={<ChartSkeleton />}>
           <PriceChart
             symbol={canonical}
             kind={kind}
             period={period}
             onPeriodChange={handlePeriodChange}
           />
-        </Panel>
-      ),
-    },
+        </LazyMount>
+      </Panel>
+    </div>
+  );
+
+  const tabItems = [
+    { value: "overview", label: t("tabs.overview"), content: overviewContent },
     { value: "stats", label: t("tabs.stats"), content: statsContent },
     ...(isBist
       ? [{ value: "news", label: t("tabs.news"), content: newsContent }]

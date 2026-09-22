@@ -29,16 +29,16 @@ test.describe("Anonim gezinme", () => {
     await expect(page.getByText("5 sonuç")).toBeVisible();
   });
 
-  test("/symbol/THYAO grafik sekmesi açılmadan yüklenir", async ({ page }) => {
+  test("/symbol/THYAO varsayılan görünümde grafiği yükler", async ({ page }) => {
     await page.goto("/symbol/THYAO");
 
     await expect(page.getByRole("heading", { name: /THYAO/ })).toBeVisible();
-    // Genel sekmesi varsayılan; grafik sekmesi var ama ağır grafik bileşeni
-    // (lightweight-charts canvas'ı) yalnız sekme açılınca mount edilir.
+    // Genel sekmesi varsayılan; istatistik ızgarasının altında grafik yer alır
+    // ve görünüme girince lightweight-charts canvas'ı mount edilir.
     await expect(page.getByRole("tab", { name: "Genel" })).toBeVisible();
-    await expect(page.getByRole("tab", { name: "Grafik" })).toBeVisible();
+    await expect(page.getByRole("tab", { name: "Finansallar" })).toBeVisible();
     await expect(page.getByText("Fiyat", { exact: true })).toBeVisible();
-    await expect(page.locator("canvas")).toHaveCount(0);
+    await expect(page.locator("canvas").first()).toBeVisible();
   });
 
   test("/digest bülteni render eder", async ({ page }) => {

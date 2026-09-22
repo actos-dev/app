@@ -80,7 +80,7 @@ describe("PriceChart", () => {
 
     await waitFor(() => expect(chartMock.addSeries).toHaveBeenCalled());
     expect(paths).toContain("/api/v1/price/history/THYAO");
-    expect(screen.getByRole("img", { name: /THYAO/ })).toBeInTheDocument();
+    expect(screen.getByText(/THYAO/)).toBeInTheDocument();
   });
 
   it("economy için /economy/history ucunu çağırır", async () => {
