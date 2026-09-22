@@ -176,6 +176,26 @@ export function formatDateTime(
   return formatter.format(date);
 }
 
+export type DateFormatOptions = DateTimeFormatOptions & Intl.DateTimeFormatOptions;
+
+/** Tarih (yalnız gün; varsayılan `dateStyle: "long"`). Geçersizse "—". */
+export function formatDate(
+  value: FormattableDate | null | undefined,
+  options: DateFormatOptions = {},
+): string {
+  const date = toDate(value);
+  if (!date) {
+    return EMPTY_VALUE;
+  }
+  const { locale, timeZone, ...dateOptions } = options;
+  const formatter = getDateFormatter(locale ?? defaultLocale, {
+    dateStyle: "long",
+    timeZone: timeZone ?? MARKET_TIME_ZONE,
+    ...dateOptions,
+  });
+  return formatter.format(date);
+}
+
 /** Yalnız saat (varsayılan `Europe/Istanbul`). Geçersizse "—". */
 export function formatTime(
   value: FormattableDate | null | undefined,
@@ -214,6 +234,10 @@ export type Formatters = {
     value: FormattableDate | null | undefined,
     options?: WithoutLocale<DateTimeFormatOptions>,
   ) => string;
+  formatDate: (
+    value: FormattableDate | null | undefined,
+    options?: WithoutLocale<DateFormatOptions>,
+  ) => string;
   formatTime: (
     value: FormattableDate | null | undefined,
     options?: WithoutLocale<DateTimeFormatOptions>,
@@ -240,6 +264,7 @@ export function useFormatters(): Formatters {
       formatCompactNumber: (value, options) =>
         formatCompactNumber(value, { locale, ...options }),
       formatDateTime: (value, options) => formatDateTime(value, { locale, ...options }),
+      formatDate: (value, options) => formatDate(value, { locale, ...options }),
       formatTime: (value, options) => formatTime(value, { locale, ...options }),
     }),
     [locale],

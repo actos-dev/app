@@ -732,6 +732,19 @@
       "economyBadge": "24/5",
       "economyNote": "Döviz ve kıymetli madenler hafta içi gün boyu işlem görür."
     },
+    "sectors": {
+      "technology": "Teknoloji",
+      "financialServices": "Finansal Hizmetler",
+      "healthcare": "Sağlık",
+      "consumerCyclical": "Tüketim (Döngüsel)",
+      "industrials": "Sanayi",
+      "energy": "Enerji",
+      "basicMaterials": "Temel Malzemeler",
+      "communicationServices": "İletişim Hizmetleri",
+      "consumerDefensive": "Tüketim (Savunmacı)",
+      "realEstate": "Gayrimenkul",
+      "utilities": "Kamu Hizmetleri"
+    },
     "favorite": {
       "add": "Favorilere ekle",
       "remove": "Favorilerden çıkar",

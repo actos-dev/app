@@ -37,6 +37,7 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { buildLoginRedirect } from "@/lib/auth/next-path";
 import { useFormatters } from "@/lib/format";
 import { buildSymbolHref, type ChartPeriod } from "@/lib/markets/periods";
+import { sectorKey } from "@/lib/markets/sectors";
 import { safeExternalUrl } from "@/lib/safe-url";
 import { cn } from "@/lib/utils";
 import type {
@@ -188,8 +189,10 @@ export function SymbolDetail({
   const stale = isBist ? (summary?.is_stale ?? false) : (quote?.stale ?? false);
   const source = isBist ? null : (quote?.source ?? null);
 
+  const profileSector = isBist ? profile?.sector : null;
+  const profileSectorKey = sectorKey(profileSector);
   const description = isBist
-    ? [profile?.sector, profile?.industry].filter(Boolean).join(" · ") || undefined
+    ? (profileSectorKey ? t(`sectors.${profileSectorKey}`) : profileSector) ?? undefined
     : [quote?.unit, quote?.currency].filter(Boolean).join(" · ") || undefined;
 
   const overviewStats: ReactNode = isBist ? (

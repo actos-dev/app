@@ -732,6 +732,19 @@
       "economyBadge": "24/5",
       "economyNote": "FX and precious metals trade throughout weekdays."
     },
+    "sectors": {
+      "technology": "Technology",
+      "financialServices": "Financial Services",
+      "healthcare": "Healthcare",
+      "consumerCyclical": "Consumer Cyclical",
+      "industrials": "Industrials",
+      "energy": "Energy",
+      "basicMaterials": "Basic Materials",
+      "communicationServices": "Communication Services",
+      "consumerDefensive": "Consumer Defensive",
+      "realEstate": "Real Estate",
+      "utilities": "Utilities"
+    },
     "favorite": {
       "add": "Add to favorites",
       "remove": "Remove from favorites",

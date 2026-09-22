@@ -36,6 +36,7 @@ vi.mock("next-intl/server", async () => {
     return typeof current === "string" ? current : path;
   };
   return {
+    getLocale: () => Promise.resolve("tr"),
     getTranslations: (namespace?: string) =>
       Promise.resolve((key: string, values?: Record<string, unknown>) => {
         const template = resolve(namespace, key);
@@ -106,7 +107,7 @@ describe("/digest", () => {
 
     expect(screen.getByText("Güncel değil")).toBeInTheDocument();
     expect(
-      screen.getByText("En son 2026-08-30 Akşam bülteni üretildi; daha yenisi yok."),
+      screen.getByText("En son 30 Ağustos 2026 Akşam bülteni üretildi; daha yenisi yok."),
     ).toBeInTheDocument();
   });
 

@@ -13,7 +13,9 @@ import { getLocale, getTranslations } from "next-intl/server";
 
 import { EmptyState } from "@/components/shared/EmptyState";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { defaultLocale, isLocale } from "@/i18n/config";
 import { serverApiFetch } from "@/lib/api/server";
+import { formatDate } from "@/lib/format";
 import {
   isLegalPolicy,
   parseLegalResponse,
@@ -68,7 +70,13 @@ export default async function LegalPage({ params }: PageProps<"/legal/[policy]">
       <PageHeader
         title={t(POLICY_LABEL_KEYS[policy])}
         description={
-          legal?.lastUpdated ? t("legal.lastUpdated", { date: legal.lastUpdated }) : undefined
+          legal?.lastUpdated
+            ? t("legal.lastUpdated", {
+                date: formatDate(legal.lastUpdated, {
+                  locale: isLocale(locale) ? locale : defaultLocale,
+                }),
+              })
+            : undefined
         }
       />
       {blocks.length > 0 ? (

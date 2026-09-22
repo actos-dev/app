@@ -148,7 +148,7 @@ describe("/legal/[policy]", () => {
     expect(
       screen.getByRole("heading", { level: 1, name: "Kullanım Şartları" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Son güncelleme: 2026-07-22")).toBeInTheDocument();
+    expect(screen.getByText("Son güncelleme: 22 Temmuz 2026")).toBeInTheDocument();
     expect(screen.getByRole("list")).toBeInTheDocument();
     expect(screen.getByText("Birinci madde")).toBeInTheDocument();
     expect(screen.getByText("İkinci madde")).toBeInTheDocument();

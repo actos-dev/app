@@ -22,6 +22,7 @@ import { ErrorState } from "@/components/shared/ErrorState";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { Panel } from "@/components/shared/Panel";
 import { Badge } from "@/components/ui/badge";
+import { defaultLocale, isLocale } from "@/i18n/config";
 import {
   digestHref,
   firstParam,
@@ -31,6 +32,7 @@ import {
 } from "@/lib/digest/digest";
 import { loadCurrentDigest, loadDigestArchive, loadDigestBySlot } from "@/lib/digest/load";
 import { DIGEST_SLOTS, type Digest, type DigestSlot } from "@/lib/digest/types";
+import { formatDate } from "@/lib/format";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [t, app, locale] = await Promise.all([
@@ -72,12 +74,14 @@ export default async function DigestPage({ searchParams }: PageProps<"/digest">)
   const date = isIsoDate(rawDate) ? rawDate : today;
   const slot = isDigestSlot(rawSlot) ? rawSlot : undefined;
 
-  const [t, current, archive, selected] = await Promise.all([
+  const [t, current, archive, selected, locale] = await Promise.all([
     getTranslations("digest"),
     loadCurrentDigest(),
     loadDigestArchive(date),
     slot ? loadDigestBySlot(date, slot) : Promise.resolve(null),
+    getLocale(),
   ]);
+  const activeLocale = isLocale(locale) ? locale : defaultLocale;
 
   const slots = availableSlots(archive.digests);
 
@@ -105,7 +109,7 @@ export default async function DigestPage({ searchParams }: PageProps<"/digest">)
             {current.freshness === "stale" ? (
               <p className="rounded-md border border-border bg-surface-raised px-3 py-2 text-xs text-muted-foreground">
                 {t("current.staleDetail", {
-                  date: current.digest.date,
+                  date: formatDate(current.digest.date, { locale: activeLocale }),
                   slot: t(`slot.${current.digest.slot}`),
                 })}
               </p>
@@ -136,7 +140,7 @@ export default async function DigestPage({ searchParams }: PageProps<"/digest">)
               <EmptyState
                 title={t("archive.slotEmptyTitle")}
                 description={t("archive.slotEmptyDescription", {
-                  date,
+                  date: formatDate(date, { locale: activeLocale }),
                   slot: t(`slot.${slot}`),
                 })}
               />
@@ -154,7 +158,9 @@ export default async function DigestPage({ searchParams }: PageProps<"/digest">)
           ) : archive.digests.length === 0 ? (
             <EmptyState
               title={t("archive.emptyTitle")}
-              description={t("archive.emptyDescription", { date })}
+              description={t("archive.emptyDescription", {
+                date: formatDate(date, { locale: activeLocale }),
+              })}
             />
           ) : (
             <div className="flex flex-col gap-2">

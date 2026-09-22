@@ -6,6 +6,7 @@ import {
   formatChangePercent,
   formatChangeValue,
   formatCompactNumber,
+  formatDate,
   formatDateTime,
   formatPrice,
   formatTime,
@@ -64,6 +65,18 @@ describe("formatDateTime / formatTime", () => {
   it("geçersiz tarihte yer tutucu döner", () => {
     expect(formatDateTime("not-a-date", { locale: "tr" })).toBe(EMPTY_VALUE);
     expect(formatTime(null)).toBe(EMPTY_VALUE);
+  });
+});
+
+describe("formatDate", () => {
+  it("yalnız günü uzun biçimde locale'e göre verir", () => {
+    expect(formatDate("2026-07-22", { locale: "tr" })).toBe("22 Temmuz 2026");
+    expect(formatDate("2026-07-22", { locale: "en" })).toBe("July 22, 2026");
+  });
+
+  it("geçersiz tarihte yer tutucu döner", () => {
+    expect(formatDate("not-a-date", { locale: "tr" })).toBe(EMPTY_VALUE);
+    expect(formatDate(null)).toBe(EMPTY_VALUE);
   });
 });
 
