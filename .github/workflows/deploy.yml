@@ -123,6 +123,7 @@ jobs:
             run_container() {
               docker run -d --name "$NAME" \
                 --restart unless-stopped \
+                --memory 512m --memory-swap 1g \
                 --env-file "$ENV_FILE" \
                 --network "$NETWORK" \
                 -p "127.0.0.1:${PORT_HOST}:3000" \
