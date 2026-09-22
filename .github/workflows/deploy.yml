@@ -78,12 +78,14 @@ jobs:
         env:
           DEPLOY_TAG: ${{ inputs.tag || github.ref_name }}
           IMAGE: ${{ env.IMAGE }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           port: ${{ secrets.DEPLOY_PORT || 22 }}
-          envs: DEPLOY_TAG,IMAGE
+          envs: DEPLOY_TAG,IMAGE,GHCR_TOKEN,GHCR_ACTOR
           script_stop: true
           # Not: `set -x` yok, env dosyası cat edilmez; sırlar loga düşmez.
           script: |
@@ -99,6 +101,12 @@ jobs:
             if [ ! -f "$ENV_FILE" ]; then
               echo "HATA: $ENV_FILE yok; deploy durduruldu." >&2
               exit 1
+            fi
+
+            # Paket private olduğu için çalışma süresince geçerli GITHUB_TOKEN ile
+            # giriş yapılır; `--password-stdin` sayesinde token loga düşmez.
+            if [ -n "${GHCR_TOKEN:-}" ]; then
+              printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "${GHCR_ACTOR:?}" --password-stdin >/dev/null
             fi
 
             docker pull "${IMAGE}:${TAG}"
