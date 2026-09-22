@@ -1267,7 +1267,6 @@
     "appearance": {
       "theme": "Theme",
       "language": "Language",
-      "description": "Your theme and language are stored on this device and saved to your account when you sign in.",
       "saved": "Preferences saved to your account."
     },
     "security": {

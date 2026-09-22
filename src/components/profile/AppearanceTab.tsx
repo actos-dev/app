@@ -39,7 +39,6 @@ export function AppearanceTab({ theme }: { theme: ThemeName }) {
         <LocaleSwitcher onChange={(value) => remember({ locale: value })} />
       </Panel>
 
-      <p className="text-sm text-muted-foreground">{t("appearance.description")}</p>
       {saved ? <StatusMessage kind="success">{t("appearance.saved")}</StatusMessage> : null}
     </div>
   );

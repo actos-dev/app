@@ -1267,7 +1267,6 @@
     "appearance": {
       "theme": "Tema",
       "language": "Dil",
-      "description": "Seçtiğin tema ve dil bu cihazda saklanır; giriş yaptığında hesabına da kaydedilir.",
       "saved": "Tercihler hesabına kaydedildi."
     },
     "security": {
