@@ -280,15 +280,22 @@ export function DataTable<TData extends RowData>({
   const pageCount = canPaginate ? Math.max(1, table.getPageCount()) : 1;
 
   return (
-    <div
-      role="table"
-      aria-label={ariaLabel}
-      aria-rowcount={totalRowCount}
-      aria-colcount={visibleHeaders.length}
-      aria-busy={isLoading || undefined}
-      className={cn("overflow-hidden rounded-lg border border-border bg-surface", className)}
-    >
-      <div ref={scrollRef} className="relative overflow-auto" style={{ maxHeight }}>
+    <div className={cn("overflow-hidden rounded-lg border border-border bg-surface", className)}>
+      {/*
+        `role="table"` yalnız satır gruplarını kapsar. Boş/hata durumu ve
+        sayfalama düğmeleri bu kabın DIŞINDA tutulur; aksi halde axe
+        `aria-required-children` (critical) tablo içinde düğüm düğmesi görür.
+      */}
+      <div
+        ref={scrollRef}
+        role="table"
+        aria-label={ariaLabel}
+        aria-rowcount={totalRowCount}
+        aria-colcount={visibleHeaders.length}
+        aria-busy={isLoading || undefined}
+        className="relative overflow-auto"
+        style={{ maxHeight }}
+      >
         {!isCardMode ? (
           <div role="rowgroup" className="sticky top-0 z-10 border-b border-border bg-surface">
             <div role="row" aria-rowindex={1} className="grid w-full" style={{ gridTemplateColumns }}>

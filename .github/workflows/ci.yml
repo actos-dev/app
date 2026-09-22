@@ -61,8 +61,22 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: E2E testleri
-        run: npm run e2e
+      # Aynı derleme üzerinde üç ayrı adım: akışlar, erişilebilirlik, görsel
+      # regresyon. Her adım kendi web sunucularını başlatıp kapatır.
+      - name: E2E akış testleri
+        run: >-
+          npx playwright test
+          e2e/auth-flow.spec.ts
+          e2e/auth-gate.spec.ts
+          e2e/market-gate.spec.ts
+          e2e/portfolio-flow.spec.ts
+          e2e/public-navigation.spec.ts
+
+      - name: Erişilebilirlik taraması (axe)
+        run: npx playwright test e2e/a11y.spec.ts
+
+      - name: Görsel regresyon
+        run: npx playwright test e2e/visual.spec.ts
 
       - name: Playwright raporunu yükle
         if: always()
@@ -70,5 +84,45 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  lighthouse:
+    name: lighthouse · bütçeler
+    runs-on: ubuntu-latest
+    needs: checks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Bağımlılıkları kur
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # Public sayfalar dinamik (ƒ) olduğu için `staticDistDir` yok; sunum
+      # `startServerCommand` ile yapılır. Stub arka planda başlatılır; sarmalayıcı
+      # (`scripts/lighthouse-server.mjs`) ayaktaysa onu yeniden kullanır.
+      - name: Stub backend'ı başlat
+        run: |
+          nohup node e2e/stub-backend.mjs > /tmp/stub-backend.log 2>&1 &
+          sleep 1
+
+      - name: Lighthouse CI
+        run: npm run lighthouse
+
+      - name: Lighthouse raporunu yükle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: .lighthouseci/
           retention-days: 7
           if-no-files-found: ignore

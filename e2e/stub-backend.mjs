@@ -32,13 +32,28 @@ const ACCESS_TOKEN_TTL_SECONDS = 3600;
 const REFRESH_TOKEN_TTL_SECONDS = 30 * 24 * 3600;
 const COMMISSION_RATE = 0.001;
 
+/**
+ * Sabit "veri saati" (opsiyonel). Görsel regresyonun gün/saatten bağımsız
+ * olması için `STUB_FIXED_NOW` verilirse TÜM veri zaman damgaları (as_of,
+ * bülten tarihi, haber tarihi) bu ana sabitlenir. Auth token ömrü KASITLI
+ * olarak gerçek saatle hesaplanır (`makeAccessToken`), aksi halde oturum
+ * testleri sabit geçmiş tarih yüzünden süresi dolmuş token üretirdi.
+ * Ayarlanmazsa davranış değişmez.
+ */
+const FIXED_NOW = process.env.STUB_FIXED_NOW ? new Date(process.env.STUB_FIXED_NOW) : null;
+
+/** Veri zaman damgaları için "şimdi"; sabit saat varsa onu döner. */
+function dataNow() {
+  return FIXED_NOW ? new Date(FIXED_NOW.getTime()) : new Date();
+}
+
 /** Next `revalidate`'i aşacak kadar eski bir zaman damgası (tazeleme zorlaması). */
 function statusAsOf() {
-  return new Date(Date.now() - 120_000).toISOString();
+  return new Date(dataNow().getTime() - 120_000).toISOString();
 }
 
 function nowIso() {
-  return new Date().toISOString();
+  return dataNow().toISOString();
 }
 
 function round2(value) {
@@ -114,7 +129,7 @@ function buildCompanyInfo(fixture) {
       regularMarketVolume: summary.volume,
       fiftyTwoWeekHigh: round2(fixture.price * 1.4),
       fiftyTwoWeekLow: round2(fixture.price * 0.6),
-      regularMarketTime: Math.floor(Date.now() / 1000),
+      regularMarketTime: Math.floor(dataNow().getTime() / 1000),
     },
     trading: {
       beta: 1.1,
@@ -187,7 +202,7 @@ function buildCandles(basePrice, count) {
     const wave = Math.sin(index / 2) * 0.02;
     const close = round2(basePrice * (1 + wave));
     candles.push({
-      ts: new Date(Date.now() - (count - index) * 86_400_000).toISOString(),
+      ts: new Date(dataNow().getTime() - (count - index) * 86_400_000).toISOString(),
       open: round2(close * 0.995),
       high: round2(close * 1.01),
       low: round2(close * 0.99),
@@ -280,7 +295,7 @@ function todayInIstanbul() {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
-  }).formatToParts(new Date());
+  }).formatToParts(dataNow());
   const read = (type) => parts.find((part) => part.type === type)?.value ?? "";
   return `${read("year")}-${read("month")}-${read("day")}`;
 }
@@ -526,7 +541,7 @@ function sortCompanies(companies, sort) {
 /** Piyasa durumu; kapalıyken ertesi gün 10:00'a işaret eder. */
 function buildMarketStatus() {
   const open = state.marketOpen;
-  const nextOpen = new Date();
+  const nextOpen = dataNow();
   nextOpen.setDate(nextOpen.getDate() + 1);
   nextOpen.setHours(10, 0, 0, 0);
   return {

@@ -35,7 +35,7 @@ export async function PublicFooter() {
             <span className="text-sm font-semibold text-foreground">{t("footer.brand")}</span>
             <span className="max-w-prose text-xs text-muted-foreground">{t("footer.tagline")}</span>
           </div>
-          <nav aria-label={common("mainNavigation")} className="flex flex-col gap-2">
+          <nav aria-label={common("footerNavigation")} className="flex flex-col gap-2">
             <span className="text-xs font-medium text-muted-foreground">{t("footer.legalTitle")}</span>
             <ul className="flex flex-wrap gap-x-4 gap-y-1">
               {LEGAL_LINKS.map((link) => (

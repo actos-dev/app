@@ -36,6 +36,11 @@ for (const [key, value] of Object.entries(process.env)) {
 serverEnv.API_BASE_URL = STUB_URL;
 serverEnv.NEXT_PUBLIC_SITE_URL = BASE_URL;
 serverEnv.PORT = String(NEXT_PORT);
+// Görsel regresyon (Birim 6.1b) deterministik olsun diye stub'ın veri saati
+// sabitlenir: bülten tarihi, "veri zamanı" ve haber tarihleri günden/andan
+// bağımsız kalır. Auth token ömrü gerçek saatle hesaplandığından (bkz.
+// e2e/stub-backend.mjs `makeAccessToken`) oturum testleri etkilenmez.
+serverEnv.STUB_FIXED_NOW = "2026-01-15T10:30:00+03:00";
 
 export default defineConfig({
   testDir: "./e2e",

@@ -6,6 +6,11 @@
  * Renk + ok + işaret ile ÇİFT kodlama yapılır: yalnız renge bırakılmaz, renk
  * körü kullanıcı yönü oktan ve işaretten okur. Görünen metin `aria-hidden`'dır;
  * erişilebilir ad (`aria-label`) i18n'den gelir ve değeri de içerir.
+ *
+ * `role="img"`: ok + sayı tek bir görsel birim gibi duyurulsun diye. ARIA 1.2
+ * `aria-label`'ı rolesüz `<span>` (generic) üzerinde yasaklar (axe
+ * `aria-prohibited-attr`, serious); `role="img"` adlandırmayı geçerli kılar ve
+ * alt öğeleri zaten presentational olduğundan yapıyı değiştirmez.
  */
 import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -59,6 +64,7 @@ function DeltaImpl({ value, percent = false, className }: DeltaProps) {
 
   return (
     <span
+      role="img"
       aria-label={ariaLabel}
       className={cn(
         "inline-flex items-center gap-1 font-mono tabular-nums",
