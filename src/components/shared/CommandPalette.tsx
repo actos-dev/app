@@ -202,7 +202,6 @@ export function CommandPalette({ theme, authenticated = true }: CommandPalettePr
         id: `page:${navItem.href}`,
         group,
         label: tNav(navItem.labelKey),
-        icon: navItem.icon,
         run: () => {
           setOpen(false);
           router.push(navItem.href);

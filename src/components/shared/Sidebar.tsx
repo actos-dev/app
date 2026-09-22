@@ -11,7 +11,6 @@
  * `/login?next=<href>` hedefine gider (open-redirect savunması
  * `lib/auth/next-path.ts`).
  */
-import { Lock } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -30,7 +29,7 @@ function isActive(pathname: string, item: NavItem): boolean {
 
 function navLinkClassName(active: boolean, locked: boolean): string {
   return cn(
-    "flex min-h-11 items-center gap-2.5 rounded-md px-2.5 text-sm transition-colors duration-150 ease-out md:min-h-9",
+    "flex min-h-11 items-center rounded-md px-3 text-sm transition-colors duration-150 ease-out md:min-h-9",
     active
       ? "bg-surface-hover font-medium text-foreground"
       : "text-muted-foreground hover:bg-surface-hover hover:text-foreground",
@@ -53,7 +52,6 @@ export function NavLinks({
   const renderItem = (item: NavItem) => {
     const locked = !authenticated && item.personal === true;
     const active = !locked && isActive(pathname, item);
-    const Icon = item.icon;
     const href = locked ? (buildLoginRedirect(item.href) as Route) : item.href;
     return (
       <li key={item.href}>
@@ -65,11 +63,6 @@ export function NavLinks({
           onClick={onNavigate}
           className={navLinkClassName(active, locked)}
         >
-          {locked ? (
-            <Lock aria-hidden="true" className="size-4 shrink-0" />
-          ) : (
-            <Icon aria-hidden="true" className="size-4 shrink-0" />
-          )}
           <span>{t(item.labelKey)}</span>
         </Link>
       </li>

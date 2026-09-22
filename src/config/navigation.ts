@@ -5,20 +5,6 @@
  * değerleri `typedRoutes` ile derleme zamanında var olan rotalara bağlanır;
  * `labelKey` ise `nav` i18n namespace'indeki anahtardır (`nav.dashboard`).
  */
-import {
-  BarChart3,
-  Briefcase,
-  Compass,
-  Database,
-  FileText,
-  LayoutDashboard,
-  Newspaper,
-  Star,
-  TrendingUp,
-  UserRound,
-  Wrench,
-  type LucideIcon,
-} from "lucide-react";
 import type { Route } from "next";
 
 /** `nav` namespace'indeki sayfa başlığı anahtarları. */
@@ -41,7 +27,6 @@ export type NavGroupKey = "market" | "portfolio" | "research" | "account";
 export type NavItem = {
   href: Route;
   labelKey: NavLabelKey;
-  icon: LucideIcon;
   /** Alt rotalarda da aktif sayılmasın (yalnızca tam eşleşme). */
   exact?: boolean;
   /** Yalnızca geliştirme ortamında gösterilir (ör. bileşen kataloğu). */
@@ -63,7 +48,6 @@ export type NavGroup = {
 export const primaryNavItem: NavItem = {
   href: "/dashboard",
   labelKey: "dashboard",
-  icon: LayoutDashboard,
   exact: true,
 };
 
@@ -71,32 +55,31 @@ export const navGroups: readonly NavGroup[] = [
   {
     id: "market",
     items: [
-      { href: "/markets", labelKey: "markets", icon: TrendingUp },
-      { href: "/watchlist", labelKey: "watchlist", icon: Star, personal: true },
+      { href: "/markets", labelKey: "markets" },
+      { href: "/watchlist", labelKey: "watchlist", personal: true },
     ],
   },
   {
     id: "portfolio",
-    items: [{ href: "/portfolio", labelKey: "portfolio", icon: Briefcase, personal: true }],
+    items: [{ href: "/portfolio", labelKey: "portfolio", personal: true }],
   },
   {
     id: "research",
     items: [
-      { href: "/research/reports", labelKey: "reports", icon: FileText, personal: true },
-      { href: "/research/simulation", labelKey: "simulation", icon: BarChart3, personal: true },
-      { href: "/research/advisor", labelKey: "advisor", icon: Compass, personal: true },
-      { href: "/digest", labelKey: "digest", icon: Newspaper },
+      { href: "/research/reports", labelKey: "reports", personal: true },
+      { href: "/research/simulation", labelKey: "simulation", personal: true },
+      { href: "/research/advisor", labelKey: "advisor", personal: true },
+      { href: "/digest", labelKey: "digest" },
     ],
   },
   {
     id: "account",
     items: [
-      { href: "/data", labelKey: "data", icon: Database, personal: true },
-      { href: "/profile", labelKey: "profile", icon: UserRound, personal: true },
+      { href: "/data", labelKey: "data", personal: true },
+      { href: "/profile", labelKey: "profile", personal: true },
       {
         href: "/kitchen-sink",
         labelKey: "kitchenSink",
-        icon: Wrench,
         devOnly: true,
         personal: true,
       },
