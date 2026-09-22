@@ -26,8 +26,8 @@ diff is reviewed by eye.
 
 ## Units (one commit each)
 
-Status: **D0–D5 and D7 done** on `feat/deslop` (gates green, prod build green,
-32/32 Playwright e2e green). **D6 (top navigation) is the next unit.**
+Status: **D0–D8 done** (gates green, prod build green, 32/32 Playwright e2e
+green). D6 (top navigation) and D8 (symbol chart hero) shipped in **1.0.3**.
 
 - **D0 — plan + branch** (`feat/deslop`). This file. ✅
 - **D1 — copy de-slop** (`messages/tr.json`, `messages/en.json`): landing
@@ -45,10 +45,13 @@ Status: **D0–D5 and D7 done** on `feat/deslop` (gates green, prod build green,
   verify with `contrast.test.ts`.
 - **D5 — text-only navigation**: drop the per-item Lucide icons from
   `navigation.ts`, `Sidebar.tsx`, `MobileNav.tsx`.
-- **D6 — top navigation** *(next phase)*: replace the left rail with a text-only
-  top nav, 11 items collapsed into ~4 grouped menus; keep `MobileNav`; update
-  `app-shell.test.tsx`.
-- **D7 — refresh Playwright visual baselines** after D2/D3/D5/D6.
+- **D6 — top navigation** ✅ text-only top bar (5 entries, grouped menus), mobile
+  drawer kept, `app-shell.test.tsx` + `top-nav.test.tsx`.
+- **D7 — refresh Playwright visual baselines** ✅ (done twice: after D2/D3/D5 and
+  after D6/D8).
+- **D8 — symbol chart hero** ✅ merge `Genel` + `Grafik` into the default tab
+  (stat grid + chart), chart stays code-split and is deferred by `LazyMount`;
+  fixed the latent `nested-interactive` a11y issue on the chart container.
 
 ## Decisions taken (initiative)
 
