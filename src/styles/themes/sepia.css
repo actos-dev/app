@@ -19,12 +19,12 @@
   --surface-foreground: #3b3226;
   --muted-foreground: #6b5d4b;
 
-  --primary: #1a4480;
-  --primary-foreground: #ffffff;
-  --primary-hover: #153768;
+  --primary: #8a4b1e;
+  --primary-foreground: #fffdf7;
+  --primary-hover: #6f3a14;
 
-  --accent: #6d28d9;
-  --accent-foreground: #ffffff;
+  --accent: #a15c14;
+  --accent-foreground: #fffdf7;
 
   --positive: #166534;
   --positive-foreground: #ffffff;
@@ -35,7 +35,7 @@
   --info: #0c5a7a;
   --info-foreground: #ffffff;
 
-  --focus-ring: #1a4480;
+  --focus-ring: #8a4b1e;
   --overlay: #3b322673;
 
   --chart-up: #166534;
