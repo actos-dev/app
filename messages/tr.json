@@ -50,20 +50,20 @@
   "consent": {
     "ariaLabel": "Çerez izni",
     "title": "Çerez izni",
-    "description": "Deneyimi iyileştirmek için analitik çerezler kullanıyoruz. Yalnızca gerekli seçeneğiyle de platformun tamamını kullanabilirsin. Ayrıntılar: <cookiePolicy>Çerez Politikası</cookiePolicy> ve <privacyPolicy>Gizlilik Politikası</privacyPolicy>.",
+    "description": "Analitik çerezler deneyimi ölçmemize yardımcı olur. Yalnızca gerekli çerezlerle de siteyi tam kullanabilirsin. Ayrıntılar: <cookiePolicy>Çerez Politikası</cookiePolicy> ve <privacyPolicy>Gizlilik Politikası</privacyPolicy>.",
     "accept": "Kabul et",
     "reject": "Yalnızca gerekli"
   },
   "landing": {
     "metaTitle": "BIST piyasa takibi ve sanal portföy",
     "metaDescription": "BIST hisselerini, döviz kurlarını ve kıymetli madenleri canlı izle; komisyon dahil sanal portföy kur, AI raporları ve Monte-Carlo simülasyonları üret.",
-    "heroBadge": "Gerçek emir yok; tamamen sanal",
-    "heroTitle": "BIST'i canlı izle, portföyünü risksiz kur.",
-    "heroDescription": "Florence, Borsa İstanbul hisselerini, döviz kurlarını ve kıymetli madenleri tek ekranda toplar. Sanal portföyünü komisyon dahil gerçekçi fiyatlarla yönet; AI raporları ve Monte-Carlo simülasyonlarıyla kararlarını test et.",
+    "heroBadge": "Komisyon dahil sanal portföy",
+    "heroTitle": "BIST'i canlı izle, portföyünü kur, kararlarını test et.",
+    "heroDescription": "Borsa İstanbul hisseleri, döviz kurları ve kıymetli madenler tek ekranda. Sanal portföyünü komisyon dahil gerçekçi fiyatlarla yönet; AI raporları ve Monte-Carlo simülasyonlarıyla kararlarını sına.",
     "ctaPrimary": "Ücretsiz hesap oluştur",
     "ctaSecondary": "Piyasaları gör",
     "featuresTitle": "Florence neler sunuyor?",
-    "featuresDescription": "Piyasa takibinden portföy analizine kadar ihtiyacın olan her şey tek yerde.",
+    "featuresDescription": "Canlı veri, sanal portföy ve analiz araçları tek hesapta.",
     "features": {
       "market": {
         "title": "Canlı piyasa verisi",
@@ -104,9 +104,9 @@
         "description": "Sanal alım satımlarla portföyünü oluştur; rapor ve simülasyonlarla test et."
       }
     },
-    "ctaTitle": "Piyasayı takip etmeye hazır mısın?",
-    "ctaDescription": "Ücretsiz hesap oluştur. Kredi kartı istemiyoruz; gerçek para kullanılmaz.",
-    "ctaButton": "Hemen başla"
+    "ctaTitle": "Sanal portföyünü bugün kur.",
+    "ctaDescription": "Ücretsiz hesap aç; saniyeler içinde ilk sanal portföyünü oluştur.",
+    "ctaButton": "Ücretsiz hesap oluştur"
   },
   "public": {
     "nav": {
@@ -175,7 +175,7 @@
   },
   "errors": {
     "notFoundTitle": "Sayfa bulunamadı",
-    "notFoundDescription": "Aradığın sayfa taşınmış veya hiç var olmamış olabilir.",
+    "notFoundDescription": "Aradığın sayfa taşınmış ya da hiç var olmamış.",
     "genericTitle": "Bir şeyler ters gitti",
     "genericDescription": "Beklenmeyen bir hata oluştu. Tekrar deneyebilirsin.",
     "retry": "Tekrar dene",
@@ -329,7 +329,7 @@
     "total": "{count} sonuç",
     "empty": "Gösterilecek kayıt yok.",
     "error": "Veriler yüklenemedi.",
-    "errorDescription": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene.",
+    "errorDescription": "Veri sağlayıcıya ulaşılamadı. Lütfen tekrar dene.",
     "retry": "Tekrar dene",
     "stale": "Gecikmeli",
     "source": "Kaynak: {source}",
@@ -369,7 +369,7 @@
     },
     "emptyTable": "Takip listesinde gösterilecek kayıt yok.",
     "error": "Takip listesi yüklenemedi.",
-    "errorDescription": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene.",
+    "errorDescription": "Veri sağlayıcıya ulaşılamadı. Lütfen tekrar dene.",
     "rateLimited": "Çok fazla istek gönderildi. Lütfen biraz bekleyip tekrar dene.",
     "retry": "Tekrar dene",
     "unresolved": "Çözülemeyen semboller: {symbols}"
@@ -427,7 +427,7 @@
     },
     "error": {
       "title": "Portföyler yüklenemedi",
-      "description": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene.",
+      "description": "Veri sağlayıcıya ulaşılamadı. Lütfen tekrar dene.",
       "retry": "Tekrar dene"
     },
     "detail": {
@@ -475,7 +475,7 @@
       },
       "error": {
         "title": "Portföy yüklenemedi",
-        "description": "Veri sağlayıcıya ulaşılamıyor olabilir. Lütfen tekrar dene."
+        "description": "Veri sağlayıcıya ulaşılamadı. Lütfen tekrar dene."
       }
     },
     "analytics": {
@@ -718,7 +718,7 @@
     "news": {
       "empty": "Bu hisse için haber bulunamadı.",
       "error": "Haberler yüklenemedi.",
-      "errorDescription": "Haber kaynağına ulaşılamıyor olabilir. Lütfen tekrar dene.",
+      "errorDescription": "Haber kaynağına ulaşılamadı. Lütfen tekrar dene.",
       "retry": "Tekrar dene"
     },
     "freshness": {
@@ -741,8 +741,7 @@
       "error": "Favori güncellenemedi."
     },
     "tradeCta": {
-      "label": "Portföyde işlem yap",
-      "note": "Al/sat işlemleri portföy sayfasında yapılır; bu ekran yalnızca piyasa verisini gösterir."
+      "label": "Portföyde işlem yap"
     }
   },
   "reports": {
@@ -1057,7 +1056,7 @@
       "title": "Güncel bülten",
       "fresh": "Güncel",
       "stale": "Güncel değil",
-      "staleDetail": "Gösterilen bülten {date} {slot} diliminden; bu aralık için daha yeni bir bülten üretilmemiş olabilir.",
+      "staleDetail": "En son {date} {slot} bülteni üretildi; daha yenisi yok.",
       "emptyTitle": "Bülten yok",
       "emptyDescription": "Henüz yayınlanmış bir piyasa bülteni bulunmuyor.",
       "errorTitle": "Güncel bülten yüklenemedi",

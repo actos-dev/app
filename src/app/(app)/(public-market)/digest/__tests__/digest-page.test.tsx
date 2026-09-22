@@ -105,7 +105,9 @@ describe("/digest", () => {
     await renderPage({ date: "2026-09-01" });
 
     expect(screen.getByText("Güncel değil")).toBeInTheDocument();
-    expect(screen.getByText(/Gösterilen bülten 2026-08-30 Akşam/)).toBeInTheDocument();
+    expect(
+      screen.getByText("En son 2026-08-30 Akşam bülteni üretildi; daha yenisi yok."),
+    ).toBeInTheDocument();
   });
 
   it("boş günde boş durum gösterir", async () => {

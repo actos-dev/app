@@ -39,17 +39,20 @@ describe("landing", () => {
   it("TR katalogla hero başlığını ve iki CTA'yı render eder", async () => {
     await renderLanding();
 
-    expect(
-      screen.getByRole("heading", {
+    const hero = screen
+      .getByRole("heading", {
         level: 1,
-        name: "BIST'i canlı izle, portföyünü risksiz kur.",
-      }),
-    ).toBeInTheDocument();
+        name: "BIST'i canlı izle, portföyünü kur, kararlarını test et.",
+      })
+      .closest("section");
+    expect(hero).not.toBeNull();
 
-    const primary = screen.getByRole("link", { name: "Ücretsiz hesap oluştur" });
+    const primary = within(hero as HTMLElement).getByRole("link", {
+      name: "Ücretsiz hesap oluştur",
+    });
     expect(primary).toHaveAttribute("href", "/register");
 
-    const secondary = screen.getByRole("link", { name: "Piyasaları gör" });
+    const secondary = within(hero as HTMLElement).getByRole("link", { name: "Piyasaları gör" });
     expect(secondary).toHaveAttribute("href", "/markets");
   });
 

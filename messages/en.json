@@ -50,20 +50,20 @@
   "consent": {
     "ariaLabel": "Cookie consent",
     "title": "Cookie consent",
-    "description": "We use analytics cookies to improve your experience. You can use the full platform with \u201conly necessary\u201d too. Details: <cookiePolicy>Cookie Policy</cookiePolicy> and <privacyPolicy>Privacy Policy</privacyPolicy>.",
+    "description": "We use analytics cookies to measure the experience. You can use the whole site with “only necessary” too. Details: <cookiePolicy>Cookie Policy</cookiePolicy> and <privacyPolicy>Privacy Policy</privacyPolicy>.",
     "accept": "Accept",
     "reject": "Only necessary"
   },
   "landing": {
     "metaTitle": "BIST market tracking and paper portfolio",
     "metaDescription": "Follow BIST stocks, currencies and precious metals live; build a commission-aware paper portfolio and generate AI reports and Monte-Carlo simulations.",
-    "heroBadge": "No real orders; fully simulated",
-    "heroTitle": "Follow BIST live, build your portfolio risk-free.",
-    "heroDescription": "Florence brings Borsa İstanbul stocks, currencies and precious metals into one screen. Manage your paper portfolio with realistic, commission-inclusive prices and test decisions with AI reports and Monte-Carlo simulations.",
+    "heroBadge": "Paper portfolio, commission included",
+    "heroTitle": "Follow BIST live, build a portfolio, test your decisions.",
+    "heroDescription": "Borsa Istanbul stocks, currencies and precious metals in one place. Manage a paper portfolio at realistic, commission-inclusive prices; pressure-test your decisions with AI reports and Monte-Carlo simulations.",
     "ctaPrimary": "Create a free account",
     "ctaSecondary": "Browse markets",
     "featuresTitle": "What Florence offers",
-    "featuresDescription": "Everything from market tracking to portfolio analysis in one place.",
+    "featuresDescription": "Live data, a paper portfolio and analysis tools in one account.",
     "features": {
       "market": {
         "title": "Live market data",
@@ -104,9 +104,9 @@
         "description": "Create a portfolio with simulated trades and test it with reports and simulations."
       }
     },
-    "ctaTitle": "Ready to follow the market?",
-    "ctaDescription": "Create a free account. No credit card, no real money involved.",
-    "ctaButton": "Get started"
+    "ctaTitle": "Start your paper portfolio today.",
+    "ctaDescription": "Open a free account and set up your first paper portfolio in seconds.",
+    "ctaButton": "Create a free account"
   },
   "public": {
     "nav": {
@@ -175,7 +175,7 @@
   },
   "errors": {
     "notFoundTitle": "Page not found",
-    "notFoundDescription": "The page you are looking for may have moved or never existed.",
+    "notFoundDescription": "The page you are looking for has moved or never existed.",
     "genericTitle": "Something went wrong",
     "genericDescription": "An unexpected error occurred. You can try again.",
     "retry": "Try again",
@@ -329,7 +329,7 @@
     "total": "{count} results",
     "empty": "Nothing to show.",
     "error": "Data could not be loaded.",
-    "errorDescription": "The data provider may be unreachable. Please try again.",
+    "errorDescription": "The data provider is unreachable. Please try again.",
     "retry": "Try again",
     "stale": "Delayed",
     "source": "Source: {source}",
@@ -369,7 +369,7 @@
     },
     "emptyTable": "No items to show in your watchlist.",
     "error": "Watchlist could not be loaded.",
-    "errorDescription": "The data provider may be unreachable. Please try again.",
+    "errorDescription": "The data provider is unreachable. Please try again.",
     "rateLimited": "Too many requests. Please wait a moment and try again.",
     "retry": "Try again",
     "unresolved": "Unresolved symbols: {symbols}"
@@ -427,7 +427,7 @@
     },
     "error": {
       "title": "Portfolios could not be loaded",
-      "description": "The data provider may be unreachable. Please try again.",
+      "description": "The data provider is unreachable. Please try again.",
       "retry": "Try again"
     },
     "detail": {
@@ -475,7 +475,7 @@
       },
       "error": {
         "title": "Portfolio could not be loaded",
-        "description": "The data provider may be unreachable. Please try again."
+        "description": "The data provider is unreachable. Please try again."
       }
     },
     "analytics": {
@@ -718,7 +718,7 @@
     "news": {
       "empty": "No news found for this stock.",
       "error": "News could not be loaded.",
-      "errorDescription": "The news source may be unreachable. Please try again.",
+      "errorDescription": "The news source is unreachable. Please try again.",
       "retry": "Try again"
     },
     "freshness": {
@@ -741,8 +741,7 @@
       "error": "Favorite could not be updated."
     },
     "tradeCta": {
-      "label": "Trade in portfolio",
-      "note": "Buy/sell trades are placed on the portfolio page; this screen only shows market data."
+      "label": "Trade in portfolio"
     }
   },
   "reports": {
@@ -1057,7 +1056,7 @@
       "title": "Current digest",
       "fresh": "Up to date",
       "stale": "Not current",
-      "staleDetail": "Showing the digest from {date} {slot}; a newer digest may not have been generated for this window.",
+      "staleDetail": "Latest generated digest: {date} {slot}.",
       "emptyTitle": "No digest",
       "emptyDescription": "No market digest has been published yet.",
       "errorTitle": "Could not load the current digest",

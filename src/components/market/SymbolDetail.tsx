@@ -453,8 +453,6 @@ export function SymbolDetail({
         </span>
       </div>
 
-      <p className="text-xs text-muted-foreground">{t("tradeCta.note")}</p>
-
       <Tabs items={tabItems} defaultValue="overview" />
     </div>
   );
