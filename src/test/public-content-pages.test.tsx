@@ -105,13 +105,15 @@ describe("/contact", () => {
 
     render(await ContactPage());
 
-    expect(screen.getByRole("link", { name: "support@florencex.com.tr" })).toHaveAttribute(
-      "href",
-      "mailto:support@florencex.com.tr",
-    );
-    const github = screen.getByRole("link", { name: "https://github.com/project-florence" });
+    expect(
+      screen.getByRole("link", { name: "E-postasupport@florencex.com.tr" }),
+    ).toHaveAttribute("href", "mailto:support@florencex.com.tr");
+    const github = screen.getByRole("link", {
+      name: "GitHubgithub.com/project-florence",
+    });
     expect(github).toHaveAttribute("href", "https://github.com/project-florence");
     expect(github).toHaveAttribute("rel", "noopener noreferrer");
+    expect(github).toHaveAttribute("target", "_blank");
   });
 
   it("javascript: şemalı GitHub adresini çizmez", async () => {
