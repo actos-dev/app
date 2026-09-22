@@ -114,7 +114,7 @@ describe("/digest", () => {
   it("boş günde boş durum gösterir", async () => {
     await renderPage({ date: "2026-09-01" });
 
-    expect(screen.getByText("Bu gün için bülten yok")).toBeInTheDocument();
+    expect(screen.getByText("Bu tarihte bülten yok")).toBeInTheDocument();
   });
 
   it("o gün için mevcut slotları listeler", async () => {

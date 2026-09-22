@@ -643,7 +643,6 @@
     "back": "Piyasalara dön",
     "tabs": {
       "overview": "Genel",
-      "chart": "Grafik",
       "stats": "Finansallar",
       "news": "Haberler"
     },
@@ -773,7 +772,7 @@
     },
     "wizard": {
       "title": "Yeni rapor üret",
-      "description": "Rapor tipini ve sembolü seç; istersen amacını yazarak sorunun yanıtını yönlendir.",
+      "description": "Rapor tipini ve sembolü seç; amacını yazarsan yanıt ona göre şekillenir.",
       "typeLabel": "Rapor tipi",
       "typePlaceholder": "Rapor tipi seç",
       "symbolLabel": "Sembol",
@@ -969,7 +968,7 @@
   },
   "advisor": {
     "title": "Yatırım Danışmanı",
-    "description": "Vade ve risk profiline göre sana uygun hisseleri bul; istersen portföyünün profilini çıkar.",
+    "description": "Vade ve risk profiline göre hisse önerisi al; portföyünün profilini de çıkarabilirsin.",
     "modes": {
       "fit": "Hisse önerisi",
       "portfolio": "Portföy profili"
@@ -1080,7 +1079,7 @@
       "available": "Bu gün için mevcut bültenler",
       "open": "Aç",
       "backToDay": "Günün tüm slotları",
-      "emptyTitle": "Bu gün için bülten yok",
+      "emptyTitle": "Bu tarihte bülten yok",
       "emptyDescription": "{date} tarihinde yayınlanmış bir bülten bulunamadı.",
       "slotEmptyTitle": "Bu slotta bülten yok",
       "slotEmptyDescription": "{date} {slot} dilimi için bülten bulunamadı.",
@@ -1306,7 +1305,7 @@
     },
     "form": {
       "dialogTitle": "Yeni bot",
-      "dialogDescription": "Bot için bir kullanıcı adı ve istersen şifre belirle.",
+      "dialogDescription": "Bot için bir kullanıcı adı belirle; şifre opsiyoneldir.",
       "username": "Kullanıcı adı",
       "usernameHint": "3-255 karakter; botun e-postası bu addan türetilir.",
       "usernameTooShort": "Kullanıcı adı en az 3 karakter olmalı.",

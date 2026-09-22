@@ -643,7 +643,6 @@
     "back": "Back to markets",
     "tabs": {
       "overview": "Overview",
-      "chart": "Chart",
       "stats": "Financials",
       "news": "News"
     },
@@ -773,7 +772,7 @@
     },
     "wizard": {
       "title": "Generate a new report",
-      "description": "Choose a report type and symbol; optionally add your goal to steer the answer.",
+      "description": "Choose a report type and symbol; if you add your goal, the answer follows it.",
       "typeLabel": "Report type",
       "typePlaceholder": "Select a report type",
       "symbolLabel": "Symbol",
@@ -969,7 +968,7 @@
   },
   "advisor": {
     "title": "Investment Advisor",
-    "description": "Find stocks that fit your horizon and risk profile; optionally derive your portfolio's profile.",
+    "description": "Get stock suggestions for your horizon and risk profile; you can also derive your portfolio's profile.",
     "modes": {
       "fit": "Stock suggestions",
       "portfolio": "Portfolio profile"
@@ -1080,7 +1079,7 @@
       "available": "Digests available for this day",
       "open": "Open",
       "backToDay": "All slots for the day",
-      "emptyTitle": "No digest for this day",
+      "emptyTitle": "No digest on this date",
       "emptyDescription": "No digest was published on {date}.",
       "slotEmptyTitle": "No digest in this slot",
       "slotEmptyDescription": "No digest was found for {date} {slot}.",
@@ -1306,7 +1305,7 @@
     },
     "form": {
       "dialogTitle": "New bot",
-      "dialogDescription": "Set a username and, optionally, a password for the bot.",
+      "dialogDescription": "Set a username for the bot; the password is optional.",
       "username": "Username",
       "usernameHint": "3-255 characters; the bot's email is derived from this name.",
       "usernameTooShort": "Username must be at least 3 characters.",
