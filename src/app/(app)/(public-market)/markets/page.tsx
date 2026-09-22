@@ -128,7 +128,6 @@ export default async function MarketsPage({ searchParams }: PageProps<"/markets"
     <div className="flex flex-col gap-6">
       <PageHeader
         title={t("title")}
-        description={t("description")}
         actions={
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
             <SymbolSearch className="sm:w-72" initialQuery={query} />

@@ -33,7 +33,6 @@ export default async function PortfolioPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title={t("title")}
-        description={t("description")}
         actions={
           <div className="flex items-center gap-2">
             <MarketStatusPill initialData={status ?? undefined} />

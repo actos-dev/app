@@ -33,7 +33,7 @@ export default async function AboutPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 md:px-6 md:py-16">
-      <PageHeader title={t("about.title")} description={t("about.description")} />
+      <PageHeader title={t("about.title")} />
       {paragraphs.length > 0 ? (
         <div className="flex flex-col gap-4">
           {paragraphs.map((paragraph) => (

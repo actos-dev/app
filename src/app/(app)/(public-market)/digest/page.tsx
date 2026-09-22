@@ -83,7 +83,7 @@ export default async function DigestPage({ searchParams }: PageProps<"/digest">)
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title={t("title")} description={t("description")} />
+      <PageHeader title={t("title")} />
 
       <Panel
         title={t("current.title")}

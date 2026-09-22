@@ -45,7 +45,6 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title={t("title")}
-        description={t("description")}
         actions={<MarketStatusPill initialData={data.status ?? undefined} />}
       />
       <DashboardOverview data={data} />

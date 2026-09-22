@@ -28,7 +28,7 @@ export default async function DataPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title={t("title")} description={t("description")} />
+      <PageHeader title={t("title")} />
       <DataCenterWorkspace initialExports={exports ?? []} />
     </div>
   );

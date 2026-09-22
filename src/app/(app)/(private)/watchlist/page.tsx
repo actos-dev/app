@@ -30,7 +30,7 @@ export default async function WatchlistPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title={t("title")} description={t("description")} />
+      <PageHeader title={t("title")} />
       <WatchlistTable
         initialFavorites={data.favorites}
         initialSummary={data.summary}

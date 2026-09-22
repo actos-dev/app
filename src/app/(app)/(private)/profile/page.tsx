@@ -36,7 +36,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title={t("title")} description={t("description")} />
+      <PageHeader title={t("title")} />
       {profile ? (
         <ProfileWorkspace profile={profile} avatars={avatars ?? []} theme={theme} />
       ) : (

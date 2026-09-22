@@ -34,7 +34,7 @@ export default async function DownloadsPage() {
 
   return (
     <div className="mx-auto w-full max-w-3xl px-4 py-12 md:px-6 md:py-16">
-      <PageHeader title={t("downloads.title")} description={t("downloads.description")} />
+      <PageHeader title={t("downloads.title")} />
 
       <p className="mb-8 flex items-start gap-3 rounded-lg border border-border bg-surface p-4 text-sm text-muted-foreground">
         <Info aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-primary" />
