@@ -43,13 +43,39 @@ const BODY_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 type ProxyContext = { params: Promise<{ path: string[] }> };
 
 /**
- * Tarayıcı kaynaklı CSRF denemesi mi? `Origin` varsa Next origin'iyle
+ * İzinli origin kümesi. Proxy arkasında (nginx/Cloudflare) tarayıcının
+ * `Origin`'i genel adrestir (ör. `https://florencex.com.tr`), `request.nextUrl.origin`
+ * ise iç adres olabilir (ör. `http://127.0.0.1:3300`). Bu yüzden ileri-yönlendirme
+ * başlıkları ve yapılandırılmış site adresi de kabul edilir.
+ */
+function allowedOrigins(request: NextRequest): Set<string> {
+  const origins = new Set<string>([request.nextUrl.origin]);
+
+  const forwardedHost = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const host = forwardedHost?.split(",")[0]?.trim();
+  if (host) {
+    const forwardedProto = request.headers.get("x-forwarded-proto") ?? request.nextUrl.protocol;
+    const proto = forwardedProto.split(",")[0]?.trim().replace(/:$/, "");
+    origins.add(`${proto}://${host}`);
+  }
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  if (siteUrl) {
+    origins.add(siteUrl);
+  }
+
+  return origins;
+}
+
+/**
+ * Tarayıcı kaynaklı CSRF denemesi mi? `Origin` varsa izinli origin'lerden biriyle
  * eşleşmeli; `Sec-Fetch-Site: cross-site` ise reddedilir. İki başlık da yoksa
- * (tarayıcı dışı istemci, ör. curl) izin verilir.
+ * (tarayıcı dışı istemci, ör. curl) izin verilir. Yetki kararı bu kapıda değil,
+ * backend'dedir.
  */
 function isSameOrigin(request: NextRequest): boolean {
   const origin = request.headers.get("origin");
-  if (origin && origin !== request.nextUrl.origin) {
+  if (origin && !allowedOrigins(request).has(origin)) {
     return false;
   }
   if (request.headers.get("sec-fetch-site") === "cross-site") {

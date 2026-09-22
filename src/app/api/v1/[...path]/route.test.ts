@@ -70,6 +70,44 @@ describe("BFF proxy", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
+  it("proxy arkasında (x-forwarded-host) genel origin'i kabul eder", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    // Next iç adresi 127.0.0.1:3300 ama tarayıcı https://florencex.com.tr görür.
+    const request = new NextRequest("http://127.0.0.1:3300/api/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        origin: "https://florencex.com.tr",
+        "x-forwarded-host": "florencex.com.tr",
+        "x-forwarded-proto": "https",
+      },
+      body: "username=a&password=b",
+    });
+
+    const response = await POST(request, context("auth", "login"));
+
+    expect(response.status).toBe(200);
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
+  it("NEXT_PUBLIC_SITE_URL origin'ini de kabul eder", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://florencex.com.tr/");
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const request = new NextRequest("http://127.0.0.1:3300/api/v1/auth/refresh", {
+      method: "POST",
+      headers: { origin: "https://florencex.com.tr" },
+    });
+
+    const response = await POST(request, context("auth", "refresh"));
+
+    expect(response.status).toBe(200);
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
   it("aynı-origin mutasyonu iletir ve gövdeyi akıtır", async () => {
     const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
     vi.stubGlobal("fetch", fetchMock);
