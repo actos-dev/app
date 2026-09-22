@@ -26,7 +26,10 @@ diff is reviewed by eye.
 
 ## Units (one commit each)
 
-- **D0 — plan + branch** (`feat/deslop`). This file.
+Status: **D0–D5 and D7 done** on `feat/deslop` (gates green, prod build green,
+32/32 Playwright e2e green). **D6 (top navigation) is the next unit.**
+
+- **D0 — plan + branch** (`feat/deslop`). This file. ✅
 - **D1 — copy de-slop** (`messages/tr.json`, `messages/en.json`): landing
   badge/title/CTA, remove `symbol.tradeCta.note`, de-hedge error copy, digest
   stale message, consent. Update the e2e/a11y/visual assertions that reference
