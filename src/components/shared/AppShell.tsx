@@ -8,7 +8,7 @@
  *
  * Anonimde: sağda "Giriş"/"Kayıt" butonları; `CreditDisplay`, `AccountMenu` ve
  * `AnnouncementBell` gösterilmez; sunucuya kredi/duyuru isteği ATILMAZ. Kişisel
- * nav öğeleri `Sidebar`/`MobileNav` içinde kilitli görünür ve `/login?next=`
+ * nav öğeleri `TopNav`/`MobileNav` içinde kilitli görünür ve `/login?next=`
  * hedefine gider. Oturum bilgisi istemciye `SessionProvider` ile geçer.
  *
  * Topbar'da ayrı `LocaleSwitcher`/`ThemeSwitcher` YOK: tema/dil/çıkış artık
@@ -26,7 +26,7 @@ import { AnnouncementBell } from "@/components/shared/AnnouncementBell";
 import { CommandPalette } from "@/components/shared/CommandPalette";
 import { CreditDisplay } from "@/components/shared/CreditDisplay";
 import { MobileNav } from "@/components/shared/MobileNav";
-import { Sidebar } from "@/components/shared/Sidebar";
+import { TopNav } from "@/components/shared/TopNav";
 import { buttonVariants } from "@/components/ui/button";
 import { resolveTheme, THEME_COOKIE } from "@/i18n/config";
 import { ANNOUNCEMENTS_SERVER_PATH } from "@/lib/announcements/api-paths";
@@ -70,13 +70,16 @@ export async function AppShell({ children }: { children: ReactNode }) {
         >
           {t("skipToContent")}
         </a>
-        <Sidebar authenticated={authenticated} />
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-background px-4 md:px-6">
+          <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-background px-4 md:px-6">
             <MobileNav authenticated={authenticated} />
-            <span className="hidden text-sm font-semibold text-foreground sm:inline md:hidden">
+            <Link
+              href="/dashboard"
+              className="text-sm font-semibold text-foreground"
+            >
               {app("name")}
-            </span>
+            </Link>
+            <TopNav authenticated={authenticated} />
             <div className="ml-auto flex items-center gap-3">
               <CommandPalette theme={theme} authenticated={authenticated} />
               {authenticated ? (

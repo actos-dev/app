@@ -17,7 +17,9 @@ test.describe("Anonim aksiyon kapısı", () => {
   test("kilitli kişisel nav girişe yönlendirir", async ({ page }) => {
     await page.goto("/dashboard");
 
-    const watchlistLink = page.getByRole("link", { name: "Takip Listesi" });
+    // Üst navigasyonda kişisel öğeler grup menüsünün içindedir; önce aç.
+    await page.getByRole("button", { name: "Piyasa" }).click();
+    const watchlistLink = page.getByRole("menuitem", { name: "Takip Listesi" });
     await expect(watchlistLink).toBeVisible();
     // Kilitli öğe `aria-disabled` taşır (erişilebilirlik için doğru); Playwright
     // bunu "enabled değil" sayar. Bu bir <a href> olduğundan gerçek tıklamayı

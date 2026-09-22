@@ -413,8 +413,8 @@ export function CommandPalette({ theme, authenticated = true }: CommandPalettePr
             title={t("shortcutHint")}
           >
             <Search aria-hidden="true" className="size-4" />
-            <span className="hidden sm:inline">{t("placeholder")}</span>
-            <kbd className="ml-1 hidden rounded border border-border bg-surface-raised px-1.5 py-0.5 font-mono text-xs text-muted-foreground sm:inline">
+            <span className="hidden lg:inline">{t("placeholder")}</span>
+            <kbd className="ml-1 hidden rounded border border-border bg-surface-raised px-1.5 py-0.5 font-mono text-xs text-muted-foreground lg:inline">
               {t("shortcut")}
             </kbd>
           </Button>

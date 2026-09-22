@@ -1,11 +1,11 @@
 "use client";
 
 /**
- * Sol navigasyon (plan §4, A-04, A-06; 5C / X-03).
+ * Navigasyon bağlantıları (plan §4, A-04, A-06; 5C / X-03).
  *
- * Masaüstünde sabit sidebar; mobilde aynı `NavLinks` gövdesi `MobileNav`
- * panelinde kullanılır. Aktif öğe `usePathname` ile bulunur ve
- * `aria-current="page"` ile işaretlenir; görsel vurgu `bg-surface-hover`.
+ * Mobil çekmece (`MobileNav`) bu gruplanmış listeyi tüketir. Aktif öğe
+ * `usePathname` ile bulunur ve `aria-current="page"` ile işaretlenir; görsel
+ * vurgu `bg-surface-hover`.
  *
  * Kişisel öğeler (`item.personal`) anonimde kilitli görünür: tıklanınca
  * `/login?next=<href>` hedefine gider (open-redirect savunması
@@ -37,7 +37,7 @@ function navLinkClassName(active: boolean, locked: boolean): string {
   );
 }
 
-/** Navigasyon bağlantıları; masaüstü ve mobil panel aynı listeyi paylaşır. */
+/** Navigasyon bağlantıları; mobil panel için gruplanmış liste. */
 export function NavLinks({
   authenticated = true,
   onNavigate,
@@ -89,18 +89,5 @@ export function NavLinks({
         );
       })}
     </nav>
-  );
-}
-
-export function Sidebar({ authenticated = true }: { authenticated?: boolean }) {
-  const t = useTranslations("app");
-
-  return (
-    <aside className="hidden border-r border-border bg-surface md:sticky md:top-0 md:flex md:h-dvh md:w-60 md:shrink-0 md:flex-col md:gap-4 md:overflow-y-auto md:px-3 md:py-4">
-      <div className="flex h-8 items-center px-2.5">
-        <span className="text-sm font-semibold text-foreground">{t("name")}</span>
-      </div>
-      <NavLinks authenticated={authenticated} />
-    </aside>
   );
 }

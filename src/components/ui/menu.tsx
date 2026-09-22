@@ -15,6 +15,12 @@ export type MenuItem = {
   destructive?: boolean;
   /** Öğeden önce ayırıcı çizer. */
   separatorBefore?: boolean;
+  /** Bağlantıya ipucu metni ekler (ör. anonimde giriş gerekli). */
+  title?: string;
+  /** Bağlantıyı kilitli işaretler (`aria-disabled`) ve soluklaştırır. */
+  "aria-disabled"?: boolean;
+  /** Aktif sayfayı vurgular (`aria-current="page"`). */
+  active?: boolean;
 };
 
 type MenuProps = {
@@ -68,6 +74,9 @@ export function Menu({
                 {item.href ? (
                   <BaseMenu.LinkItem
                     href={item.href}
+                    title={item.title}
+                    aria-disabled={item["aria-disabled"]}
+                    aria-current={item.active ? "page" : undefined}
                     className={menuItemClassName(item)}
                   >
                     {item.label}
@@ -90,10 +99,17 @@ export function Menu({
   );
 }
 
-function menuItemClassName({ destructive, disabled }: MenuItem): string {
+function menuItemClassName({
+  destructive,
+  disabled,
+  active,
+  "aria-disabled": ariaDisabled,
+}: MenuItem): string {
   return cn(
     "flex min-h-11 cursor-default items-center gap-2 rounded-md px-2 text-sm select-none data-highlighted:bg-surface-hover data-disabled:pointer-events-none data-disabled:opacity-50 md:min-h-8",
     destructive ? "text-negative" : "text-foreground",
-    disabled ? "opacity-50" : undefined,
+    active && "bg-surface-hover font-medium",
+    disabled && "opacity-50",
+    ariaDisabled && "opacity-60",
   );
 }

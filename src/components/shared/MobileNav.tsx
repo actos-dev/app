@@ -5,7 +5,7 @@
  *
  * Topbar'daki menü düğmesi soldan açılan bir Base UI Dialog açar; odak tuzağı,
  * Escape ile kapatma ve kapanışta odağın düğmeye dönmesi Base UI'dan gelir.
- * Masaüstünde düğme gizlenir (`md:hidden`), sidebar zaten görünürdür.
+ * Masaüstünde düğme gizlenir (`md:hidden`), üst navigasyon zaten görünürdür.
  */
 import { Dialog as BaseDialog } from "@base-ui/react/dialog";
 import { Menu, X } from "lucide-react";
@@ -14,7 +14,7 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 
-import { NavLinks } from "./Sidebar";
+import { NavLinks } from "./NavLinks";
 
 export function MobileNav({ authenticated = true }: { authenticated?: boolean }) {
   const t = useTranslations("common");

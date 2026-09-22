@@ -1,9 +1,10 @@
 /**
  * Uygulama navigasyon haritası (plan §4: Piyasa / Portföy / Araştırma / Hesap).
  *
- * Tek kaynak burasıdır: `Sidebar` ve `MobileNav` aynı listeyi tüketir. `href`
- * değerleri `typedRoutes` ile derleme zamanında var olan rotalara bağlanır;
- * `labelKey` ise `nav` i18n namespace'indeki anahtardır (`nav.dashboard`).
+ * Tek kaynak burasıdır: `TopNav`, `MobileNav` ve `CommandPalette` aynı listeyi
+ * tüketir. `href` değerleri `typedRoutes` ile derleme zamanında var olan rotalara
+ * bağlanır; `labelKey` ise `nav` i18n namespace'indeki anahtardır
+ * (`nav.dashboard`).
  */
 import type { Route } from "next";
 

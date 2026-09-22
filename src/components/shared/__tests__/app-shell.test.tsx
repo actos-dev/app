@@ -87,10 +87,19 @@ describe("AppShell", () => {
   });
 
   it("navigasyon gruplarını ve öğelerini render eder", async () => {
+    const user = userEvent.setup();
     await renderShell();
 
+    // Masaüstü üst barda yalnız tek öğeli grup ve birincil bağlantı düz linktir;
+    // tam harita mobil çekmecede gruplanmış olarak durur.
+    expect(screen.getByRole("link", { name: "Genel Bakış" })).toHaveAttribute("href", "/dashboard");
+    expect(screen.getByRole("link", { name: "Portföy" })).toHaveAttribute("href", "/portfolio");
+
+    await user.click(screen.getByRole("button", { name: "Menüyü aç" }));
+    const dialog = await screen.findByRole("dialog");
+
     for (const group of ["Piyasa", "Portföy", "Araştırma", "Hesap"]) {
-      expect(screen.getByRole("heading", { name: group })).toBeInTheDocument();
+      expect(within(dialog).getByRole("heading", { name: group })).toBeInTheDocument();
     }
     for (const item of [
       "Genel Bakış",
@@ -104,7 +113,7 @@ describe("AppShell", () => {
       "Veri Merkezi",
       "Profil",
     ]) {
-      expect(screen.getByRole("link", { name: item })).toBeInTheDocument();
+      expect(within(dialog).getByRole("link", { name: item })).toBeInTheDocument();
     }
 
     expect(screen.getByText("Sayfa içeriği")).toBeInTheDocument();
@@ -112,20 +121,30 @@ describe("AppShell", () => {
 
   it("aktif rotayı aria-current=\"page\" ile işaretler", async () => {
     mocks.pathname = "/markets";
+    const user = userEvent.setup();
     await renderShell();
 
-    expect(screen.getByRole("link", { name: "Piyasalar" })).toHaveAttribute(
+    await user.click(screen.getByRole("button", { name: "Menüyü aç" }));
+    const dialog = await screen.findByRole("dialog");
+
+    expect(within(dialog).getByRole("link", { name: "Piyasalar" })).toHaveAttribute(
       "aria-current",
       "page",
     );
-    expect(screen.getByRole("link", { name: "Portföyler" })).not.toHaveAttribute("aria-current");
+    expect(within(dialog).getByRole("link", { name: "Portföyler" })).not.toHaveAttribute(
+      "aria-current",
+    );
   });
 
   it("alt rotada üst öğeyi aktif sayar", async () => {
     mocks.pathname = "/portfolio/42";
+    const user = userEvent.setup();
     await renderShell();
 
-    expect(screen.getByRole("link", { name: "Portföyler" })).toHaveAttribute(
+    await user.click(screen.getByRole("button", { name: "Menüyü aç" }));
+    const dialog = await screen.findByRole("dialog");
+
+    expect(within(dialog).getByRole("link", { name: "Portföyler" })).toHaveAttribute(
       "aria-current",
       "page",
     );
@@ -189,17 +208,32 @@ describe("AppShell — anonim (5C / X-03)", () => {
   });
 
   it("kişisel nav kilitli ve /login?next= hedefine gider; piyasa açık kalır", async () => {
+    const user = userEvent.setup();
     await renderShell();
 
-    const watchlist = screen.getByRole("link", { name: "Takip Listesi" });
+    // Masaüstü üst bar: birincil bağlantı ve tek öğeli grup.
+    expect(screen.getByRole("link", { name: "Genel Bakış" })).toHaveAttribute("href", "/dashboard");
+    const portfolio = screen.getByRole("link", { name: "Portföy" });
+    expect(portfolio).toHaveAttribute("href", "/login?next=%2Fportfolio");
+    expect(portfolio).toHaveAttribute("aria-disabled", "true");
+
+    await user.click(screen.getByRole("button", { name: "Menüyü aç" }));
+    const dialog = await screen.findByRole("dialog");
+
+    const watchlist = within(dialog).getByRole("link", { name: "Takip Listesi" });
     expect(watchlist).toHaveAttribute("href", "/login?next=%2Fwatchlist");
     expect(watchlist).toHaveAttribute("aria-disabled", "true");
-    expect(screen.getByRole("link", { name: "Portföyler" })).toHaveAttribute(
+    expect(within(dialog).getByRole("link", { name: "Portföyler" })).toHaveAttribute(
       "href",
       "/login?next=%2Fportfolio",
     );
-    expect(screen.getByRole("link", { name: "Piyasalar" })).toHaveAttribute("href", "/markets");
-    expect(screen.getByRole("link", { name: "Genel Bakış" })).toHaveAttribute("href", "/dashboard");
-    expect(screen.getByRole("link", { name: "Piyasa Bülteni" })).toHaveAttribute("href", "/digest");
+    expect(within(dialog).getByRole("link", { name: "Piyasalar" })).toHaveAttribute(
+      "href",
+      "/markets",
+    );
+    expect(within(dialog).getByRole("link", { name: "Piyasa Bülteni" })).toHaveAttribute(
+      "href",
+      "/digest",
+    );
   });
 });
