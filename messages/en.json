@@ -55,15 +55,14 @@
     "reject": "Only necessary"
   },
   "landing": {
-    "metaTitle": "BIST market tracking and paper portfolio",
-    "metaDescription": "Follow BIST stocks, currencies and precious metals live; build a commission-aware paper portfolio and generate AI reports and Monte-Carlo simulations.",
-    "heroBadge": "Paper portfolio, commission included",
-    "heroTitle": "Follow BIST live, build a portfolio, test your decisions.",
-    "heroDescription": "Borsa Istanbul stocks, currencies and precious metals in one place. Manage a paper portfolio at realistic, commission-inclusive prices; pressure-test your decisions with AI reports and Monte-Carlo simulations.",
+    "metaTitle": "BIST market tracking, live data and analysis",
+    "metaDescription": "Follow BIST stocks, currencies and precious metals live; analyze with AI reports and Monte-Carlo simulations, and run a commission-inclusive paper portfolio.",
+    "heroTitle": "Follow BIST live, analyze the data, test your decisions.",
+    "heroDescription": "Borsa Istanbul stocks, currencies and precious metals in one place. Track live data, analyze it with AI reports and Monte-Carlo simulations, and run a paper portfolio at realistic, commission-inclusive prices.",
     "ctaPrimary": "Create a free account",
     "ctaSecondary": "Browse markets",
     "featuresTitle": "What Florence offers",
-    "featuresDescription": "Live data, a paper portfolio and analysis tools in one account.",
+    "featuresDescription": "Live data, analysis tools and a paper portfolio in one account.",
     "features": {
       "market": {
         "title": "Live market data",
@@ -71,23 +70,20 @@
       },
       "portfolio": {
         "title": "Paper portfolio with commission",
-        "description": "Simulate trades with the commission rate and inspect cost, return and risk metrics."
+        "description": "Simulate trades with the commission rate; see cost, return and risk metrics."
       },
       "reports": {
         "title": "AI-assisted reports",
-        "description": "Spend credits on a ticker to generate an analysis report grounded in current data."
+        "description": "Generate an AI analysis report for a stock, grounded in current data."
       },
       "simulation": {
         "title": "Monte-Carlo simulation",
-        "description": "Set a target price and horizon; explore the distribution of possible outcomes."
+        "description": "Set a target price and horizon; explore the distribution of outcomes with Monte-Carlo."
       }
     },
-    "mock": {
-      "portfolioLabel": "Paper portfolio",
-      "totalLabel": "Total value",
-      "dailyLabel": "Today",
-      "positionsLabel": "Positions",
-      "disclaimer": "Illustrative data"
+    "popular": {
+      "title": "Market highlights",
+      "viewAll": "View all markets"
     },
     "stepsTitle": "How it works",
     "steps": {
@@ -104,8 +100,8 @@
         "description": "Create a portfolio with simulated trades and test it with reports and simulations."
       }
     },
-    "ctaTitle": "Start your paper portfolio today.",
-    "ctaDescription": "Open a free account and set up your first paper portfolio in seconds.",
+    "ctaTitle": "Start following the market.",
+    "ctaDescription": "Open a free account and start using live data and analysis tools.",
     "ctaButton": "Create a free account"
   },
   "public": {

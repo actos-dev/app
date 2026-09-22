@@ -55,19 +55,18 @@
     "reject": "Yalnızca gerekli"
   },
   "landing": {
-    "metaTitle": "BIST piyasa takibi ve sanal portföy",
-    "metaDescription": "BIST hisselerini, döviz kurlarını ve kıymetli madenleri canlı izle; komisyon dahil sanal portföy kur, AI raporları ve Monte-Carlo simülasyonları üret.",
-    "heroBadge": "Komisyon dahil sanal portföy",
-    "heroTitle": "BIST'i canlı izle, portföyünü kur, kararlarını test et.",
-    "heroDescription": "Borsa İstanbul hisseleri, döviz kurları ve kıymetli madenler tek ekranda. Sanal portföyünü komisyon dahil gerçekçi fiyatlarla yönet; AI raporları ve Monte-Carlo simülasyonlarıyla kararlarını sına.",
+    "metaTitle": "BIST piyasa takibi, canlı veri ve analiz",
+    "metaDescription": "BIST hisselerini, döviz kurlarını ve kıymetli madenleri canlı izle; AI raporları ve Monte-Carlo simülasyonlarıyla analiz et, komisyon dahil sanal portföyünü yönet.",
+    "heroTitle": "BIST'i canlı izle, veriyi analiz et, kararlarını sına.",
+    "heroDescription": "Borsa İstanbul hisseleri, döviz kurları ve kıymetli madenler tek ekranda. Canlı veriyi izle, AI raporları ve Monte-Carlo simülasyonlarıyla analiz et; sanal portföyünü de komisyon dahil gerçekçi fiyatlarla yönet.",
     "ctaPrimary": "Ücretsiz hesap oluştur",
     "ctaSecondary": "Piyasaları gör",
     "featuresTitle": "Florence neler sunuyor?",
-    "featuresDescription": "Canlı veri, sanal portföy ve analiz araçları tek hesapta.",
+    "featuresDescription": "Canlı veri, analiz araçları ve sanal portföy tek hesapta.",
     "features": {
       "market": {
         "title": "Canlı piyasa verisi",
-        "description": "BIST hisseleri, döviz ve kıymetli madenler; seans saatleri ve fiyat geçmişiyle birlikte."
+        "description": "BIST hisseleri, döviz ve kıymetli madenler; seans saatleri ve fiyat geçmişiyle."
       },
       "portfolio": {
         "title": "Sanal portföy ve komisyon",
@@ -75,19 +74,16 @@
       },
       "reports": {
         "title": "AI destekli raporlar",
-        "description": "Seçtiğin hisse için kredi harcayarak güncel verilere dayanan bir analiz raporu üret."
+        "description": "Seçtiğin hisse için güncel verilere dayanan AI analiz raporu üret."
       },
       "simulation": {
         "title": "Monte-Carlo simülasyonu",
-        "description": "Hedef fiyat ve vade ver; olası sonuç dağılımını simülasyonla incele."
+        "description": "Hedef fiyat ve vade ver; olası sonuç dağılımını Monte-Carlo ile incele."
       }
     },
-    "mock": {
-      "portfolioLabel": "Sanal portföy",
-      "totalLabel": "Toplam değer",
-      "dailyLabel": "Bugün",
-      "positionsLabel": "Pozisyonlar",
-      "disclaimer": "Temsilî veriler"
+    "popular": {
+      "title": "Piyasada öne çıkanlar",
+      "viewAll": "Tüm piyasayı gör"
     },
     "stepsTitle": "Nasıl çalışır?",
     "steps": {
@@ -104,8 +100,8 @@
         "description": "Sanal alım satımlarla portföyünü oluştur; rapor ve simülasyonlarla test et."
       }
     },
-    "ctaTitle": "Sanal portföyünü bugün kur.",
-    "ctaDescription": "Ücretsiz hesap aç; saniyeler içinde ilk sanal portföyünü oluştur.",
+    "ctaTitle": "Piyasayı takip etmeye başla.",
+    "ctaDescription": "Ücretsiz hesap aç; canlı veriyi ve analiz araçlarını hemen kullan.",
     "ctaButton": "Ücretsiz hesap oluştur"
   },
   "public": {

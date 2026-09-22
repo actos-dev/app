@@ -1,9 +1,9 @@
 /**
- * Landing (plan Faz 2 / Birim 2.3a, §2.2, M-07).
+ * Landing (plan Faz 2 / Birim 2.3a, §2.2, M-07; D-12).
  *
  * Public ana sayfa tam SSR'dır; tüm metinler `landing.*` altından gelir.
- * Raster görsel yoktur: ürün anlatımı token'larla kurulmuş bir mini portföy
- * mock'u (ProductMock) ve düz metin bölümleriyle yapılır.
+ * Raster görsel yoktur: ürün anlatımı gerçek popüler hisse verisiyle
+ * (PopularStocks) ve düz metin bölümleriyle yapılır.
  */
 import { BarChart3, Briefcase, FileText, TrendingUp } from "lucide-react";
 import type { Metadata } from "next";
@@ -11,16 +11,19 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import type { LucideIcon } from "lucide-react";
 
-import { ProductMock } from "@/components/marketing/ProductMock";
+import { PopularStocks } from "@/components/marketing/PopularStocks";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buttonVariants } from "@/components/ui/button";
 import { getSiteUrl } from "@/config/site";
+import { defaultLocale, isLocale } from "@/i18n/config";
+import { serverApiFetchWithStatus } from "@/lib/api/server";
+import type { CompanySummaryResponse } from "@/types/market";
 
 const FEATURES = [
   { key: "market", icon: TrendingUp },
-  { key: "portfolio", icon: Briefcase },
   { key: "reports", icon: FileText },
   { key: "simulation", icon: BarChart3 },
+  { key: "portfolio", icon: Briefcase },
 ] as const satisfies readonly { key: string; icon: LucideIcon }[];
 
 const STEPS = ["register", "explore", "build"] as const;
@@ -56,7 +59,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LandingPage() {
-  const [t, app] = await Promise.all([getTranslations("landing"), getTranslations("app")]);
+  const [t, app, locale, summary] = await Promise.all([
+    getTranslations("landing"),
+    getTranslations("app"),
+    getLocale(),
+    // Popüler hisseler gerçek veriden gelir; ağ/JSON hatasında `null` olur ve
+    // boş fallback çizilir, böylece landing asla çökmez.
+    serverApiFetchWithStatus<CompanySummaryResponse>("/api/v1/companies/summary", {
+      revalidate: 60,
+      query: { limit: 5, offset: 0, sort: "popular" },
+    }).catch(() => null),
+  ]);
 
   // JSON-LD: WebSite (+ SearchAction → /markets?q=) ve Organization. Arama
   // hedefi gerçekten çalışır: `/markets` `q` parametresini SymbolSearch'e
@@ -95,9 +108,6 @@ export default async function LandingPage() {
       <section className="border-b border-border">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:gap-14 md:px-6 md:py-24">
           <div className="flex flex-col items-start gap-5">
-            <span className="rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-muted-foreground">
-              {t("heroBadge")}
-            </span>
             <h1 className="text-4xl font-semibold tracking-tight text-foreground md:text-5xl">
               {t("heroTitle")}
             </h1>
@@ -113,12 +123,11 @@ export default async function LandingPage() {
               </Link>
             </div>
           </div>
-          <ProductMock
-            portfolioLabel={t("mock.portfolioLabel")}
-            totalLabel={t("mock.totalLabel")}
-            dailyLabel={t("mock.dailyLabel")}
-            positionsLabel={t("mock.positionsLabel")}
-            disclaimer={t("mock.disclaimer")}
+          <PopularStocks
+            rows={summary?.data?.data ?? []}
+            title={t("popular.title")}
+            viewAllLabel={t("popular.viewAll")}
+            locale={isLocale(locale) ? locale : defaultLocale}
           />
         </div>
       </section>
