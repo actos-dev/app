@@ -48,4 +48,12 @@ test.describe("Anonim gezinme", () => {
     await expect(page.getByRole("heading", { name: "Güncel bülten" })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Sabah Bülteni" })).toBeVisible();
   });
+
+  test("/offline çevrimdışı sayfası doğrudan açılır (6.4)", async ({ page }) => {
+    const response = await page.goto("/offline");
+
+    expect(response?.status()).toBe(200);
+    await expect(page.getByRole("heading", { name: "Bağlantı yok" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Tekrar dene" })).toBeVisible();
+  });
 });

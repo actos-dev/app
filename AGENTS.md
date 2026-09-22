@@ -38,6 +38,15 @@ Florence'ın yeni Next.js istemcisi. Referans repo değil, **aktif geliştirme a
   yasak. Tema token'ları Faz 1'de tanımlanır; keyfi değer yerine token kullanılır.
 - Testler Vitest + Testing Library (`src/test/setup.ts`); yeni davranış testle gelir.
 
+## PWA
+
+- Manifest `src/app/manifest.ts` (start_url `/dashboard`), service worker `public/sw.js`
+  (el yazımı; serwist YOK) ve kayıt `ServiceWorkerRegistrar` (yalnız üretim) Faz 6 / Birim 6.4.
+- İkonlar `src/app/icon.svg`'ten türetilir; `scripts/generate-icons.sh` (rsvg-convert + magick)
+  ile üretilir ve PNG'ler repoya girer. Kaynak değişince betiği çalıştırın.
+- `/api/` SW tarafından asla önbelleğe alınmaz; CSP'de `worker-src 'self'` korunmalıdır
+  (`strict-dynamic` altında SW kaydı aksi halde engellenebilir).
+
 ## API tipleri
 
 - **Elle API tipi yazmak yasak.** Tek kaynak `src/types/generated.ts`'tir; `npm run gen:api` ile

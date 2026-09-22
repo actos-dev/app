@@ -48,6 +48,10 @@ export function buildCsp(nonce: string, isDev: boolean): string {
     "img-src 'self' data: blob:",
     "font-src 'self'",
     "connect-src 'self'",
+    // Service worker kaydı (Faz 6 / Birim 6.4): `strict-dynamic` script-src'te
+    // 'self'i geçersiz kıldığından worker-src AYRICA verilmelidir; aksi halde
+    // tarayıcı `/sw.js` kaydını engelleyebilir.
+    "worker-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

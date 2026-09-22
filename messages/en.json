@@ -187,6 +187,12 @@
     "description": "You have hit the request limit right now. Please try again shortly.",
     "retryAfter": "Try again in {seconds} seconds."
   },
+  "offline": {
+    "title": "No connection",
+    "description": "Your internet connection appears to be offline. Check your connection and try again; Florence will pick up where it left off.",
+    "retry": "Try again",
+    "home": "Home"
+  },
   "seo": {
     "symbolDescription": "Market data, price chart, key financials and news for {name} ({symbol}).",
     "economyDescription": "Market data, history and current information for {symbol}."

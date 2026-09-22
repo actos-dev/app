@@ -187,6 +187,12 @@
     "description": "Şu anda istek sınırına takıldın. Birazdan tekrar dene.",
     "retryAfter": "{seconds} saniye sonra tekrar dene."
   },
+  "offline": {
+    "title": "Bağlantı yok",
+    "description": "İnternet bağlantın görünmüyor. Bağlantını kontrol edip tekrar dene; bağlantı gelince Florence kaldığı yerden devam eder.",
+    "retry": "Tekrar dene",
+    "home": "Ana sayfa"
+  },
   "seo": {
     "symbolDescription": "{name} ({symbol}) için piyasa verisi, fiyat grafiği, temel finansallar ve haberler.",
     "economyDescription": "{symbol} için piyasa verisi, geçmiş ve güncel bilgiler."

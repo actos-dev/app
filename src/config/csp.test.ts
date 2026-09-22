@@ -35,6 +35,7 @@ describe("buildCsp", () => {
       "img-src 'self' data: blob:",
       "font-src 'self'",
       "connect-src 'self'",
+      "worker-src 'self'",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",

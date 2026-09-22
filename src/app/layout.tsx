@@ -9,6 +9,7 @@ import { AuthUnauthorizedListener } from "@/components/auth/AuthUnauthorizedList
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { WebVitals } from "@/components/providers/WebVitals";
 import { ConsentBanner } from "@/components/shared/ConsentBanner";
+import { ServiceWorkerRegistrar } from "@/components/shared/ServiceWorkerRegistrar";
 import { Toaster } from "@/components/ui/toaster";
 import { getSiteUrl } from "@/config/site";
 import { CONSENT_COOKIE } from "@/lib/consent";
@@ -36,6 +37,12 @@ export async function generateMetadata(): Promise<Metadata> {
     // Alt sayfa başlıkları `%s · Florence` biçiminde birleşir (plan M-07).
     title: { default: t("app.name"), template: `%s · ${t("app.name")}` },
     description: t("app.description"),
+    // iOS ana ekran uygulaması: tam ekran mod + başlık (Faz 6 / Birim 6.4).
+    appleWebApp: {
+      capable: true,
+      title: t("app.name"),
+      statusBarStyle: "black-translucent",
+    },
   };
 }
 
@@ -59,6 +66,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <AuthUnauthorizedListener />
         <WebVitals />
+        <ServiceWorkerRegistrar />
         <NextIntlClientProvider>
           <QueryProvider>{children}</QueryProvider>
           <ConsentBanner needsConsent={needsConsent} />

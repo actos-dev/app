@@ -28,7 +28,15 @@ npm test                   # vitest run (tek seferlik)
 npm run test:watch         # vitest (izleme modu)
 npm run check              # typecheck + lint + tokens + test (PR öncesi tam kapı)
 npm run build              # üretim derlemesi
+bash scripts/generate-icons.sh  # PWA ikonlarını icon.svg'ten üret (rsvg-convert + magick)
 ```
+
+### PWA ikonları
+
+`public/pwa-192.png`, `public/pwa-512.png`, `public/pwa-maskable-512.png` ve
+`src/app/apple-icon.png` elle commit edilir; kaynak tek dosyadır (`src/app/icon.svg`) ve
+`scripts/generate-icons.sh` ile yeniden üretilir. İkon değişince betiği çalıştırıp çıktıları
+birlikte güncelleyin.
 
 ### `gen:api` nasıl çalışır?
 
